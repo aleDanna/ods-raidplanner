@@ -1,0 +1,15 @@
+.ods_raidplanner_raidgrid-container {
+    margin-top: 30px;
+}
+
+.ods_raidplanner_raidgrid-summary-column {
+    display: flex;
+    align-items: center;
+}
+
+.ods_raidplanner_raidgrid-summary-content {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

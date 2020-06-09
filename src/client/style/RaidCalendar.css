@@ -1,0 +1,27 @@
+.ods_raidplanner_raidcalendar-container {
+    margin-top: 20px;
+}
+
+.DayPicker {
+    width: 100%;
+    pointer-events: none !important;
+}
+
+.DayPicker-Months {
+    display: flex;
+    flex-direction: column;
+}
+
+.DayPicker-Caption {
+    text-align: center !important;
+}
+
+.DayPicker-Day {
+    border: 1px solid #000000;
+    text-align: right !important;
+    padding: 6em 0.5em 0 3em !important;
+}
+
+.RaidCalendar-event-icon-container {
+    pointer-events: all !important;
+}
