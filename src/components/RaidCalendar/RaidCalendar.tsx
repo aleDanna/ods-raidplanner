@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Container, Col, Row, Media} from "react-bootstrap";
 import DayPicker from "react-day-picker";
-import {isSameDay, parseISO} from "date-fns";
+import {isSameDay} from "date-fns";
 
 
 export const RaidCalendar = ({items}) => {
@@ -22,7 +22,7 @@ export const RaidCalendar = ({items}) => {
     }).forEach(elem => {events = events.concat(elem)});
 
     function renderDay(day: Date) {
-        events = events.filter(item => {
+        const list = events.filter((item: any) => {
             return isSameDay(new Date(item.start), day);
         });
 
@@ -35,10 +35,10 @@ export const RaidCalendar = ({items}) => {
                 </Row>
                 <Container fluid className="ods_raidplanner_raidcalendar-icons">
                     <Row className="ods_raidplanner_raidcalendar-icons">
-                        {events.map((value, _) => {
+                        {list.map((value: any, _) => {
                             return <Col md={4}>
                                 <Media>
-                                    <a className="ods_raidplanner_raidcalendar-icon-container" onClick={event => openPopup(event, value)}>
+                                    <a className="ods_raidplanner_raidcalendar-icon-container" onClick={event => openPopup(value)}>
                                         <img src={`/static/images/${value.icon}.jpg`} style={{width: "60px", height: "60px"}}/>
                                     </a>
                                 </Media>
@@ -50,8 +50,7 @@ export const RaidCalendar = ({items}) => {
         )
     }
 
-    const openPopup = (click, event) => {
-        console.log(click);
+    const openPopup = (event) => {
         console.log(event);
     };
 
