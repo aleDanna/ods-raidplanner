@@ -19,6 +19,7 @@ export const RaidCalendar = ({items}) => {
                 icon: imageIcon
             }
         })
+
     }).forEach(elem => {events = events.concat(elem)});
 
     function renderDay(day: Date) {
