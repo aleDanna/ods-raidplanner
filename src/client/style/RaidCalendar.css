@@ -7,6 +7,12 @@
     pointer-events: none !important;
 }
 
+.DayPicker:focus {
+    border: none !important;
+    outline: none !important;
+}
+
+
 .DayPicker-Months {
     display: flex;
     flex-direction: column;
@@ -18,10 +24,28 @@
 
 .DayPicker-Day {
     border: 1px solid #000000;
-    text-align: right !important;
-    padding: 6em 0.5em 0 3em !important;
 }
 
-.RaidCalendar-event-icon-container {
+.ods_raidplanner_raidcalendar-icon-container {
     pointer-events: all !important;
+}
+
+.ods_raidplanner_raidcalendar-icon-container:hover {
+    cursor: pointer !important;
+}
+
+.ods_raidplanner_raidcalendar-cell-row {
+    display: flex;
+}
+
+.ods_raidplanner_raidcalendar-cell-day {
+    text-align: right !important;
+}
+
+.ods_raidplanner_raidcalendar-icons {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    flex: 1 0 50%;
+    min-height: 60px;
 }
