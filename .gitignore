@@ -1,4 +1,5 @@
-/ods-raidplanner.iml
-/node_modules/
-/build/
-/.idea/
+node_modules/
+.DS_Store
+out/
+src/**/*.js
+build/

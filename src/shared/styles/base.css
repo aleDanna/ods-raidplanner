@@ -1,0 +1,23 @@
+@import "../components/RaidsCalendar/RaidCalendar.css";
+@import "../components/RaidsGrid/RaidsGrid.css";
+@import "../components/Header/Header.css";
+@import "../components/Footer/Footer.css";
+@import "../components/ContentTitle/ContentTitle.css";
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    font-family: fantasy !important;
+    background-image: url("../images/background.jpg") !important;
+    background-size: cover;
+    background-repeat: repeat-y;
+}
+
+content {
+    flex: 100%;
+}
