@@ -13,6 +13,7 @@
   "author": "Alessio D'Anna <alessio.danna.94@gmail.com>",
   "dependencies": {
     "body-parser": "1.18.3",
+    "bootstrap": "^4.5.0",
     "common-tags": "1.8.0",
     "date-fns": "^2.14.0",
     "debug": "4.1.0",
