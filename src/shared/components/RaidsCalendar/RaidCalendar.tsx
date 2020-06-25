@@ -9,24 +9,49 @@ import raidsCalendarModalFragments from "@shared/fragments/modalContents/RaidsCa
 
 export const RaidCalendar = ({items}) => {
 
-    let events = [];
+    const CalendarModalComponent = ({event}) => {
 
-    items.allowedRaidGroups.map(eventGroup => {
-        const title = eventGroup.groupName;
-        const imageIcon = eventGroup.imageName;
-        return eventGroup.scheduledEvents.map(event => {
-            return {
-                title: title,
-                start: event.start,
-                description: `${title} del ${getDateTimeString(event.start)}`,
-                subscriptions: event.subscriptions,
-                subscribed: event.subscribed,
-                icon: imageIcon
-            }
-        })
-    }).forEach(elem => {events = events.concat(elem)});
+        const modalOpener = <img src={require(`../../images/icons/${event.icon}.jpg`)} style={{width: "60px", height: "60px"}} />
+        const subscribe = (event) => {
+            console.log("Subscribed to event: ", event);
+        };
+        const unsubscribe = (event) => {
+            console.log("Unsubscribed to event: ", event);
+        };
+
+        const modalProps = {
+            modalOpener: modalOpener,
+            title: event.title,
+            content: event.subscribed ?
+                raidsCalendarModalFragments.userSubscribedModalContent(event.description) :
+                raidsCalendarModalFragments.userUnsubscribedModalContent(event.description, calculateSubscriptions(event.subscriptions)),
+            confirmButtonText: event.subscribed ? "Rimuovi iscrizione" : "Iscriviti",
+            closeButtonText: "Annulla",
+            confirmAction: event.subscribed ? unsubscribe : subscribe,
+            confirmButtonVariant: event.subscribed ? "danger" : "success"
+        }
+
+        return <ConfirmationModal {...modalProps}/>
+    }
 
     function renderDay(day: Date) {
+        let events = [];
+
+        items.allowedRaidGroups.map(eventGroup => {
+            const title = eventGroup.groupName;
+            const imageIcon = eventGroup.imageName;
+            return eventGroup.scheduledEvents.map(event => {
+                return {
+                    title: title,
+                    start: event.start,
+                    description: `${title} del ${getDateTimeString(event.start)}`,
+                    subscriptions: event.subscriptions,
+                    subscribed: event.subscribed,
+                    icon: imageIcon
+                }
+            })
+        }).forEach(elem => {events = events.concat(elem)});
+
         const list = events.filter((item: any) => {
             return isSameDay(new Date(item.start), day);
         });
@@ -52,31 +77,6 @@ export const RaidCalendar = ({items}) => {
                 </Container>
             </Container>
         )
-    }
-
-    const CalendarModalComponent = ({event}) => {
-
-        const modalOpener = <img src={require(`../../images/icons/${event.icon}.jpg`)} style={{width: "60px", height: "60px"}} />
-        const subscribe = (event) => {
-            console.log("Subscribed to event: ", event);
-        };
-        const unsubscribe = (event) => {
-            console.log("Unsubscribed to event: ", event);
-        };
-
-        const modalProps = {
-            modalOpener: modalOpener,
-            title: event.title,
-            content: event.subscribed ?
-                raidsCalendarModalFragments.userSubscribedModalContent(event.description) :
-                raidsCalendarModalFragments.userUnsubscribedModalContent(event.description, calculateSubscriptions(event.subscriptions)),
-            confirmButtonText: event.subscribed ? "Rimuovi iscrizione" : "Iscriviti",
-            closeButtonText: "Annulla",
-            confirmAction: event.subscribed ? unsubscribe : subscribe,
-            confirmButtonVariant: event.subscribed ? "danger" : "success"
-        }
-
-        return <ConfirmationModal {...modalProps}/>
     }
 
     return (
