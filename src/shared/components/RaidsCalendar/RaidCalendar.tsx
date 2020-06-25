@@ -44,7 +44,7 @@ export const RaidCalendar = ({items}) => {
                         {list.map((value: any, index) => {
                             return <Col md={4} key={index}>
                                 <div className="ods_raidplanner_raidcalendar-icon-container">
-                                    {modalComponent(value)}
+                                    <CalendarModalComponent event={value} />
                                 </div>
                             </Col>;
                         })}
@@ -54,7 +54,7 @@ export const RaidCalendar = ({items}) => {
         )
     }
 
-    const modalComponent = (event) => {
+    const CalendarModalComponent = ({event}) => {
 
         const modalOpener = <img src={require(`../../images/icons/${event.icon}.jpg`)} style={{width: "60px", height: "60px"}} />
         const subscribe = (event) => {
@@ -78,7 +78,6 @@ export const RaidCalendar = ({items}) => {
 
         return <ConfirmationModal {...modalProps}/>
     }
-
 
     return (
         <Container className="ods_raidplanner_raidcalendar-container">
