@@ -50,6 +50,7 @@ export function getFooter(options: IFooterOpts) {
   };
   </script>
   ${options.scripts.map(src => createScriptTag(options.fePort, src))}
+  </div>
 </body>
 </html>`;
 }

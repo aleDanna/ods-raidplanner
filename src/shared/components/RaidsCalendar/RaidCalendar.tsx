@@ -2,6 +2,10 @@ import * as React from 'react';
 import {Container, Col, Row, Media} from "react-bootstrap";
 import DayPicker from "react-day-picker";
 import {isSameDay} from "date-fns";
+import {ConfirmationModal} from "@shared/components/ConfirmationModal/ConfirmationModal";
+import {calculateSubscriptions} from "../../../utils/dataUtils";
+import {getDateTimeString} from "../../../utils/dateUtils";
+import raidsCalendarModalFragments from "@shared/fragments/modalContents/RaidsCalendarModal";
 
 export const RaidCalendar = ({items}) => {
 
@@ -14,7 +18,9 @@ export const RaidCalendar = ({items}) => {
             return {
                 title: title,
                 start: event.start,
-                description: title,
+                description: `${title} del ${getDateTimeString(event.start)}`,
+                subscriptions: event.subscriptions,
+                subscribed: event.subscribed,
                 icon: imageIcon
             }
         })
@@ -27,21 +33,20 @@ export const RaidCalendar = ({items}) => {
 
         return (
             <Container>
+
                 <Row>
                     <Col md className="ods_raidplanner_raidcalendar-cell-day">
                         {day.getDate()}
                     </Col>
                 </Row>
-                <Container fluid className="ods_raidplanner_raidcalendar-icons">
+                <Container fluid>
                     <Row className="ods_raidplanner_raidcalendar-icons">
-                        {list.map((value: any, _) => {
-                            return <Col md={4}>
-                                <Media>
-                                    <a className="ods_raidplanner_raidcalendar-icon-container" onClick={event => openPopup(value)}>
-                                        <img src={require(`../../images/icons/${value.icon}.jpg`)} style={{width: "60px", height: "60px"}}/>
-                                    </a>
-                                </Media>
-                                </Col>
+                        {list.map((value: any, index) => {
+                            return <Col md={4} key={index}>
+                                <div className="ods_raidplanner_raidcalendar-icon-container">
+                                    {modalComponent(value)}
+                                </div>
+                            </Col>;
                         })}
                     </Row>
                 </Container>
@@ -49,9 +54,31 @@ export const RaidCalendar = ({items}) => {
         )
     }
 
-    const openPopup = (event) => {
-        console.log(event);
-    };
+    const modalComponent = (event) => {
+
+        const modalOpener = <img src={require(`../../images/icons/${event.icon}.jpg`)} style={{width: "60px", height: "60px"}} />
+        const subscribe = (event) => {
+            console.log("Subscribed to event: ", event);
+        };
+        const unsubscribe = (event) => {
+            console.log("Unsubscribed to event: ", event);
+        };
+
+        const modalProps = {
+            modalOpener: modalOpener,
+            title: event.title,
+            content: event.subscribed ?
+                raidsCalendarModalFragments.userSubscribedModalContent(event.description) :
+                raidsCalendarModalFragments.userUnsubscribedModalContent(event.description, calculateSubscriptions(event.subscriptions)),
+            confirmButtonText: event.subscribed ? "Rimuovi iscrizione" : "Iscriviti",
+            closeButtonText: "Annulla",
+            confirmAction: event.subscribed ? unsubscribe : subscribe,
+            confirmButtonVariant: event.subscribed ? "danger" : "success"
+        }
+
+        return <ConfirmationModal {...modalProps}/>
+    }
+
 
     return (
         <Container className="ods_raidplanner_raidcalendar-container">
