@@ -28,5 +28,15 @@ export default () => {
             .catch(() => res.sendStatus(500));
     });
 
+    router.get('/recoverSession', function (req, res) {
+        const userSession = req["session"].user;
+        console.log("session...", userSession)
+        if (userSession) {
+            res.send(userSession)
+        }
+        else {
+            res.sendStatus(204)
+        }
+    })
     return router;
 }
