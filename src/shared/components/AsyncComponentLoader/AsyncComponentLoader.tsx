@@ -1,5 +1,6 @@
 import Async from "react-async";
 import * as React from "react";
+import {Loading} from "@shared/components/Loading/Loading";
 
 
 export const AsyncComponentLoader = ({Component, asyncFn, componentProps, propFetched}) => {
@@ -10,10 +11,9 @@ export const AsyncComponentLoader = ({Component, asyncFn, componentProps, propFe
 
                 if (isLoading) {
                     //TODO change to loading component
-                    return "Loading..."
+                    return (<Loading />)
                 }
                 if (data) {
-                    console.log(data)
                     componentProps[propFetched] = data;
                     return (
                         <Component {...componentProps} />

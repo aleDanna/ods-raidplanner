@@ -8,10 +8,8 @@ export const RaidsPage = (routeProps) => {
 
     const loadRaids = () =>
         subscriptionRestClient.getAvailableRaidGroups()
-            .then(res => res.json())
             .then(data => {
                 return subscriptionRestClient.getSubscribedRaids()
-                    .then(res => res.json())
                     .then(ids => {
                         const subscribedEvents = ids.map(row => {return row.raid_ref})
                         console.log("subscribed raid ids fetched...", subscribedEvents)

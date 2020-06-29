@@ -1,13 +1,19 @@
 import {Client} from "pg"
 import {dbConnection} from "../../database/connection.config";
+import {userInfo} from "os";
 
 
-async function executeQuery(query){
+async function executeQuery(query, singleResult){
     const client = new Client(dbConnection);
     client.connect();
     return await client.query(query)
         .then(res => {
-            return res.rows
+            if (singleResult) {
+                return res.rows[0] || null
+            }
+            else {
+                return res.rows || []
+            }
         })
         .catch(err => {
             throw err.stack
@@ -26,18 +32,17 @@ export default {
                                      AND r.start_date >= cast(date_trunc('month', current_date) as date)
                                      AND rg.rank <= u.rank`;
 
-        return executeQuery(query);
+        return executeQuery(query, false);
 
     },
 
     addSubscription(event, user) {
-        console.log("saving subscription...")
         const client = new Client(dbConnection);
         client.connect();
         const query = `INSERT INTO raid_subscriptions (character_ref, user_ref, raid_ref)
                         VALUES (${user.characterId}, ${user.id}, ${event.eventId})`;
 
-        return executeQuery(query);
+        return executeQuery(query, true);
     },
     getSubscribedRaids(userId) {
         const allowedRaidsQuery = `SELECT rs.raid_ref 
@@ -46,6 +51,15 @@ export default {
                                      AND rs.user_ref = ${userId}
                                      AND r.start_date >= cast(date_trunc('month', current_date) as date)`;
 
-        return executeQuery(allowedRaidsQuery);
+        return executeQuery(allowedRaidsQuery, false);
+    },
+    authenticate(username, password) {
+        const query = `SELECT u.id, u.name, u.surname, u.eso_username, u.rank, c.username
+                                   FROM users u, credentials c
+                                   WHERE c.username = '${username}'
+                                     AND c.password = '${password}'
+                                     AND u.credentials_ref = c.id`;
+
+        return executeQuery(query, true);
     }
 }

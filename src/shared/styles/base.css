@@ -1,8 +1,14 @@
+@import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 @import "../components/RaidsCalendar/RaidCalendar.css";
 @import "../components/RaidsGrid/RaidsGrid.css";
 @import "../components/Header/Header.css";
 @import "../components/Footer/Footer.css";
 @import "../components/ContentTitle/ContentTitle.css";
+@import "../components/Login/Login.css";
+@import "../components/Loading/Loading.css";
+@import "../components/NavBar/NavBar.css";
+
 
 html, body {
     height: 100%;
@@ -20,4 +26,5 @@ body {
 
 content {
     flex: 100%;
+    min-height: 100%;
 }

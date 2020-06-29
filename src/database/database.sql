@@ -19,7 +19,7 @@ CREATE TABLE users (
     surname varchar not null,
     eso_username varchar unique not null,
     rank numeric not null,
-    credentials_ref numeric not null references credentials
+    credentials_ref numeric unique not null references credentials
 );
 
 CREATE TABLE roles (

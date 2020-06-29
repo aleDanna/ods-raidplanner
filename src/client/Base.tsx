@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 
 import Routes from '@shared/Routes';
-import {Header} from "@shared/components/Header/Header";
-import {Footer} from "@shared/components/Footer/Footer";
+import {NavBar} from "@shared/components/NavBar/NavBar";
 
 export default (
     <>
-        <Header />
-        <BrowserRouter>
+        <BrowserRouter forceRefresh={true}>
+            <NavBar />
             <Routes />
         </BrowserRouter>
-        <Footer />
     </>
 );

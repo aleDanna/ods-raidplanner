@@ -1,9 +1,10 @@
 INSERT INTO credentials (id, username, password) values
-(1, 'test', 'test');
+(1, 'test', 'test'),
+(2, 'test2', 'test2');
 
 INSERT INTO users (id, name, surname, eso_username, rank, credentials_ref) values
 (1, 'test', 'test', 'aleD94', 1, 1),
-(2, 'test2', 'test2', 'vdvdvf', 2, 1);
+(2, 'test2', 'test2', 'vdvdvf', 2, 2);
 
 INSERT INTO characters (name, role_ref, user_ref) values
 ('oban whisky', 3, 1);

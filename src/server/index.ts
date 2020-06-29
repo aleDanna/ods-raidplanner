@@ -3,18 +3,20 @@ import cors from 'cors';
 import expressSession from "express-session";
 
 import reactMiddleWare from './reactMiddleWare';
-import restController from './restController';
+import apiController from './controllers/apiController';
+import authController from "./controllers/authController";
+import bodyParser from "body-parser";
 const app = express();
 
 app.use(cors())
 app.options('*', cors())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-const session =
 app.use(expressSession({
   secret: 'ods-raidplanner',
-  resave:true,
-  saveUninitialized:true,
-  cookie: { maxAge: 60000 }
+  resave: true,
+  saveUninitialized: true
 }));
 
 type MiddleWares = Array<{
@@ -31,15 +33,11 @@ function mountMiddleWares(middlewares: MiddleWares) {
   middlewares
     .filter(m => m.when === 'pre')
     .forEach(m => app.use(m.route, m.middleWare));
-  app.use('/rp', reactMiddleWare);
 
-  restController(app);
-  // app.use(session({
-  //   store: {},
-  //   secret: process.env.REDISSECRET,
-  //   resave: false,
-  //   saveUninitialized: false
-  // }));
+
+  app.use('/rp', reactMiddleWare);
+  app.use('/auth', authController());
+  app.use('/api', apiController());
 
   middlewares
     .filter(m => m.when === 'post')

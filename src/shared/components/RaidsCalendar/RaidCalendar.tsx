@@ -8,7 +8,7 @@ import {getDateTimeString} from "../../../utils/dateUtils";
 import {UserSubscribeModalContent, UserUnsubscribeModalContent} from "@shared/fragments/modalContents/RaidsCalendarModal";
 import subscriptionRestClient from "../../services/subscriptionRestClient";
 
-export const RaidCalendar = ({items}) => {
+export const RaidCalendar = ({events}) => {
 
     const CalendarModalComponent = ({event}) => {
 
@@ -41,18 +41,6 @@ export const RaidCalendar = ({items}) => {
 
     function renderDay(day: Date) {
 
-        const events = items.map(item => {
-                return {
-                    title: item.name,
-                    start: item.start_date,
-                    description: `${item.name} del ${getDateTimeString(item.start_date)}`,
-                    subscriptions: item.subscriptions,
-                    subscribed: item.subscribed,
-                    eventId: item.id,
-                    icon: item.image_name
-                }
-        });
-
         const list = events.filter((item: any) => {
             return isSameDay(new Date(item.start), day);
         });
@@ -83,7 +71,6 @@ export const RaidCalendar = ({items}) => {
         <Container className="ods_raidplanner_raidcalendar-container">
             <DayPicker
                 canChangeMonth={false}
-                className="Raids"
                 renderDay={renderDay}
             />
         </Container>
