@@ -1,4 +1,5 @@
 import { mockService} from "./mock-service";
+import persistenceService from "../../server/services/persistence-service";
 
 export default {
 
@@ -10,8 +11,8 @@ export default {
 
     },
 
-    subscribe(userId, character, raidId) {
-
+    subscribe(event, user) {
+        return persistenceService.addSubscription(event, user);
     },
 
     raidSubscriptions(userId) {
