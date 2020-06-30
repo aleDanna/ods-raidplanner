@@ -37,8 +37,10 @@ export default () => {
             id: req["session"].user.id,
             characterId: characterId
         }
-        const result = persistenceService.addSubscription(event, user);
-        res.send(result);
+        persistenceService.addSubscription(event, user)
+            .then(() => {
+                res.sendStatus(200);
+            })
     });
 
     return router;

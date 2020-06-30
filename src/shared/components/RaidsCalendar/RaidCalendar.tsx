@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Container, Col, Row} from "react-bootstrap";
+import {Container, Col, Row, Alert} from "react-bootstrap";
 import DayPicker from "react-day-picker";
 import {isSameDay} from "date-fns";
 import {ConfirmationModal} from "@shared/components/ConfirmationModal/ConfirmationModal";
@@ -7,18 +7,29 @@ import {calculateSubscriptions} from "../../../utils/dataUtils";
 import {getDateTimeString} from "../../../utils/dateUtils";
 import {UserSubscribeModalContent, UserUnsubscribeModalContent} from "@shared/fragments/modalContents/RaidsCalendarModal";
 import subscriptionRestClient from "../../services/subscriptionRestClient";
+import sessionStorageService from "@shared/services/sessionStorageService";
+import {useState} from "react";
+import windowUtils from "../../../utils/windowUtils";
 
 export const RaidCalendar = ({events}) => {
+
+    const [characterMissingShow, setCharacterMissingShow] = useState(false);
 
     const CalendarModalComponent = ({event}) => {
 
         const modalOpener = <img src={require(`../../images/icons/${event.icon}.jpg`)} style={{width: "60px", height: "60px"}} />
         const subscribe = () => {
-            subscriptionRestClient.subscribe(event, {id: 1})
-                .then(res => res.json())
-                .then((data) => {
-                    console.log(data);
-                })
+            const characterId = sessionStorageService.get("selectedCharacter");
+            if (characterId) {
+                setCharacterMissingShow(false);
+                subscriptionRestClient.subscribe(event, characterId)
+                    .then(() => {
+                        windowUtils.reload();
+                    })
+            }
+            else {
+                setCharacterMissingShow(true);
+            }
         }
         const unsubscribe = (event) => {
             console.log("Unsubscribed to event: ", event);
@@ -69,6 +80,9 @@ export const RaidCalendar = ({events}) => {
 
     return (
         <Container className="ods_raidplanner_raidcalendar-container">
+            <Alert variant="danger" show={characterMissingShow}>
+                Seleziona un personaggio!
+            </Alert>
             <DayPicker
                 canChangeMonth={false}
                 renderDay={renderDay}

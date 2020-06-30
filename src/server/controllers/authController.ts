@@ -17,9 +17,14 @@ export default () => {
         const password = req.body.password;
         persistenceService.authenticate(username, password)
             .then(user => {
+                console.log(user)
                 if (user) {
-                    req["session"].user = user;
-                    res.send(user);
+                    persistenceService.getCharacters(user.id)
+                        .then(characters => {
+                            user.characters = characters;
+                            req["session"].user = user;
+                            res.send(user);
+                        })
                 }
                 else {
                     res.sendStatus(405);

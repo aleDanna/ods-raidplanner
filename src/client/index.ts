@@ -2,6 +2,7 @@ import * as ReactDOM from 'react-dom';
 
 import Base from './Base';
 import sessionStorageService from "@shared/services/sessionStorageService";
+import windowUtils from "../utils/windowUtils";
 
 const serverRendered = (window.MyApp && window.MyApp.serverRendered) || false;
 const appNode = document.getElementById('app');
@@ -37,7 +38,7 @@ if (!sessionStorageService.get("loggedUser")) {
       .then(res => {
         if (res) {
           sessionStorageService.saveOrUpdate("loggedUser", res);
-          window.location.reload();
+            windowUtils.reload();
         }
       })
 }

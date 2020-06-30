@@ -15,7 +15,7 @@ const executeRestCall = (url, method, body?) => {
         if (res.status === 401) {
             window.location.href = "/rp/login";
         }
-        return res.json()
+        return res.json().catch(_ => res)
     })
 }
 

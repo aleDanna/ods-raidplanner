@@ -16,7 +16,11 @@ app.use(bodyParser.json())
 app.use(expressSession({
   secret: 'ods-raidplanner',
   resave: true,
-  saveUninitialized: true
+  rolling: true,
+  saveUninitialized: true,
+  cookie: {
+    expires: 2592000000
+  }
 }));
 
 type MiddleWares = Array<{

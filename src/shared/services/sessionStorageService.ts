@@ -6,5 +6,8 @@ export default {
 
     get(key) {
         return JSON.parse(<string>sessionStorage.getItem(key));
+    },
+    remove(key) {
+        sessionStorage.removeItem(key);
     }
 }

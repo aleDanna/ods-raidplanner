@@ -1,6 +1,5 @@
 import {Client} from "pg"
 import {dbConnection} from "../../database/connection.config";
-import {userInfo} from "os";
 
 
 async function executeQuery(query, singleResult){
@@ -16,7 +15,7 @@ async function executeQuery(query, singleResult){
             }
         })
         .catch(err => {
-            throw err.stack
+            console.error(err.stack);
         })
         .finally(() => {
             client.end();
@@ -61,5 +60,14 @@ export default {
                                      AND u.credentials_ref = c.id`;
 
         return executeQuery(query, true);
+    },
+
+    getCharacters(userId) {
+        const query = `SELECT c.id as character_id, c.name as character_name, r.id as role_id, r.name as role_name
+                                   FROM characters c, roles r
+                                   WHERE c.user_ref = ${userId}
+                                     AND c.role_ref = r.id`;
+
+        return executeQuery(query, false);
     }
 }
