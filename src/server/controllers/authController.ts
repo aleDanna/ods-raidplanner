@@ -35,7 +35,7 @@ export default () => {
 
     router.get('/recoverSession', function (req, res) {
         const userSession = req["session"].user;
-        console.log("session...", userSession)
+        console.log("session recovered: ", userSession)
         if (userSession) {
             res.send(userSession)
         }
