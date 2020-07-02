@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 import * as React from 'react';
 import { renderToNodeStream } from 'react-dom/server';
 
-import { BaseApp } from './Base';
+import { App } from './App';
 import { getFooter, getHeader } from './template';
 
 const fePort = process.env.FE_PORT as string;
 const isDev = process.env.NODE_ENV !== 'production';
 
 function reactMiddleWare(req: Request, res: Response, next: NextFunction) {
-  res.write(getHeader({ isDev, fePort, title: 'Testing 1' }));
+  res.write(getHeader({ isDev, fePort, title: 'ODS Raidplanner' }));
 
   if (!__ISOMORPHIC__) {
     // If not isomorphic, end the response here and let the
@@ -21,7 +21,7 @@ function reactMiddleWare(req: Request, res: Response, next: NextFunction) {
     const routerContext = {};
     const modules: string[] = [];
     const stream = renderToNodeStream(
-      React.createElement(BaseApp, {
+      React.createElement(App, {
         modules,
         routerContext,
         url: req.url,

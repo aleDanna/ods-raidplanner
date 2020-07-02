@@ -9,7 +9,7 @@ interface Props {
   modules: string[];
 }
 
-export function BaseApp({ url, routerContext, modules }: Props) {
+export function App({ url, routerContext, modules }: Props) {
   return (
     <StaticRouter location={url} context={routerContext}>
       <Routes />

@@ -1,6 +1,6 @@
 import {Raids} from "@shared/components/Raids/Raids";
 import {isMobile} from "react-device-detect";
-import subscriptionRestClient from "../services/subscriptionRestClient";
+import subscriptionRestClient from "../services/restClient";
 import {AsyncComponentLoader} from "@shared/components/AsyncComponentLoader/AsyncComponentLoader";
 
 export const RaidsPage = (routeProps) => {

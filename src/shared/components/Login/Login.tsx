@@ -18,7 +18,7 @@ export const Login = ({history}) => {
         }
 
         else {
-            fetch('http://localhost:9000/auth', {
+            fetch('http://localhost:9000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -38,7 +38,8 @@ export const Login = ({history}) => {
                 })
                 .then(res => {
                     sessionStorageService.saveOrUpdate("loggedUser", res);
-                    history.push("/rp/raids/calendar")
+                    history.push("/rp/raids/calendar");
+                    history.go();
                 })
         }
 

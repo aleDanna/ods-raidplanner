@@ -12,7 +12,7 @@ export default () => {
         next();
     });
 
-    router.post('/', function(req, res) {
+    router.post('/login', function(req, res) {
         const username = req.body.username;
         const password = req.body.password;
         persistenceService.authenticate(username, password)
@@ -33,9 +33,13 @@ export default () => {
             .catch(() => res.sendStatus(500));
     });
 
+    router.get('/logout', function(req, res) {
+        req['session'].destroy();
+        res.send(200);
+    });
+
     router.get('/recoverSession', function (req, res) {
         const userSession = req["session"].user;
-        console.log("session recovered: ", userSession)
         if (userSession) {
             res.send(userSession)
         }

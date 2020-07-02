@@ -6,7 +6,7 @@ import {ConfirmationModal} from "@shared/components/ConfirmationModal/Confirmati
 import {calculateSubscriptions} from "../../../utils/dataUtils";
 import {getDateTimeString} from "../../../utils/dateUtils";
 import {UserSubscribeModalContent, UserUnsubscribeModalContent} from "@shared/fragments/modalContents/RaidsCalendarModal";
-import subscriptionRestClient from "../../services/subscriptionRestClient";
+import subscriptionRestClient from "../../services/restClient";
 import sessionStorageService from "@shared/services/sessionStorageService";
 import {useState} from "react";
 import windowUtils from "../../../utils/windowUtils";

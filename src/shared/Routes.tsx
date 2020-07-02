@@ -5,10 +5,6 @@ import './styles/base.css';
 import {RaidsPage} from "@shared/pages/RaidsPage";
 import {LoginPage} from "@shared/pages/LoginPage";
 
-function Loading() {
-    return <h3>Loading...</h3>;
-}
-
 function RouteCollection() {
 
   return (

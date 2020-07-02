@@ -71,7 +71,7 @@ export const RaidsGrid = ({events}) => {
                     {result} {current}
                 </>
             )
-        })
+        }, <></>)
     }
 
 
