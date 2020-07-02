@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 import sessionStorageService from "@shared/services/sessionStorageService";
 import {UserNavBarIcon} from "@shared/fragments/icons/UserNavBarIcon";
 import {useState} from "react";
-import {neverSettle} from "react-async";
 
 export const NavBar = () => {
     const EMPTY_CHARACTER = "---";
