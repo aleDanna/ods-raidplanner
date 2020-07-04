@@ -8,7 +8,8 @@
 @import "../components/Login/Login.css";
 @import "../components/Loading/Loading.css";
 @import "../components/NavBar/NavBar.css";
-
+@import "../components/ScheduleEvent/ScheduleEvent.css";
+@import "../components/Raid/Raid.css";
 
 html, body {
     height: 100%;

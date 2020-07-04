@@ -3,6 +3,7 @@ import persistenceService from "../services/persistence-service"
 import bodyParser from "body-parser";
 
 export default () => {
+    console.log("initializing auth controller...");
     let router = express.Router();
     router.use(bodyParser.urlencoded({ extended: false }))
     router.use(bodyParser.json())
@@ -17,7 +18,6 @@ export default () => {
         const password = req.body.password;
         persistenceService.authenticate(username, password)
             .then(user => {
-                console.log(user)
                 if (user) {
                     persistenceService.getCharacters(user.id)
                         .then(characters => {

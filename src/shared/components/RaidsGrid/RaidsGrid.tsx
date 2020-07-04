@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Col, Container, Row, Media, Button} from "react-bootstrap";
 import {formatISODateString} from "../../../utils/dateUtils";
 
-export const RaidsGrid = ({events}) => {
+export const RaidsGrid = ({events, history}) => {
 
     const groupBy = (array, key) => {
         return array.reduce((result, currentValue) => {

@@ -17,19 +17,37 @@ const executeRestCall = (url, method, body?) => {
 }
 
 export default {
-    getAvailableRaidGroups() {
+    getAvailableRaids() {
         return executeRestCall(`http://localhost:9000/api/getRaids`, 'GET');
     },
-    subscribe(event, characterId) {
+    subscribe(eventId, characterId) {
         return executeRestCall(
             'http://localhost:9000/api/subscribe',
             'POST',
             {
-                event: event,
+                eventId: eventId,
                 characterId: characterId,
             })
     },
+    unsubscribe(eventId) {
+        return executeRestCall(`http://localhost:9000/api/unsubscribe/${eventId}`, 'DELETE');
+    },
     getSubscribedRaids() {
         return executeRestCall(`http://localhost:9000/api/subscribedRaids`, 'GET');
+    },
+    getRaidGroups() {
+        return executeRestCall(`http://localhost:9000/admin/raidGroups`, 'GET');
+    },
+    scheduleEvent(event) {
+        return executeRestCall(`http://localhost:9000/admin/schedule`, 'POST',
+            {
+                raid: event
+            });
+    },
+    getSubscriptionsFor(eventId) {
+        return executeRestCall(`http://localhost:9000/api/subscriptionsFor/${eventId}`, 'GET');
+    },
+    getRaidDetails(eventId) {
+        return executeRestCall(`http://localhost:9000/api/raidDetails/${eventId}`, 'GET');
     }
 }

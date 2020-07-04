@@ -7,7 +7,7 @@ export const RaidsPage = (routeProps) => {
     const mode = routeProps.match.params.mode;
 
     const loadRaids = () =>
-        subscriptionRestClient.getAvailableRaidGroups()
+        subscriptionRestClient.getAvailableRaids()
             .then(data => {
                 return subscriptionRestClient.getSubscribedRaids()
                     .then(ids => {
@@ -20,7 +20,7 @@ export const RaidsPage = (routeProps) => {
                     });
             });
 
-    const props = {mode: mode, isMobile: isMobile, raids: {}};
+    const props = {mode: mode, isMobile: isMobile, raids: {}, history: routeProps.history};
 
     return AsyncComponentLoader({
         Component: Raids,

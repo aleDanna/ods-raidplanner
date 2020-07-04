@@ -3,11 +3,14 @@ import {Modal, Button} from "react-bootstrap";
 import {useState} from "react";
 
 export interface ModalParams {
-    modalOpener: any
+    modalOpener: any,
+    id: any,
     title: string,
     content: any,
+    detailsActionText: string
     confirmButtonText: string,
     closeButtonText: string,
+    detailsAction: any,
     confirmAction: any,
     closeAction?: any,
     confirmButtonVariant?: any
@@ -16,7 +19,7 @@ export interface ModalParams {
 export const ConfirmationModal = (props: ModalParams) => {
 
     const [show, setShow] = useState(false);
-    const {modalOpener, title, content, confirmButtonText, closeButtonText, confirmAction, closeAction, confirmButtonVariant} = props;
+    const {modalOpener, id, title, content, detailsActionText, confirmButtonText, closeButtonText, detailsAction, confirmAction, closeAction, confirmButtonVariant} = props;
 
     const showModal = () => {setShow(true)};
     const hideModal = () => {setShow(false)};
@@ -30,6 +33,13 @@ export const ConfirmationModal = (props: ModalParams) => {
     const closeActionWrapper = () => {
         if (!!closeAction) {
             closeAction()
+        }
+        hideModal();
+    }
+
+    const detailsActionWrapper = (id) => {
+        if (!!detailsAction) {
+            detailsAction(id)
         }
         hideModal();
     }
@@ -51,6 +61,9 @@ export const ConfirmationModal = (props: ModalParams) => {
                 </Modal.Header>
                 <Modal.Body>{content}</Modal.Body>
                 <Modal.Footer>
+                    <Button variant={`primary`} onClick={() => detailsActionWrapper(id)}>
+                        {detailsActionText}
+                    </Button>
                     <Button variant="secondary" onClick={closeActionWrapper}>
                         {closeButtonText}
                     </Button>

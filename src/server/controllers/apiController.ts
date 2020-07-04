@@ -32,16 +32,40 @@ export default () => {
     });
 
     router.post("/subscribe", (req, res) => {
-        const {event, characterId} = req.body
+        const {eventId, characterId} = req.body
         const user = {
             id: req["session"].user.id,
             characterId: characterId
         }
-        persistenceService.addSubscription(event, user)
+        persistenceService.addSubscription(eventId, user)
             .then(() => {
                 res.sendStatus(200);
             })
     });
+
+    router.delete("/unsubscribe/:eventId", (req, res) => {
+        const eventId = req.params.eventId
+        const userId = req["session"].user.id
+
+        persistenceService.removeSubscription(eventId, userId)
+            .then(() => {
+                res.sendStatus(200);
+            })
+    });
+
+    router.get("/subscriptionsFor/:eventId", (req, res) => {
+        persistenceService.getSubscriptionsByEventId(req.params.eventId)
+            .then(subscriptions => {
+                res.send(subscriptions);
+            })
+    });
+
+    router.get("/raidDetails/:eventId", (req, res) => {
+        persistenceService.getRaid(req.params.eventId)
+            .then(raid => {
+                res.send(raid);
+            })
+    })
 
     return router;
 }

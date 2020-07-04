@@ -1,0 +1,19 @@
+.ods_raidplanner_raid-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-top: 80px;
+}
+
+.ods_raidplanner_raid-container * {
+    font-size: 20px;
+}
+
+.ods_raidplanner_raid-detail:focus {
+    border: none !important;
+    outline: none !important;
+}
+
+.ods_raidplanner_raid-subscriptions {
+    font-size: 15px !important;
+}

@@ -5,10 +5,11 @@ import {Container} from "react-bootstrap";
 import {RaidCalendar} from "../RaidsCalendar/RaidCalendar";
 import {getDateTimeString} from "../../../utils/dateUtils";
 
-export const Raids = ({mode, raids, isMobile}) => {
+export const Raids = ({mode, raids, isMobile, history}) => {
 
     const events = raids.map(item => {
         return {
+            id: item.id,
             title: item.name,
             start: item.start_date,
             description: `${item.name} del ${getDateTimeString(item.start_date)}`,
@@ -20,7 +21,7 @@ export const Raids = ({mode, raids, isMobile}) => {
     });
 
     let title;
-    let content = <RaidsGrid events={events} />
+    let content = <RaidsGrid events={events} history={history} />
 
     if (mode === "grid") {
         title = "Raid disponibili";
@@ -28,7 +29,7 @@ export const Raids = ({mode, raids, isMobile}) => {
 
     if (mode === "calendar" && !isMobile) {
         title = "Calendario";
-        content = <RaidCalendar events={events} />
+        content = <RaidCalendar events={events} history={history}/>
     }
 
    return (
