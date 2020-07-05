@@ -2,7 +2,7 @@ import {Client} from "pg"
 import {dbConnection} from "../../database/connection.config";
 
 
-async function executeQuery(query, singleResult){
+async function executeQuery(query, singleResult) {
     const client = new Client(dbConnection);
     client.connect();
     return await client.query(query)
@@ -25,10 +25,8 @@ async function executeQuery(query, singleResult){
 export default {
     getAllowedEvents(userId) {
         const query = `SELECT r.id, r.start_date, r.end_date, 
-                            (SELECT count(*) FROM raid_subscriptions rs, characters c 
-                            WHERE c.user_ref = ${userId}
-                              AND rs.character_ref = c.id
-                              AND rs.raid_ref = r.id) as subscriptions, 
+                            (SELECT count(*) FROM raid_subscriptions rs 
+                            WHERE rs.raid_ref = r.id) as subscriptions, 
                             rg.name, rg.image_name 
                                    FROM raids r, raid_groups rg, users u
                                    WHERE r.group_ref = rg.id 
