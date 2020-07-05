@@ -52,9 +52,8 @@ CREATE TABLE raids (
 CREATE TABLE raid_subscriptions (
     id numeric primary key DEFAULT NEXTVAL('raid_subscriptions_seq'),
     character_ref numeric not null references characters,
-    user_ref numeric not null references users,
     raid_ref numeric not null references raids,
-    UNIQUE (user_ref, character_ref, raid_ref)
+    UNIQUE (character_ref, raid_ref)
 );
 
 INSERT INTO roles (id, name) values

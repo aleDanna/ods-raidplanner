@@ -25,7 +25,9 @@ async function executeQuery(query, singleResult){
 export default {
     getAllowedEvents(userId) {
         const query = `SELECT r.id, r.start_date, r.end_date, 
-                            (SELECT count(*) FROM raid_subscriptions WHERE user_ref = ${userId}) as subscriptions, 
+                            (SELECT count(*) FROM raid_subscriptions rs, characters c 
+                            WHERE c.user_ref = ${userId}
+                                AND rs.character_ref = c.id) as subscriptions, 
                             rg.name, rg.image_name 
                                    FROM raids r, raid_groups rg, users u
                                    WHERE r.group_ref = rg.id 
@@ -40,16 +42,17 @@ export default {
     addSubscription(eventId, user) {
         const client = new Client(dbConnection);
         client.connect();
-        const query = `INSERT INTO raid_subscriptions (character_ref, user_ref, raid_ref)
-                        VALUES (${user.characterId}, ${user.id}, ${eventId})`;
+        const query = `INSERT INTO raid_subscriptions (character_ref, raid_ref)
+                        VALUES (${user.characterId}, ${eventId})`;
 
         return executeQuery(query, true);
     },
     getSubscribedRaids(userId) {
         const allowedRaidsQuery = `SELECT rs.raid_ref 
-                                   FROM raids r, raid_subscriptions rs
+                                   FROM raids r, raid_subscriptions rs, characters c
                                    WHERE r.id = rs.raid_ref 
-                                     AND rs.user_ref = ${userId}
+                                     AND rs.character_ref = c.id
+                                     AND c.user_ref = ${userId}
                                      AND r.start_date >= cast(date_trunc('month', current_date) as date)`;
 
         return executeQuery(allowedRaidsQuery, false);
@@ -97,16 +100,24 @@ export default {
         const query = `SELECT u.id, u.eso_username, c.name as character_name, r.name as role_name
                        FROM users u, characters c, roles r, raid_subscriptions rs 
                        WHERE rs.raid_ref = ${eventId} 
-                         AND rs.user_ref = u.id 
+                         AND c.user_ref = u.id
                          AND c.id = rs.character_ref
                          AND r.id = c.role_ref`;
         return executeQuery(query, false);
     },
-    removeSubscription(eventId, userId) {
+    removeSubscription(eventId, characterId) {
         const query = `DELETE 
-                       FROM raid_subscriptions rs 
+                       FROM raid_subscriptions rs
                        WHERE rs.raid_ref = ${eventId} 
-                         AND rs.user_ref = ${userId}`;
+                         AND rs.character_ref = ${characterId}`;
+        return executeQuery(query, true);
+    },
+    getSubscribedCharacter(eventId, userId) {
+        const query = `SELECT c.id
+                       FROM users u, characters c, raid_subscriptions rs 
+                       WHERE rs.raid_ref = ${eventId} 
+                         AND c.id = rs.character_ref
+                         AND c.user_ref = ${userId}`;
         return executeQuery(query, true);
     }
 }

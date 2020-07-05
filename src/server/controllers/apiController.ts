@@ -47,10 +47,14 @@ export default () => {
         const eventId = req.params.eventId
         const userId = req["session"].user.id
 
-        persistenceService.removeSubscription(eventId, userId)
-            .then(() => {
-                res.sendStatus(200);
-            })
+        persistenceService.getSubscribedCharacter(eventId, userId)
+            .then((character => {
+                console.log(character)
+                persistenceService.removeSubscription(eventId, character.id)
+                    .then(() => {
+                        res.sendStatus(200);
+                    })
+            }))
     });
 
     router.get("/subscriptionsFor/:eventId", (req, res) => {
