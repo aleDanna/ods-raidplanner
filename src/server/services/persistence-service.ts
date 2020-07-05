@@ -27,7 +27,8 @@ export default {
         const query = `SELECT r.id, r.start_date, r.end_date, 
                             (SELECT count(*) FROM raid_subscriptions rs, characters c 
                             WHERE c.user_ref = ${userId}
-                                AND rs.character_ref = c.id) as subscriptions, 
+                              AND rs.character_ref = c.id
+                              AND rs.raid_ref = r.id) as subscriptions, 
                             rg.name, rg.image_name 
                                    FROM raids r, raid_groups rg, users u
                                    WHERE r.group_ref = rg.id 
