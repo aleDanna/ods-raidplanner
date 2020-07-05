@@ -1,8 +1,14 @@
 import * as React from 'react';
-import {Col, Container, Row, Media, Button} from "react-bootstrap";
+import {Col, Container, Row, Media, Button, Alert} from "react-bootstrap";
 import {formatISODateString} from "../../../utils/dateUtils";
+import sessionStorageService from "@shared/services/sessionStorageService";
+import subscriptionRestClient from "@shared/services/restClient";
+import windowUtils from "../../../utils/windowUtils";
+import {useState} from "react";
 
-export const RaidsGrid = ({events}) => {
+export const RaidsGrid = ({events, history}) => {
+
+    const [characterMissingShow, setCharacterMissingShow] = useState(false);
 
     const groupBy = (array, key) => {
         return array.reduce((result, currentValue) => {
@@ -12,6 +18,31 @@ export const RaidsGrid = ({events}) => {
             return result;
         }, {});
     };
+
+    const subscribe = (eventId) => {
+        const characterId = sessionStorageService.get("selectedCharacter");
+        if (characterId) {
+            setCharacterMissingShow(false);
+            subscriptionRestClient.subscribe(eventId, characterId)
+                .then(() => {
+                    windowUtils.reload();
+                })
+        }
+        else {
+            setCharacterMissingShow(true);
+        }
+    }
+
+    const unsubscribe = (eventId) => {
+        subscriptionRestClient.unsubscribe(eventId)
+            .then(() => {
+                windowUtils.reload();
+            })
+    };
+
+    const eventDetails = (eventId) => {
+        history.push(`/rp/raid/${eventId}`);
+    }
 
     const events2group = groupBy(events, "title");
 
@@ -43,10 +74,15 @@ export const RaidsGrid = ({events}) => {
                                             <span>Day: {formatISODateString(value.start, "iii")}</span>
                                             <span>Iscrizioni: {value.subscriptions}</span>
                                         </Container>
-                                        <Button variant={value.subscribed ? `danger` : `success`} size="sm" block>
-                                            {value.subscribed ? 'Rimuovi' : 'Iscriviti'}
-                                        </Button>
-                                        <Button variant="secondary" size="sm" block>
+                                        {value.subscribed ?
+                                            <Button variant="danger" size="sm" block onClick={() => unsubscribe(value.id)}>
+                                                Rimuovi iscrizione
+                                            </Button> :
+                                            <Button variant="success" size="sm" block onClick={() => subscribe(value.id)}>
+                                                Iscriviti
+                                            </Button>
+                                        }
+                                        <Button variant="secondary" size="sm" block onClick={() => eventDetails(value.id)}>
                                             Dettagli evento
                                         </Button>
                                     </Col>
@@ -68,15 +104,20 @@ export const RaidsGrid = ({events}) => {
         return fragments.reduce((result, current) => {
             return (
                 <>
-                    {result} {current}
+                    {result}
+                    <hr className="mt-3 mb-3"/>
+                    {current}
                 </>
             )
-        })
+        }, <></>)
     }
 
 
     return (
         <Container className="ods_raidplanner_raidgrid-container">
+            <Alert variant="danger" show={characterMissingShow}>
+                Seleziona un personaggio!
+            </Alert>
             {generateGroups()}
         </Container>
     )

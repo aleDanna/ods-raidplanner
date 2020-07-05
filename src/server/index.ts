@@ -6,6 +6,7 @@ import reactMiddleWare from './reactMiddleWare';
 import apiController from './controllers/apiController';
 import authController from "./controllers/authController";
 import bodyParser from "body-parser";
+import adminController from "./controllers/adminController";
 const app = express();
 
 app.use(cors())
@@ -42,6 +43,7 @@ function mountMiddleWares(middlewares: MiddleWares) {
   app.use('/rp', reactMiddleWare);
   app.use('/auth', authController());
   app.use('/api', apiController());
+  app.use('/admin', adminController());
 
   middlewares
     .filter(m => m.when === 'post')

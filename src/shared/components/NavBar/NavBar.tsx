@@ -1,4 +1,4 @@
-import {Form, FormControl, InputGroup, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Col, Form, Nav, Navbar, NavDropdown, Row} from "react-bootstrap";
 import * as React from "react";
 import {Link} from "react-router-dom";
 import sessionStorageService from "@shared/services/sessionStorageService";
@@ -8,7 +8,7 @@ import {useState} from "react";
 export const NavBar = () => {
     const EMPTY_CHARACTER = "---";
     const userData = sessionStorageService.get("loggedUser");
-    const [selectedCharacter, setSelectedCharacter] = useState(sessionStorageService.get("selectedCharacter"));
+    const [selectedCharacter, setSelectedCharacter] = useState(sessionStorageService.get("selectedCharacter") || EMPTY_CHARACTER);
 
     const onCharacterChange = (character) => {
         setSelectedCharacter(character);
@@ -17,6 +17,7 @@ export const NavBar = () => {
         }
         else {
             sessionStorageService.remove("selectedCharacter");
+            setSelectedCharacter(EMPTY_CHARACTER);
         }
     }
     return (
@@ -32,6 +33,16 @@ export const NavBar = () => {
             </Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav" className="ods_raidplanner_navbar-links">
                 <Nav className="mr-auto">
+                    {userData && userData.role === 'ADMIN' &&
+                        <NavDropdown title="Admin" id="admin-dropdown">
+                            <NavDropdown.Item>
+                                <Link to="/rp/admin/schedule">Crea nuovo evento</Link>
+                            </NavDropdown.Item>
+                            <NavDropdown.Item>
+                                <Link to="/rp/admin/update">Modifica evento</Link>
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    }
                     <NavDropdown title="Raids" id="raids-dropdown">
                         <NavDropdown.Item >
                             <Link to="/rp/raids/grid">Griglia</Link>
@@ -46,24 +57,31 @@ export const NavBar = () => {
                     {userData && (
                         <>
                             <Form inline>
-                                <Form.Label className="my-1 mr-2" >
-                                    Personaggio
-                                </Form.Label>
-                                <Form.Control id="characterForm" as="select" value={selectedCharacter} onChange={e => onCharacterChange(e.target.value)}>
-                                    {
-                                        userData.characters.map((value) => {
-                                            return <option
-                                                key={value.character_id} value={value.character_id}>
-                                                {value.character_name} ( {value.role_name} )
-                                            </option>
-                                        })
-                                    }
-                                    <option key={0} selected={!selectedCharacter} defaultValue={EMPTY_CHARACTER}>{EMPTY_CHARACTER}</option>
-                                </Form.Control>
+                                <Row>
+                                    <Form.Label column md={4}>
+                                        Personaggio
+                                    </Form.Label>
+                                    <Col md={8}>
+                                        <Form.Control id="characterForm" as="select" value={selectedCharacter} onChange={e => onCharacterChange(e.target.value)}>
+                                            {
+                                                userData.characters.map((value) => {
+                                                    return <option
+                                                        key={value.character_id} value={value.character_id}>
+                                                        {value.character_name} ( {value.role_name} )
+                                                    </option>
+                                                })
+                                            }
+                                            <option key={0} defaultValue={selectedCharacter}>{EMPTY_CHARACTER}</option>
+                                        </Form.Control>
+                                    </Col>
+                                </Row>
                             </Form>
                             <NavDropdown className="ods_raidplanner_navbar-user-dropdown" title={<UserNavBarIcon />} id="raids-dropdown">
                                 <NavDropdown.Item>
                                     <Link to="/rp/profile">Profilo</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link to="#" onClick={doLogout}>Logout</Link>
                                 </NavDropdown.Item>
                             </NavDropdown>
                         </>
@@ -72,4 +90,18 @@ export const NavBar = () => {
             </Navbar.Collapse>
         </Navbar>
     )
+}
+
+
+const doLogout = () => {
+    fetch('http://localhost:9000/auth/logout', {
+        method: 'GET'
+    })
+        .then(res => {
+            if (res.ok) {
+                sessionStorageService.remove("loggedUser");
+                sessionStorageService.remove("selectedCharacter");
+                window.location.href = "/rp/login";
+            }
+        })
 }

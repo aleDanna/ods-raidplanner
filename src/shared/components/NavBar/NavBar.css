@@ -3,6 +3,11 @@
     background: rgba(255, 255, 255, 0.3) !important;
 }
 
+.dropdown-menu > a > a {
+    color: black !important;
+    text-decoration: none !important;
+}
+
 .ods_raidplanner_navbar-links {
     margin-top: 10px;
 }

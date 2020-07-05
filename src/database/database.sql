@@ -10,7 +10,8 @@ CREATE SEQUENCE raid_subscriptions_seq START 1;
 CREATE TABLE credentials (
     id numeric primary key DEFAULT NEXTVAL('credentials_seq'),
     username varchar not null unique,
-    password varchar not null
+    password varchar not null,
+    role varchar not null
 );
 
 CREATE TABLE users (
@@ -45,16 +46,14 @@ CREATE TABLE raids (
     id numeric primary key DEFAULT NEXTVAL('raids_seq'),
     start_date timestamp not null,
     end_date timestamp not null,
-    subscriptions numeric not null,
     group_ref numeric not null references raid_groups
 );
 
 CREATE TABLE raid_subscriptions (
     id numeric primary key DEFAULT NEXTVAL('raid_subscriptions_seq'),
     character_ref numeric not null references characters,
-    user_ref numeric not null references users,
     raid_ref numeric not null references raids,
-    UNIQUE (user_ref, raid_ref)
+    UNIQUE (character_ref, raid_ref)
 );
 
 INSERT INTO roles (id, name) values

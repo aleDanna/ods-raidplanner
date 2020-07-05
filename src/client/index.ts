@@ -1,18 +1,18 @@
 import * as ReactDOM from 'react-dom';
 
-import Base from './Base';
+import App from './App';
 import sessionStorageService from "@shared/services/sessionStorageService";
 import windowUtils from "../utils/windowUtils";
 
 const serverRendered = (window.MyApp && window.MyApp.serverRendered) || false;
 const appNode = document.getElementById('app');
 const renderFunc = serverRendered ? ReactDOM.hydrate : ReactDOM.render;
-renderFunc(Base, appNode);
+renderFunc(App, appNode);
 
 if (process.env.NODE_ENV === 'development') {
   if (module.hot) {
-    module.hot.accept('./Base', () => {
-      const base = require('./Base').default;
+    module.hot.accept('./App', () => {
+      const base = require('./App').default;
       ReactDOM.unmountComponentAtNode(appNode!);
       ReactDOM.render(base, appNode);
     });
