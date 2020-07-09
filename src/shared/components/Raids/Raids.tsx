@@ -20,11 +20,7 @@ export const Raids = ({mode, raids, history}) => {
         }
     });
 
-    let title;
     let content = <RaidsGrid events={events} history={history} />
-
-    if (mode === "grid") {
-    }
 
     if (mode === "calendar" && !isMobile) {
         content = <RaidCalendar events={events} history={history}/>
