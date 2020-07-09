@@ -81,6 +81,9 @@ export const NavBar = () => {
                                     <Link to="/rp/profile">Profilo</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
+                                    <Link to="/rp/characters">Personaggi</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
                                     <Link to="#" onClick={doLogout}>Logout</Link>
                                 </NavDropdown.Item>
                             </NavDropdown>

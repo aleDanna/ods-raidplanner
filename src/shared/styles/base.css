@@ -10,6 +10,8 @@
 @import "../components/NavBar/NavBar.css";
 @import "../components/ScheduleEvent/ScheduleEvent.css";
 @import "../components/Raid/Raid.css";
+@import "../components/UserProfile/UserProfile.css";
+@import "../components/Characters/Characters.css";
 
 html, body {
     height: 100%;

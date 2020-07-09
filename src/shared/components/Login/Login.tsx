@@ -56,7 +56,6 @@ export const Login = ({history}) => {
             </Row>
             <Row className="justify-content-md-center">
                 <Jumbotron className="ods_raidplanner_login-jumbotron">
-                    <h1>Login</h1>
                     <Form noValidate validated={validated} onSubmit={login}>
                         <Form.Group controlId="formLogin">
                             <Form.Label>Username</Form.Label>

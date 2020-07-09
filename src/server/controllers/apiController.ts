@@ -49,7 +49,6 @@ export default () => {
 
         persistenceService.getSubscribedCharacter(eventId, userId)
             .then((character => {
-                console.log(character)
                 persistenceService.removeSubscription(eventId, character.id)
                     .then(() => {
                         res.sendStatus(200);
@@ -69,7 +68,95 @@ export default () => {
             .then(raid => {
                 res.send(raid);
             })
-    })
+    });
+
+    router.get("/checkUsername/:username", (req, res) => {
+        persistenceService.getUserByUsername(req.params.username)
+            .then(user => {
+                res.send({
+                    isValid: user === null || user.id === req['session'].user.id
+                });
+            })
+    });
+
+    router.get("/checkEsoUsername/:username", (req, res) => {
+        persistenceService.getUserByESOUsername(req.params.username)
+            .then(userId => {
+                res.send({
+                    isValid: userId === null || userId === req['session'].user.id
+                });
+            })
+    });
+
+    router.get("/allRoles", (req, res) => {
+        persistenceService.getRoles()
+            .then(roles => {
+                res.send(roles);
+            })
+    });
+
+    router.put("/updateCharacter", (req, res) => {
+
+        const {characterId, name, roleId } = req.body;
+
+        persistenceService.updateCharacter(characterId, name, roleId)
+            .then(() => {
+                persistenceService.getCharacters(req['session'].user.id)
+                    .then(characters => {
+                        req['session'].user.characters = characters;
+                        res.send(req['session'].user);
+                    })
+            });
+
+    });
+
+    router.delete("/deleteCharacter/:characterId", (req, res) => {
+
+        persistenceService.deleteCharacter(req.params.characterId)
+            .then(() => {
+                persistenceService.getCharacters(req['session'].user.id)
+                    .then(characters => {
+                        req['session'].user.characters = characters;
+                        res.send(req['session'].user);
+                    })
+            });
+    });
+
+
+    router.put("/updateUser", (req, res) => {
+        const actualUser = Object.create(req['session'].user);
+
+        for (let key in req.body.userData) {
+            actualUser[key] = req.body.userData[key];
+        }
+
+        persistenceService.updateUser(actualUser)
+            .then(() => {
+                persistenceService.updateUsername(req['session'].user.username, actualUser.username)
+                    .then(() => {
+                        persistenceService.getCharacters(req['session'].user.id)
+                            .then(characters => {
+                                req['session'].user.characters = characters;
+                                res.send(req['session'].user);
+                            })
+                    });
+            })
+
+    });
+
+    router.post("/saveCharacter", (req, res) => {
+        const {name, roleId} = req.body
+        const userId = req["session"].user.id;
+
+        persistenceService.addCharacter(userId, name, roleId)
+            .then(() => {
+                persistenceService.getCharacters(req['session'].user.id)
+                    .then(characters => {
+                        req['session'].user.characters = characters;
+                        res.send(req['session'].user);
+                    })
+            })
+    });
 
     return router;
 }

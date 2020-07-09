@@ -1,14 +1,11 @@
 import * as React from 'react';
-import {ContentTitle} from "../ContentTitle/ContentTitle";
-import {RaidsGrid} from "../RaidsGrid/RaidsGrid";
-import {Alert, Button, Col, Container, Form, Jumbotron, Row} from "react-bootstrap";
-import {RaidCalendar} from "../RaidsCalendar/RaidCalendar";
-import {formatISODateString, getDateTimeString} from "../../../utils/dateUtils";
+import {useState} from 'react';
+import {Alert, Button, Col, Container, Form, Row} from "react-bootstrap";
+import {formatISODateString} from "../../../utils/dateUtils";
 import {calculateSubscriptions} from "../../../utils/dataUtils";
 import sessionStorageService from "@shared/services/sessionStorageService";
 import subscriptionRestClient from "@shared/services/restClient";
 import windowUtils from "../../../utils/windowUtils";
-import {useState} from "react";
 
 export const Raid = ({raid}) => {
 
@@ -38,7 +35,6 @@ export const Raid = ({raid}) => {
 
     return (
         <Container fluid>
-            <ContentTitle nameTitle="Dettagli evento" />
             <Container className="ods_raidplanner_raid-container">
                 <Alert variant="danger" show={characterMissingShow}>
                     Seleziona un personaggio!

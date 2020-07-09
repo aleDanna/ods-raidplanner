@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {ContentTitle} from "../ContentTitle/ContentTitle";
 import {RaidsGrid} from "../RaidsGrid/RaidsGrid";
 import {Container} from "react-bootstrap";
 import {RaidCalendar} from "../RaidsCalendar/RaidCalendar";
 import {getDateTimeString} from "../../../utils/dateUtils";
+import {isMobile} from "react-device-detect";
 
-export const Raids = ({mode, raids, isMobile, history}) => {
+export const Raids = ({mode, raids, history}) => {
 
     const events = raids.map(item => {
         return {
@@ -24,17 +24,14 @@ export const Raids = ({mode, raids, isMobile, history}) => {
     let content = <RaidsGrid events={events} history={history} />
 
     if (mode === "grid") {
-        title = "Raid disponibili";
     }
 
     if (mode === "calendar" && !isMobile) {
-        title = "Calendario";
         content = <RaidCalendar events={events} history={history}/>
     }
 
    return (
        <Container fluid>
-           <ContentTitle nameTitle={title} />
            {content}
        </Container>
    )

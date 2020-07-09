@@ -11,7 +11,7 @@ export default () => {
 
     router.use('*', (req, res, next) => {
         if (req["session"].user && req["session"].user.role === "ADMIN") {
-            console.log("Rest api service called: ", new Date());
+            console.log("Admin api service called: ", new Date());
             next();
         }
         else {

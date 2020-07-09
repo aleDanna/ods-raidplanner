@@ -118,5 +118,58 @@ export default {
                          AND c.id = rs.character_ref
                          AND c.user_ref = ${userId}`;
         return executeQuery(query, true);
+    },
+    getUserByUsername(username) {
+        const query = `SELECT u.id, u.name, u.surname, u.eso_username, u.rank, c.username, c.role
+                                   FROM users u, credentials c
+                                   WHERE c.username = '${username}'
+                                     AND u.credentials_ref = c.id`;
+
+        return executeQuery(query, true);
+    },
+    getUserByESOUsername(eso_username) {
+        const query = `SELECT u.id
+                       FROM users u
+                       WHERE u.eso_username = '${eso_username}'`;
+        return executeQuery(query, true);
+    },
+    updateUser(user) {
+        const query = `UPDATE users u
+                       SET name = '${user.name}', 
+                           surname = '${user.surname}',
+                           eso_username = '${user.eso_username}',
+                           rank = '${user.rank}'
+                       WHERE u.id = ${user.id}`;
+        return executeQuery(query, true);
+    },
+    updateUsername(oldUsername, username) {
+        const query = `UPDATE credentials c
+                       SET username = '${username}'
+                       WHERE c.username = '${oldUsername}'`;
+        return executeQuery(query, true);
+    },
+    getRoles() {
+        const query = `SELECT *
+                       FROM roles`;
+        return executeQuery(query, false);
+    },
+    updateCharacter(characterId, name, roleId) {
+        const query = `UPDATE characters c
+                       SET name = '${name}', 
+                           role_ref = '${roleId}'
+                       WHERE c.id = ${characterId}`;
+        return executeQuery(query, true);
+    },
+
+    deleteCharacter(characterId: any) {
+        const query = `DELETE 
+                       FROM characters c
+                       WHERE c.id = ${characterId}`;
+        return executeQuery(query, true);
+    },
+    addCharacter(userId, name, roleId) {
+        const query = `INSERT INTO characters (name, role_ref, user_ref) 
+                            VALUES ('${name}', ${roleId}, ${userId})`
+        return executeQuery(query, true);
     }
 }

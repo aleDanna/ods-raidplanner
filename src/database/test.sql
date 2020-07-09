@@ -8,12 +8,12 @@ INSERT INTO users (id, name, surname, eso_username, rank, credentials_ref) value
 (2, 'test2', 'test2', 'vdvdvf', 2, 2),
 (3, 'Admin', 'Super', 'adminESO', 5, 3);
 
-INSERT INTO characters (name, role_ref, user_ref) values
-('oban whisky', 3, 1),
-('brandir', 1, 1),
-('noshop', 2, 2),
-('ivo avido', 3, 3),
-('rupert sciamenna', 1, 3);
+INSERT INTO characters (id, name, role_ref, user_ref) values
+(1001, 'oban whisky', 3, 1),
+(1002, 'brandir', 1, 1),
+(1003, 'noshop', 2, 2),
+(1004, 'ivo avido', 3, 3),
+(1005, 'rupert sciamenna', 1, 3);
 
 
 INSERT INTO raids (id, start_date, end_date, subscriptions, group_ref) values

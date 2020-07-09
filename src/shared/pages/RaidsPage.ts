@@ -2,6 +2,8 @@ import {Raids} from "@shared/components/Raids/Raids";
 import {isMobile} from "react-device-detect";
 import subscriptionRestClient from "../services/restClient";
 import {AsyncComponentLoader} from "@shared/components/AsyncComponentLoader/AsyncComponentLoader";
+import {ContentTitle} from "@shared/components/ContentTitle/ContentTitle";
+import pageBuilder from "@shared/pages/pageBuilder";
 
 export const RaidsPage = (routeProps) => {
     const mode = routeProps.match.params.mode;
@@ -12,7 +14,6 @@ export const RaidsPage = (routeProps) => {
                 return subscriptionRestClient.getSubscribedRaids()
                     .then(ids => {
                         const subscribedEvents = ids.map(row => {return row.raid_ref})
-                        console.log("subscribed raid ids fetched...", subscribedEvents)
                         data.map(event => {
                             return event['subscribed'] = subscribedEvents.indexOf(event.id) > -1;
                         });
@@ -20,12 +21,17 @@ export const RaidsPage = (routeProps) => {
                     });
             });
 
-    const props = {mode: mode, isMobile: isMobile, raids: {}, history: routeProps.history};
+    const props = {mode: mode, raids: {}, history: routeProps.history};
 
-    return AsyncComponentLoader({
+    const title = mode === "calendar" && !isMobile ? "Calendario" : "Raid disponibili";
+
+    const titleComponent = ContentTitle({nameTitle: title})
+    const mainComponent = AsyncComponentLoader({
         Component: Raids,
         asyncFn: loadRaids,
         componentProps: props,
         propFetched: 'raids'
     });
+
+    return pageBuilder.build(titleComponent, mainComponent);
 }
