@@ -27,7 +27,7 @@ export default {
         const query = `SELECT r.id, r.start_date, r.end_date, 
                             (SELECT count(*) FROM raid_subscriptions rs 
                             WHERE rs.raid_ref = r.id) as subscriptions, 
-                            rg.name, rg.image_name 
+                            rg.name, rg.image_name, rg.id as group_id 
                                    FROM raids r, raid_groups rg, users u
                                    WHERE r.group_ref = rg.id 
                                      AND u.id = ${userId}
@@ -162,14 +162,55 @@ export default {
     },
 
     deleteCharacter(characterId: any) {
-        const query = `DELETE 
+        const childQuery = `DELETE
+                            FROM raid_subscriptions rs
+                            WHERE rs.character_ref = ${characterId}`;
+        return executeQuery(childQuery, true)
+            .then(() => {
+                const query = `DELETE 
                        FROM characters c
                        WHERE c.id = ${characterId}`;
-        return executeQuery(query, true);
+                return executeQuery(query, true);
+            })
     },
     addCharacter(userId, name, roleId) {
         const query = `INSERT INTO characters (name, role_ref, user_ref) 
                             VALUES ('${name}', ${roleId}, ${userId})`
         return executeQuery(query, true);
+    },
+    getRaidsByFilter(startDateFilter, endDateFilter, groupFilter) {
+
+        let additionalConditions = "";
+        if (startDateFilter) {
+            additionalConditions = additionalConditions + `AND r.start_date::date >= '${startDateFilter}'::date `;
+        }
+        if (endDateFilter) {
+            additionalConditions = additionalConditions + `AND r.start_date::date <= '${endDateFilter}'::date `;
+        }
+        if (groupFilter) {
+            additionalConditions = additionalConditions + `AND ${groupFilter} = rg.id`;
+        }
+
+        const query = `SELECT r.id, r.start_date, r.end_date, 
+                            (SELECT count(*) FROM raid_subscriptions rs 
+                            WHERE rs.raid_ref = r.id) as subscriptions, 
+                            rg.name, rg.image_name, rg.id as group_id 
+                                   FROM raids r, raid_groups rg
+                                   WHERE r.group_ref = rg.id
+                                   ${additionalConditions}`;
+
+        return executeQuery(query, false);
+    },
+    deleteEvent(eventId) {
+        const childQuery = `DELETE
+                            FROM raid_subscriptions rs
+                            WHERE rs.raid_ref = ${eventId}`;
+        return executeQuery(childQuery, true)
+            .then(() => {
+                const query = `DELETE 
+                       FROM raids r
+                       WHERE r.id = ${eventId}`;
+                return executeQuery(query, true);
+            })
     }
 }

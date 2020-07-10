@@ -5,6 +5,7 @@ import sessionStorageService from "@shared/services/sessionStorageService";
 import subscriptionRestClient from "@shared/services/restClient";
 import windowUtils from "../../../utils/windowUtils";
 import {useState} from "react";
+import {RaidCard} from "@shared/components/RaidCard/RaidCard";
 
 export const RaidsGrid = ({events, history}) => {
 
@@ -68,12 +69,7 @@ export const RaidsGrid = ({events, history}) => {
                             <Row>
                                 {events.map((value, _) => {
                                     return <Col md="auto" xs={6} className="ods_raidplanner_raidgrid-event">
-                                        <Container fluid="md" className="ods_raidplanner_raidgrid-event-content">
-                                            <span>Data: {formatISODateString(value.start, "dd-MM")}</span>
-                                            <span>Ora: {formatISODateString(value.start, "hh:mm")}</span>
-                                            <span>Day: {formatISODateString(value.start, "iii")}</span>
-                                            <span>Iscrizioni: {value.subscriptions}</span>
-                                        </Container>
+                                        <RaidCard event={value} />
                                         {value.subscribed ?
                                             <Button variant="danger" size="sm" block onClick={() => unsubscribe(value.id)}>
                                                 Rimuovi iscrizione

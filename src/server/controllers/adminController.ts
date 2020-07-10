@@ -33,5 +33,12 @@ export default () => {
             })
     })
 
+    router.delete('/deleteEvent/:eventId', function (req, res) {
+        persistenceService.deleteEvent(req.params.eventId)
+            .then(() => {
+                res.sendStatus(200);
+            })
+    })
+
     return router;
 }

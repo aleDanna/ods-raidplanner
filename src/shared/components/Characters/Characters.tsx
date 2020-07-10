@@ -104,6 +104,9 @@ export const Characters = ({groups}) => {
                                 </Col>
                                 <p><strong>{character.role_name}</strong></p>
                             </Row>
+                            <Row>
+                                <span><strong style={{color: 'red'}}>Attenzione, eliminando il personaggio eliminerai tutte le iscrizioni a lui associate. Continuare?</strong></span>
+                            </Row>
                         </Container>
                     </Modal.Body>
                     <Modal.Footer>

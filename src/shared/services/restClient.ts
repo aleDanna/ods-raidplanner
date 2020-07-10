@@ -82,5 +82,15 @@ export default {
                 name: name,
                 roleId: role
             });
+    },
+    getRaidsByFilter(filters) {
+        return executeRestCall(`http://localhost:9000/api/getRaidsByFilter`, 'POST',
+            {
+                filters: filters
+            });
+    },
+    deleteEvent(eventId) {
+        return executeRestCall(`http://localhost:9000/admin/deleteEvent/${eventId}`, 'DELETE');
+
     }
 }

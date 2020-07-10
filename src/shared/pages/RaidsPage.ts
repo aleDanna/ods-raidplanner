@@ -1,23 +1,25 @@
 import {Raids} from "@shared/components/Raids/Raids";
 import {isMobile} from "react-device-detect";
-import subscriptionRestClient from "../services/restClient";
+import restClient from "../services/restClient";
 import {AsyncComponentLoader} from "@shared/components/AsyncComponentLoader/AsyncComponentLoader";
 import {ContentTitle} from "@shared/components/ContentTitle/ContentTitle";
 import pageBuilder from "@shared/pages/pageBuilder";
+import RaidTransformer from "../../utils/raidTransformer";
 
 export const RaidsPage = (routeProps) => {
     const mode = routeProps.match.params.mode;
 
     const loadRaids = () =>
-        subscriptionRestClient.getAvailableRaids()
+        restClient.getAvailableRaids()
             .then(data => {
-                return subscriptionRestClient.getSubscribedRaids()
+                return restClient.getSubscribedRaids()
                     .then(ids => {
                         const subscribedEvents = ids.map(row => {return row.raid_ref})
-                        data.map(event => {
-                            return event['subscribed'] = subscribedEvents.indexOf(event.id) > -1;
+                        const events = RaidTransformer.transform(data);
+                        events.forEach(event => {
+                            event.subscribed = subscribedEvents.indexOf(event.id) > -1
                         });
-                        return data;
+                        return events;
                     });
             });
 

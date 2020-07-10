@@ -12,6 +12,8 @@
 @import "../components/Raid/Raid.css";
 @import "../components/UserProfile/UserProfile.css";
 @import "../components/Characters/Characters.css";
+@import "../components/EventSearch/EventSearch.css";
+@import "../components/RaidCard/RaidCard.css";
 
 html, body {
     height: 100%;

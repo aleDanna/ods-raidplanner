@@ -39,7 +39,7 @@ export const NavBar = () => {
                                 <Link to="/rp/admin/schedule">Crea nuovo evento</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Item>
-                                <Link to="/rp/admin/update">Modifica evento</Link>
+                                <Link to="/rp/admin/raids">Cerca eventi</Link>
                             </NavDropdown.Item>
                         </NavDropdown>
                     }

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Container, Row, Col } from "react-bootstrap";
-export const ContentTitle = (props) => {
-    const { nameTitle } = props;
+export const ContentTitle = ({ nameTitle }) => {
     return (
         <Container className="ods_raidplanner_contenttitle-container" fluid>
             <Row className="ods_raidplanner_contenttitle-title">

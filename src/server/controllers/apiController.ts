@@ -158,5 +158,14 @@ export default () => {
             })
     });
 
+    router.post("/getRaidsByFilter", (req, res) => {
+        const {startDateFilter, endDateFilter, groupFilter} = req.body.filters
+
+        persistenceService.getRaidsByFilter(startDateFilter, endDateFilter, groupFilter)
+            .then((data) => {
+                res.send(data);
+            });
+    });
+
     return router;
 }
