@@ -120,7 +120,7 @@ export default {
         return executeQuery(query, true);
     },
     getUserByUsername(username) {
-        const query = `SELECT u.id, u.name, u.surname, u.eso_username, u.rank, c.username, c.role
+        const query = `SELECT u.id, u.name, u.surname, u.eso_username, u.rank, c.username, c.role, c.id as credentials_id
                                    FROM users u, credentials c
                                    WHERE c.username = '${username}'
                                      AND u.credentials_ref = c.id`;
@@ -212,5 +212,28 @@ export default {
                        WHERE r.id = ${eventId}`;
                 return executeQuery(query, true);
             })
+    },
+    saveCredentials(username, password, role) {
+        const query = `INSERT INTO credentials (username, password, role) 
+                            VALUES ('${username}', '${password}', '${role}'); 
+                            SELECT currval('credentials_seq');`
+        return executeQuery(query, true);
+    },
+    saveUser(name, surname, esoUsername, rank, username) {
+        const query = `INSERT INTO users (name, surname, eso_username, rank, credentials_ref) 
+                            VALUES ('${name}', '${surname}', '${esoUsername}', ${rank}, (SELECT id FROM credentials WHERE username = '${username}'))`;
+        return executeQuery(query, true);
+    },
+    updateRoleCredentials(credentials_id, role) {
+        const query = `UPDATE credentials c
+                       SET role = '${role}' 
+                       WHERE c.id = ${credentials_id}`;
+        return executeQuery(query, true);
+    },
+    updateRank(id, rank) {
+        const query = `UPDATE users u
+                       SET rank = ${rank} 
+                       WHERE u.id = ${id}`;
+        return executeQuery(query, true);
     }
 }

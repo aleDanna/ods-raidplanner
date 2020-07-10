@@ -46,6 +46,36 @@ export default () => {
         else {
             res.sendStatus(204)
         }
+    });
+
+    router.get("/checkUsername/:username", (req, res) => {
+        persistenceService.getUserByUsername(req.params.username)
+            .then(user => {
+                res.send({
+                    isValid: user === null || (req['session'].user && user.id === req['session'].user.id)
+                });
+            })
+    });
+
+    router.get("/checkEsoUsername/:username", (req, res) => {
+        persistenceService.getUserByESOUsername(req.params.username)
+            .then(userId => {
+                res.send({
+                    isValid: userId === null || (req['session'].user && userId === req['session'].user.id)
+                });
+            })
+    });
+
+    router.post("/register", (req, res) => {
+        console.log(req.body);
+        const {username, password, name, surname, esoUsername} = req.body.userData;
+        persistenceService.saveCredentials(username, password, "DEFAULT")
+            .then(() => {
+                persistenceService.saveUser(name, surname, esoUsername, 1, username)
+                    .then(() => {
+                        res.sendStatus(200);
+                    })
+            })
     })
     return router;
 }

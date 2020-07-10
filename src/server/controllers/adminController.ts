@@ -31,12 +31,36 @@ export default () => {
             .then(() => {
                 res.sendStatus(200);
             })
-    })
+    });
 
     router.delete('/deleteEvent/:eventId', function (req, res) {
         persistenceService.deleteEvent(req.params.eventId)
             .then(() => {
                 res.sendStatus(200);
+            })
+    });
+
+
+    router.get('/findUser/:username', function (req, res) {
+        persistenceService.getUserByUsername(req.params.username)
+            .then(raidGroups => {
+                res.send(raidGroups);
+            })
+    });
+
+    router.get('/allUserRoles', (req, res) => {
+        //TODO migrate in future as typo table on db
+        res.send(["DEFAULT", "ADMIN"]);
+    });
+
+    router.put("/updateUser", (req, res) => {
+        const {id, rank, role, credentials_id} = req.body.userData;
+        persistenceService.updateRoleCredentials(credentials_id, role)
+            .then(() => {
+                persistenceService.updateRank(id, rank)
+                    .then(() => {
+                        res.sendStatus(200);
+                    })
             })
     })
 

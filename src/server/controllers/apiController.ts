@@ -70,24 +70,6 @@ export default () => {
             })
     });
 
-    router.get("/checkUsername/:username", (req, res) => {
-        persistenceService.getUserByUsername(req.params.username)
-            .then(user => {
-                res.send({
-                    isValid: user === null || user.id === req['session'].user.id
-                });
-            })
-    });
-
-    router.get("/checkEsoUsername/:username", (req, res) => {
-        persistenceService.getUserByESOUsername(req.params.username)
-            .then(userId => {
-                res.send({
-                    isValid: userId === null || userId === req['session'].user.id
-                });
-            })
-    });
-
     router.get("/allRoles", (req, res) => {
         persistenceService.getRoles()
             .then(roles => {

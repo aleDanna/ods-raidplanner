@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {Jumbotron, Button, Form, Container, Row, Alert} from "react-bootstrap";
+import {Jumbotron, Button, Form, Container, Row, Alert, Col} from "react-bootstrap";
 import {useState} from "react";
 import sessionStorageService from "@shared/services/sessionStorageService";
+import {Link} from "react-router-dom";
 
 export const Login = ({history}) => {
     const [username, setUsername] = useState("");
@@ -77,9 +78,19 @@ export const Login = ({history}) => {
                                 Campo obbligatorio
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Login
-                        </Button>
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <Button variant="primary" type="submit">
+                                    Login
+                                </Button>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <span>or </span>
+                                <Link to="/rp/signup">signup</Link>
+                            </Form.Group>
+                        </Form.Row>
                     </Form>
                 </Jumbotron>
 

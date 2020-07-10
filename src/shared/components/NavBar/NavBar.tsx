@@ -41,6 +41,9 @@ export const NavBar = () => {
                             <NavDropdown.Item>
                                 <Link to="/rp/admin/raids">Cerca eventi</Link>
                             </NavDropdown.Item>
+                            <NavDropdown.Item>
+                                <Link to="/rp/admin/editUser">Modifica utente</Link>
+                            </NavDropdown.Item>
                         </NavDropdown>
                     }
                     <NavDropdown title="Raids" id="raids-dropdown">
