@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Col, Container, Row, Media, Button, Alert} from "react-bootstrap";
 import {formatISODateString} from "../../../utils/dateUtils";
 import sessionStorageService from "@shared/services/sessionStorageService";
-import subscriptionRestClient from "@shared/services/restClient";
+import restClient from "@shared/services/restClient";
 import windowUtils from "../../../utils/windowUtils";
 import {useState} from "react";
 import {RaidCard} from "@shared/components/RaidCard/RaidCard";
@@ -24,7 +24,7 @@ export const RaidsGrid = ({events, history}) => {
         const characterId = sessionStorageService.get("selectedCharacter");
         if (characterId) {
             setCharacterMissingShow(false);
-            subscriptionRestClient.subscribe(eventId, characterId)
+            restClient.subscribe(eventId, characterId)
                 .then(() => {
                     windowUtils.reload();
                 })
@@ -35,7 +35,7 @@ export const RaidsGrid = ({events, history}) => {
     }
 
     const unsubscribe = (eventId) => {
-        subscriptionRestClient.unsubscribe(eventId)
+        restClient.unsubscribe(eventId)
             .then(() => {
                 windowUtils.reload();
             })

@@ -38,7 +38,7 @@ export const Login = ({history}) => {
                 })
                 .then(res => {
                     sessionStorageService.saveOrUpdate("loggedUser", res);
-                    history.push("/rp/raids/calendar");
+                    history.push("/rp");
                     history.go();
                 })
         }
