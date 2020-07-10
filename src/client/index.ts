@@ -35,10 +35,9 @@ if (!sessionStorageService.get("loggedUser")) {
           return res.json()
         }
       })
-      .then(res => {
-        if (res) {
-          sessionStorageService.saveOrUpdate("loggedUser", res);
-            windowUtils.reload();
+      .then(user => {
+        if (user) {
+            windowUtils.reload(user);
         }
       })
 }

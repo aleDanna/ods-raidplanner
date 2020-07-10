@@ -1,16 +1,23 @@
-import {Raids} from "@shared/components/Raids/Raids";
-import {isMobile} from "react-device-detect";
 import restClient from "../services/restClient";
 import {AsyncComponentLoader} from "@shared/components/AsyncComponentLoader/AsyncComponentLoader";
 import {ContentTitle} from "@shared/components/ContentTitle/ContentTitle";
 import pageBuilder from "@shared/pages/pageBuilder";
 import RaidTransformer from "../../utils/raidTransformer";
+import {formatISODateString} from "../../utils/dateUtils";
+import {Home} from "@shared/components/Home/Home";
 
-export const RaidsPage = (routeProps) => {
-    const mode = routeProps.match.params.mode;
+export const HomePage = (routeProps) => {
 
-    const loadRaids = () =>
-        restClient.getAvailableRaids()
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setMonth(nextWeek.getMonth() + 1);
+
+    const loadEvents = () =>
+
+        restClient.getRaidsByFilter({
+            startDateFilter: formatISODateString(today.toISOString(), "yyyy-MM-dd"),
+            endDateFilter: formatISODateString(nextWeek.toISOString(), "yyyy-MM-dd")
+        })
             .then(data => {
                 return restClient.getSubscribedRaids()
                     .then(ids => {
@@ -23,16 +30,12 @@ export const RaidsPage = (routeProps) => {
                     });
             });
 
-    const props = {mode: mode, raids: {}, history: routeProps.history};
-
-    const title = mode === "calendar" && !isMobile ? "Calendario" : "Raid disponibili";
-
-    const titleComponent = ContentTitle({nameTitle: title})
+    const titleComponent = ContentTitle({nameTitle: "Home"})
     const mainComponent = AsyncComponentLoader({
-        Component: Raids,
-        asyncFn: loadRaids,
-        componentProps: props,
-        propFetched: 'raids'
+        Component: Home,
+        asyncFn: loadEvents,
+        componentProps: {history: routeProps.history},
+        propFetched: 'events'
     });
 
     return pageBuilder.build(titleComponent, mainComponent);

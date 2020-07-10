@@ -19,19 +19,6 @@
     text-align: center;
 }
 
-.ods_raidplanner_raidgrid-event-content {
-    display: inline-block;
-    border: 1px solid;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-.ods_raidplanner_raidgrid-event-content > span {
-    display: block;
-    vertical-align: top;
-    text-align: left;
-}
-
 /*img {*/
 /*    width: 100px;*/
 /*    height: 100px;*/

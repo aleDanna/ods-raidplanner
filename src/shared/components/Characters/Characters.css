@@ -1,0 +1,9 @@
+.ods_raidplanner_characters-container {
+    margin-top: 20px;
+}
+
+.ods_raidplanner_characters-cell {
+    padding-top: 18px !important;
+    text-align: center;
+    font-weight: bold;
+}

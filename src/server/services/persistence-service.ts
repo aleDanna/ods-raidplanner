@@ -27,7 +27,7 @@ export default {
         const query = `SELECT r.id, r.start_date, r.end_date, 
                             (SELECT count(*) FROM raid_subscriptions rs 
                             WHERE rs.raid_ref = r.id) as subscriptions, 
-                            rg.name, rg.image_name 
+                            rg.name, rg.image_name, rg.id as group_id 
                                    FROM raids r, raid_groups rg, users u
                                    WHERE r.group_ref = rg.id 
                                      AND u.id = ${userId}
@@ -118,5 +118,99 @@ export default {
                          AND c.id = rs.character_ref
                          AND c.user_ref = ${userId}`;
         return executeQuery(query, true);
+    },
+    getUserByUsername(username) {
+        const query = `SELECT u.id, u.name, u.surname, u.eso_username, u.rank, c.username, c.role
+                                   FROM users u, credentials c
+                                   WHERE c.username = '${username}'
+                                     AND u.credentials_ref = c.id`;
+
+        return executeQuery(query, true);
+    },
+    getUserByESOUsername(eso_username) {
+        const query = `SELECT u.id
+                       FROM users u
+                       WHERE u.eso_username = '${eso_username}'`;
+        return executeQuery(query, true);
+    },
+    updateUser(user) {
+        const query = `UPDATE users u
+                       SET name = '${user.name}', 
+                           surname = '${user.surname}',
+                           eso_username = '${user.eso_username}',
+                           rank = '${user.rank}'
+                       WHERE u.id = ${user.id}`;
+        return executeQuery(query, true);
+    },
+    updateUsername(oldUsername, username) {
+        const query = `UPDATE credentials c
+                       SET username = '${username}'
+                       WHERE c.username = '${oldUsername}'`;
+        return executeQuery(query, true);
+    },
+    getRoles() {
+        const query = `SELECT *
+                       FROM roles`;
+        return executeQuery(query, false);
+    },
+    updateCharacter(characterId, name, roleId) {
+        const query = `UPDATE characters c
+                       SET name = '${name}', 
+                           role_ref = '${roleId}'
+                       WHERE c.id = ${characterId}`;
+        return executeQuery(query, true);
+    },
+
+    deleteCharacter(characterId: any) {
+        const childQuery = `DELETE
+                            FROM raid_subscriptions rs
+                            WHERE rs.character_ref = ${characterId}`;
+        return executeQuery(childQuery, true)
+            .then(() => {
+                const query = `DELETE 
+                       FROM characters c
+                       WHERE c.id = ${characterId}`;
+                return executeQuery(query, true);
+            })
+    },
+    addCharacter(userId, name, roleId) {
+        const query = `INSERT INTO characters (name, role_ref, user_ref) 
+                            VALUES ('${name}', ${roleId}, ${userId})`
+        return executeQuery(query, true);
+    },
+    getRaidsByFilter(startDateFilter, endDateFilter, groupFilter) {
+
+        let additionalConditions = "";
+        if (startDateFilter) {
+            additionalConditions = additionalConditions + `AND r.start_date::date >= '${startDateFilter}'::date `;
+        }
+        if (endDateFilter) {
+            additionalConditions = additionalConditions + `AND r.start_date::date <= '${endDateFilter}'::date `;
+        }
+        if (groupFilter) {
+            additionalConditions = additionalConditions + `AND ${groupFilter} = rg.id`;
+        }
+
+        const query = `SELECT r.id, r.start_date, r.end_date, 
+                            (SELECT count(*) FROM raid_subscriptions rs 
+                            WHERE rs.raid_ref = r.id) as subscriptions, 
+                            rg.name, rg.image_name, rg.id as group_id 
+                                   FROM raids r, raid_groups rg
+                                   WHERE r.group_ref = rg.id
+                                   ${additionalConditions}`;
+
+        return executeQuery(query, false);
+    },
+    deleteEvent(eventId) {
+        const childQuery = `DELETE
+                            FROM raid_subscriptions rs
+                            WHERE rs.raid_ref = ${eventId}`;
+        return executeQuery(childQuery, true)
+            .then(() => {
+                const query = `DELETE 
+                       FROM raids r
+                       WHERE r.id = ${eventId}`;
+                return executeQuery(query, true);
+            })
     }
 }

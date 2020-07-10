@@ -39,7 +39,7 @@ export const NavBar = () => {
                                 <Link to="/rp/admin/schedule">Crea nuovo evento</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Item>
-                                <Link to="/rp/admin/update">Modifica evento</Link>
+                                <Link to="/rp/admin/raids">Cerca eventi</Link>
                             </NavDropdown.Item>
                         </NavDropdown>
                     }
@@ -79,6 +79,9 @@ export const NavBar = () => {
                             <NavDropdown className="ods_raidplanner_navbar-user-dropdown" title={<UserNavBarIcon />} id="raids-dropdown">
                                 <NavDropdown.Item>
                                     <Link to="/rp/profile">Profilo</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link to="/rp/characters">Personaggi</Link>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
                                     <Link to="#" onClick={doLogout}>Logout</Link>

@@ -61,8 +61,7 @@ export const RaidCalendar = ({events, history}) => {
         return <ConfirmationModal {...modalProps}/>
     }
 
-    function renderDay(day: Date) {
-
+    const renderDay = (day: Date) => {
         const list = events.filter((item: any) => {
             return isSameDay(new Date(item.start), day);
         });

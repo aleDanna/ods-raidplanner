@@ -127,7 +127,6 @@ export const ScheduleEvent = ({raidGroups}) => {
             </Modal>
             <Row className="justify-content-md-center">
                 <Jumbotron className="ods_raidplanner_schedule-event-jumbotron">
-                    <h1>Crea nuovo evento</h1>
                     <Form noValidate onSubmit={submit}>
                         <Form.Group controlId="raidGroup">
                             <Form.Label>Tipo evento: </Form.Label>

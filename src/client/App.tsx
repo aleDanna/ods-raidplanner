@@ -5,8 +5,9 @@ import Routes from '@shared/Routes';
 import {NavBar} from "@shared/components/NavBar/NavBar";
 import sessionStorageService from "@shared/services/sessionStorageService";
 import {Login} from "@shared/components/Login/Login";
+import {LoginPage} from "@shared/pages/LoginPage";
 
-const DefaultLogin = withRouter(Login);
+const DefaultLogin = withRouter(LoginPage);
 
 export default (
     <>
