@@ -3,6 +3,7 @@ import { StaticRouter } from 'react-router-dom';
 
 import StandardRoutes from '@shared/StandardRoutes';
 import DefaultRoutes from '@shared/DefaultRoutes';
+import AdminRoutes from '@shared/AdminRoutes';
 
 interface Props {
   url: string;
@@ -13,7 +14,8 @@ interface Props {
 export function App({ url, routerContext, modules }: Props) {
   return (
     <StaticRouter location={url} context={routerContext}>
-      <StandardRoutes />
+        <AdminRoutes />
+        <StandardRoutes />
       <DefaultRoutes />
     </StaticRouter>
   );

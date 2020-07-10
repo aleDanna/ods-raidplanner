@@ -98,5 +98,17 @@ export default {
             {
                 userData: user
             });
+    },
+    getUserRoles() {
+        return executeRestCall(`http://localhost:9000/admin/allUserRoles`, 'GET');
+    },
+    findUser(username) {
+        return executeRestCall(`http://localhost:9000/admin/findUser/${username}`, 'GET');
+    },
+    updateUser(user) {
+        return executeRestCall(`http://localhost:9000/admin/updateUser`, 'PUT',
+            {
+                userData: user
+            });
     }
 }
