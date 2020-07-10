@@ -7,6 +7,7 @@
 @import "../components/Footer/Footer.css";
 @import "../components/ContentTitle/ContentTitle.css";
 @import "../components/Login/Login.css";
+@import "../components/SignUp/SignUp.css";
 @import "../components/Loading/Loading.css";
 @import "../components/NavBar/NavBar.css";
 @import "../components/ScheduleEvent/ScheduleEvent.css";

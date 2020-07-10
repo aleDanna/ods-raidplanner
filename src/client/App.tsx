@@ -1,23 +1,21 @@
 import * as React from 'react';
 import {BrowserRouter, withRouter} from 'react-router-dom';
 
-import Routes from '@shared/Routes';
+import StandardRoutes from '@shared/StandardRoutes';
+import DefaultRoutes from '@shared/DefaultRoutes';
+
 import {NavBar} from "@shared/components/NavBar/NavBar";
 import sessionStorageService from "@shared/services/sessionStorageService";
-import {Login} from "@shared/components/Login/Login";
-import {LoginPage} from "@shared/pages/LoginPage";
-
-const DefaultLogin = withRouter(LoginPage);
 
 export default (
     <>
         <BrowserRouter forceRefresh={true}>
             <NavBar />
             {sessionStorageService.get("loggedUser") &&
-                <Routes />
+            <StandardRoutes />
             }
             {!sessionStorageService.get("loggedUser") &&
-                <DefaultLogin />
+            <DefaultRoutes />
             }
         </BrowserRouter>
     </>

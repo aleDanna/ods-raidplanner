@@ -57,10 +57,10 @@ export default {
             });
     },
     checkAvailableUsername(username) {
-        return executeRestCall(`http://localhost:9000/api/checkUsername/${username}`, 'GET');
+        return executeRestCall(`http://localhost:9000/auth/checkUsername/${username}`, 'GET');
     },
     checkAvailableESOUsername(username) {
-        return executeRestCall(`http://localhost:9000/api/checkEsoUsername/${username}`, 'GET');
+        return executeRestCall(`http://localhost:9000/auth/checkEsoUsername/${username}`, 'GET');
     },
     getRoles() {
         return executeRestCall(`http://localhost:9000/api/allRoles`, 'GET');
@@ -92,5 +92,11 @@ export default {
     deleteEvent(eventId) {
         return executeRestCall(`http://localhost:9000/admin/deleteEvent/${eventId}`, 'DELETE');
 
+    },
+    registerUser(user) {
+        return executeRestCall(`http://localhost:9000/auth/register`, 'POST',
+            {
+                userData: user
+            });
     }
 }

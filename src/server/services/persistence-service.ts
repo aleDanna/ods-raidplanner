@@ -212,5 +212,16 @@ export default {
                        WHERE r.id = ${eventId}`;
                 return executeQuery(query, true);
             })
+    },
+    saveCredentials(username, password, role) {
+        const query = `INSERT INTO credentials (username, password, role) 
+                            VALUES ('${username}', '${password}', '${role}'); 
+                            SELECT currval('credentials_seq');`
+        return executeQuery(query, true);
+    },
+    saveUser(name, surname, esoUsername, rank, username) {
+        const query = `INSERT INTO users (name, surname, eso_username, rank, credentials_ref) 
+                            VALUES ('${name}', '${surname}', '${esoUsername}', ${rank}, (SELECT id FROM credentials WHERE username = '${username}'))`;
+        return executeQuery(query, true);
     }
 }
