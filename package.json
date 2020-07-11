@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/god.js",
-    "start": "npm run clean && NODE_ENV=production BE_PORT=9000 FE_PORT=9001 node scripts/prod.js",
+    "start": "npm run build && NODE_ENV=production node scripts/prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf build",
     "build:server": "NODE_ENV=production webpack --config configs/webpack.server.js",
