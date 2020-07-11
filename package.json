@@ -8,11 +8,12 @@
   },
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/god.js",
-    "start": "npm run clean && node scripts/startdevserver.js",
+    "start": "npm run clean && NODE_ENV=production BE_PORT=9000 FE_PORT=9001 node scripts/prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf build",
+    "build:server": "NODE_ENV=production webpack --config configs/webpack.server.js",
     "build:client": "NODE_ENV=production webpack --config configs/webpack.client.production.js",
-    "build": "npm run clean && npm run build:client"
+    "build": "npm run clean && npm run build:server && npm run build:client"
   },
   "author": "Alessio D'Anna <alessio.danna.94@gmail.com>",
   "dependencies": {
