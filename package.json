@@ -8,10 +8,10 @@
   },
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/god.js",
-    "start": "NODE_ENV=production BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express webpack-dev-server node scripts/prod.js",
+    "start": "npm run clean && NODE_ENV=production BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/startdevserver.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf build",
-    "build:server": "NODE_ENV=production webpack --config configs/webpack.production.server.js",
+    "build:server": "NODE_ENV=production webpack --config configs/webpack.server.js",
     "build:client": "NODE_ENV=production webpack --config configs/webpack.client.production.js",
     "build": "npm run clean && npm run build:server && npm run build:client"
   },

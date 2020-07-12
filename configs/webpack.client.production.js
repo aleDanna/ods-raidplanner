@@ -43,22 +43,11 @@ module.exports = function(options) {
             },
           },
         ],
-      }, {
-        exclude: /node_modules/,
-        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-            },
-          },
-        ]
-      }]
+      }],
     },
     output: {
       path: path.join(process.cwd(), 'build/client'),
-      filename: '[name].js',
+      filename: '[name].[contenthash].js',
       publicPath: '/static/',
       jsonpFunction: 'wjp',
       hotUpdateFunction: 'whu',
@@ -87,8 +76,8 @@ module.exports = function(options) {
         canPrint: true
       }),
       new MiniCssExtractPlugin({
-        filename: "[name].css",
-        chunkFilename: "[name].css"
+        filename: "[name].[contenthash].css",
+        chunkFilename: "[name].[contenthash].css"
       }),
       new webpack.DefinePlugin({
         process: {

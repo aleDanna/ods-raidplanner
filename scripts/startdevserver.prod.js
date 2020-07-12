@@ -154,11 +154,9 @@ logClient('Starting webpack');
 webpackDevServer = new WebpackDevServer(
   clientCompiler,
   Object.assign(clientConfig.devServer || {}, {
-    disableHostCheck: true,
     clientLogLevel: 'info',
-    hot: true,
-    hotOnly: true,
-    noInfo: true,
+    hot: false,
+    inline: false,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',

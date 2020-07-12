@@ -5,9 +5,9 @@ const { resolve } = require('./common');
 
 module.exports = function(options) {
   return {
-    mode: 'development',
+    mode: 'production',
     target: 'node',
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
     entry: {
       server:  [
         './src/server/index.ts',
@@ -50,5 +50,5 @@ module.exports = function(options) {
       __dirname: true,
       __filename: true,
     },
-  };  
+  };
 }

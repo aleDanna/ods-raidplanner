@@ -2,22 +2,19 @@ const http = require('http');
 const app = require('../build/server/server');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const configClient = require('../configs/webpack.client');
+const configClient = require('../configs/webpack.client.production');
 const clientPort = process.env.FE_PORT || 3001;
-const clientConfig = configClient({
-    port: clientPort,
-});
-const clientCompiler = webpack(clientConfig);
+const clientConfig = configClient();
+const clientCompiler = webpack(configClient());
 
 clientConfig.entry.client.unshift(`webpack-dev-server/client?http://0.0.0.0:${clientPort}/`, 'webpack/hot/only-dev-server');
 console.log('Starting webpack');
+
 webpackDevServer = new WebpackDevServer(
     clientCompiler,
     Object.assign(clientConfig.devServer || {}, {
         disableHostCheck: true,
         clientLogLevel: 'info',
-        hot: true,
-        hotOnly: true,
         noInfo: true,
         headers: {
             'Access-Control-Allow-Origin': '*',
