@@ -43,11 +43,22 @@ module.exports = function(options) {
             },
           },
         ],
+      }, {
+        exclude: /node_modules/,
+        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ]
       }],
     },
     output: {
       path: path.join(process.cwd(), 'build/client'),
-      filename: '[name].[contenthash].js',
+      filename: '[name].js',
       publicPath: '/static/',
       jsonpFunction: 'wjp',
       hotUpdateFunction: 'whu',
