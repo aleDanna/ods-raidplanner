@@ -100,7 +100,7 @@ export const NavBar = () => {
 
 
 const doLogout = () => {
-    fetch('http://localhost:9000/auth/logout', {
+    fetch('http://0.0.0.0:9000/auth/logout', {
         method: 'GET'
     })
         .then(res => {

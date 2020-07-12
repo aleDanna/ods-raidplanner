@@ -19,7 +19,7 @@ export const Login = ({history}) => {
         }
 
         else {
-            fetch('http://localhost:9000/auth/login', {
+            fetch('http://0.0.0.0:9000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

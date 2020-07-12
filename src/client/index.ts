@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 if (!sessionStorageService.get("loggedUser")) {
-  fetch('http://localhost:9000/auth/recoverSession', {
+  fetch('http://0.0.0.0:9000/auth/recoverSession', {
     method: 'GET',
     headers: {
       'Accept': 'application/json'

@@ -55,7 +55,7 @@ module.exports = function(options) {
     output: {
       path: path.join(process.cwd(), 'build/client'),
       filename: '[name].js',
-      publicPath: options.port ? `//localhost:${options.port}/` : '/',
+      publicPath: options.port ? `//0.0.0.0:${options.port}/` : '/',
     },
     plugins: [
       new webpack.DefinePlugin({

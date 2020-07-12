@@ -1,7 +1,7 @@
 import { html } from 'common-tags';
 
 function createScriptTag(port: number | string, src: string) {
-  return `<script src="//localhost:${port}/${src}"></script>`;
+  return `<script src="//0.0.0.0:${port}/${src}"></script>`;
 }
 
 function createLinkTag(
@@ -9,7 +9,7 @@ function createLinkTag(
     href: string,
     rel: string = 'stylesheet'
 ): string {
-  return `<link rel="${rel}" href="//localhost:${port}/${href} />`;
+  return `<link rel="${rel}" href="//0.0.0.0:${port}/${href} />`;
 }
 
 interface IHeaderOpts {
@@ -25,7 +25,7 @@ export function getHeader(options: IHeaderOpts) {
       <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <script crossorigin src="http://localhost:9000"></script>
+        <script crossorigin src="http://0.0.0.0:9000"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://unpkg.com/react-day-picker/lib/style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">

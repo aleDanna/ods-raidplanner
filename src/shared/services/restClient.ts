@@ -18,11 +18,11 @@ const executeRestCall = (url, method, body?) => {
 
 export default {
     getAvailableRaids() {
-        return executeRestCall(`http://localhost:9000/api/getRaids`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/api/getRaids`, 'GET');
     },
     subscribe(eventId, characterId) {
         return executeRestCall(
-            'http://localhost:9000/api/subscribe',
+            'http://0.0.0.0:9000/api/subscribe',
             'POST',
             {
                 eventId: eventId,
@@ -30,43 +30,43 @@ export default {
             })
     },
     unsubscribe(eventId) {
-        return executeRestCall(`http://localhost:9000/api/unsubscribe/${eventId}`, 'DELETE');
+        return executeRestCall(`http://0.0.0.0:9000/api/unsubscribe/${eventId}`, 'DELETE');
     },
     getSubscribedRaids() {
-        return executeRestCall(`http://localhost:9000/api/subscribedRaids`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/api/subscribedRaids`, 'GET');
     },
     getRaidGroups() {
-        return executeRestCall(`http://localhost:9000/admin/raidGroups`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/admin/raidGroups`, 'GET');
     },
     scheduleEvent(event) {
-        return executeRestCall(`http://localhost:9000/admin/schedule`, 'POST',
+        return executeRestCall(`http://0.0.0.0:9000/admin/schedule`, 'POST',
             {
                 raid: event
             });
     },
     getSubscriptionsFor(eventId) {
-        return executeRestCall(`http://localhost:9000/api/subscriptionsFor/${eventId}`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/api/subscriptionsFor/${eventId}`, 'GET');
     },
     getRaidDetails(eventId) {
-        return executeRestCall(`http://localhost:9000/api/raidDetails/${eventId}`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/api/raidDetails/${eventId}`, 'GET');
     },
     updateUserDetails(userData) {
-        return executeRestCall(`http://localhost:9000/api/updateUser`, 'PUT',
+        return executeRestCall(`http://0.0.0.0:9000/api/updateUser`, 'PUT',
             {
                 userData: userData
             });
     },
     checkAvailableUsername(username) {
-        return executeRestCall(`http://localhost:9000/auth/checkUsername/${username}`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/auth/checkUsername/${username}`, 'GET');
     },
     checkAvailableESOUsername(username) {
-        return executeRestCall(`http://localhost:9000/auth/checkEsoUsername/${username}`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/auth/checkEsoUsername/${username}`, 'GET');
     },
     getRoles() {
-        return executeRestCall(`http://localhost:9000/api/allRoles`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/api/allRoles`, 'GET');
     },
     updateCharacter(characterId, newName, newRoleId) {
-        return executeRestCall(`http://localhost:9000/api/updateCharacter`, 'PUT',
+        return executeRestCall(`http://0.0.0.0:9000/api/updateCharacter`, 'PUT',
             {
                 characterId: characterId,
                 name: newName,
@@ -74,39 +74,39 @@ export default {
             });
     },
     deleteCharacter(characterId) {
-        return executeRestCall(`http://localhost:9000/api/deleteCharacter/${characterId}`, 'DELETE');
+        return executeRestCall(`http://0.0.0.0:9000/api/deleteCharacter/${characterId}`, 'DELETE');
     },
     saveCharacter(name, role) {
-        return executeRestCall(`http://localhost:9000/api/saveCharacter`, 'POST',
+        return executeRestCall(`http://0.0.0.0:9000/api/saveCharacter`, 'POST',
             {
                 name: name,
                 roleId: role
             });
     },
     getRaidsByFilter(filters) {
-        return executeRestCall(`http://localhost:9000/api/getRaidsByFilter`, 'POST',
+        return executeRestCall(`http://0.0.0.0:9000/api/getRaidsByFilter`, 'POST',
             {
                 filters: filters
             });
     },
     deleteEvent(eventId) {
-        return executeRestCall(`http://localhost:9000/admin/deleteEvent/${eventId}`, 'DELETE');
+        return executeRestCall(`http://0.0.0.0:9000/admin/deleteEvent/${eventId}`, 'DELETE');
 
     },
     registerUser(user) {
-        return executeRestCall(`http://localhost:9000/auth/register`, 'POST',
+        return executeRestCall(`http://0.0.0.0:9000/auth/register`, 'POST',
             {
                 userData: user
             });
     },
     getUserRoles() {
-        return executeRestCall(`http://localhost:9000/admin/allUserRoles`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/admin/allUserRoles`, 'GET');
     },
     findUser(username) {
-        return executeRestCall(`http://localhost:9000/admin/findUser/${username}`, 'GET');
+        return executeRestCall(`http://0.0.0.0:9000/admin/findUser/${username}`, 'GET');
     },
     updateUser(user) {
-        return executeRestCall(`http://localhost:9000/admin/updateUser`, 'PUT',
+        return executeRestCall(`http://0.0.0.0:9000/admin/updateUser`, 'PUT',
             {
                 userData: user
             });
