@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/god.js",
-    "start": "NODE_ENV=production BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express node scripts/startdevserver.prod.js",
+    "start": "NODE_ENV=production BE_PORT=9000 FE_PORT=9001 DEBUG=dev:god,dev:server,dev:client,dev:express webpack-dev-server node scripts/prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf build",
     "build:server": "NODE_ENV=production webpack --config configs/webpack.production.server.js",
@@ -38,11 +38,12 @@
     "react-loadable": "5.5.0",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
-    "webpack": "4.26.1",
-    "webpack-cli": "3.1.2",
-    "webpack-dev-server": "3.1.11",
-    "webpack-manifest-plugin": "2.0.4",
-    "webpack-node-externals": "1.7.2",
+    "css-loader": "1.0.1",
+    "cssnano": "4.1.7",
+    "file-loader": "^2.0.0",
+    "ignore-loader": "0.1.2",
+    "mini-css-extract-plugin": "0.5.0",
+    "nodemon": "1.18.7",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "postcss-assets": "^5.0.0",
     "postcss-loader": "3.0.0",
@@ -52,11 +53,11 @@
     "ts-loader": "5.3.1",
     "typescript": "3.2.1",
     "url-loader": "^4.1.0",
-    "css-loader": "1.0.1",
-    "cssnano": "4.1.7",
-    "file-loader": "^2.0.0",
-    "ignore-loader": "0.1.2",
-    "mini-css-extract-plugin": "0.5.0"
+    "webpack": "4.26.1",
+    "webpack-cli": "3.1.2",
+    "webpack-dev-server": "3.1.11",
+    "webpack-manifest-plugin": "2.0.4",
+    "webpack-node-externals": "1.7.2"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.0",
@@ -69,7 +70,6 @@
     "@types/react-loadable": "5.4.2",
     "@types/react-router-dom": "5.1.5",
     "@types/webpack-env": "1.13.6",
-    "autoprefixer": "9.4.2",
-    "nodemon": "1.18.7"
+    "autoprefixer": "9.4.2"
   }
 }

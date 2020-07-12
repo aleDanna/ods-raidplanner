@@ -58,7 +58,7 @@ module.exports = function(options) {
     },
     output: {
       path: path.join(process.cwd(), 'build/client'),
-      filename: '[name].[contenthash].js',
+      filename: '[name].js',
       publicPath: '/static/',
       jsonpFunction: 'wjp',
       hotUpdateFunction: 'whu',
@@ -87,8 +87,8 @@ module.exports = function(options) {
         canPrint: true
       }),
       new MiniCssExtractPlugin({
-        filename: "[name].[contenthash].css",
-        chunkFilename: "[name].[contenthash].css"
+        filename: "[name].css",
+        chunkFilename: "[name].css"
       }),
       new webpack.DefinePlugin({
         process: {
