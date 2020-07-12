@@ -38,7 +38,9 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "typescript": "3.2.1",
-    "url-loader": "^4.1.0"
+    "url-loader": "^4.1.0",
+    "webpack-dev-server": "3.1.11",
+    "webpack": "4.26.1"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.0",
@@ -52,9 +54,7 @@
     "@types/react-router-dom": "5.1.5",
     "@types/webpack-env": "1.13.6",
     "autoprefixer": "9.4.2",
-    "webpack": "4.26.1",
     "webpack-cli": "3.1.2",
-    "webpack-dev-server": "3.1.11",
     "webpack-manifest-plugin": "2.0.4",
     "webpack-node-externals": "1.7.2",
     "css-loader": "1.0.1",
