@@ -1,4 +1,3 @@
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -13,6 +12,7 @@ export function configureStore(initialState?: AppState): Store<AppState> {
   let middleware = applyMiddleware(thunk.withExtraArgument(api));
 
   if (config.isDev) {
+    const { composeWithDevTools } = require('redux-devtools-extension');
     middleware = composeWithDevTools(middleware);
   }
 
