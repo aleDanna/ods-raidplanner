@@ -1,5 +1,6 @@
 import { UserProps } from '@core/datatypes/UserProps';
 
+const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
 const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3001;
 
@@ -15,7 +16,7 @@ const executeRestCall = (url, method, body?) => {
   };
 
   // @ts-ignore
-  return fetch(`http://${host}:${port}${url}`, params).then(res => {
+  return fetch(`${protocol}://${host}:${port}${url}`, params).then(res => {
     return res.json().catch(_ => res);
   });
 };
