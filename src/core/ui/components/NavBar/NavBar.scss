@@ -1,0 +1,19 @@
+.navbar,
+
+.dropdown-menu > a > a {
+    color: black !important;
+    text-decoration: none !important;
+}
+
+.links {
+    margin-top: 10px;
+}
+
+.userUsername {
+    margin-top: 20px;
+}
+
+.userDropdown > a.dropdown-toggle::after {
+    display: none;
+}
+

@@ -1,0 +1,12 @@
+.content {
+    display: inline-block;
+    border: 1px solid;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.content > span {
+    display: block;
+    vertical-align: top;
+    text-align: left;
+}

@@ -1,0 +1,55 @@
+@import './variables';
+@import './mixins';
+@import './fonts';
+@import "../../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  font-family: fantasy !important;
+  background-image: url("../images/background.jpg") !important;
+  background-size: cover;
+  background-repeat: repeat-y;
+}
+
+content {
+  flex: 100%;
+  min-height: 100%;
+}
+
+.DayPicker {
+  width: 100%;
+  pointer-events: none !important;
+}
+
+.DayPicker:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+.DayPicker-Months {
+  display: flex;
+  flex-direction: column;
+}
+
+.DayPicker-Caption {
+  text-align: center !important;
+}
+
+.DayPicker-Day {
+  border: 1px solid #000000;
+}
+
+.dropdown-menu {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.dropdown-menu > a > a {
+  color: black !important;
+  text-decoration: none !important;
+}

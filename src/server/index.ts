@@ -1,57 +1,93 @@
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpack from 'webpack';
 import express from 'express';
+import helmet from 'helmet';
+import path from 'path';
 import cors from 'cors';
-import expressSession from "express-session";
+import cookieParser from 'cookie-parser';
 
-import reactMiddleWare from './reactMiddleWare';
-import apiController from './controllers/apiController';
-import authController from "./controllers/authController";
-import bodyParser from "body-parser";
-import adminController from "./controllers/adminController";
+import expressSession from 'express-session';
+
+import 'isomorphic-fetch';
+import './exitHandler';
+
+import { assetsParser } from './middlewares/assetsParser';
+import { getRequire } from './lib/utils';
+import { router } from './router';
+import { apiController } from '@server/controllers/apiController';
+import { adminController } from '@server/controllers/adminController';
+import { authController } from '@server/controllers/authController';
+import { getDbConnection } from '../database/connection.config';
+
+const isProduction = process.env.NODE_ENV === 'production';
+const host = process.env.HOST || 'localhost';
+const port = process.env.PORT || 3001;
 const app = express();
 
-app.use(cors())
-app.options('*', cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+const SECRET = 'ods-raidplanner';
 
-app.use(expressSession({
-  secret: 'ods-raidplanner',
-  resave: true,
-  rolling: true,
-  saveUninitialized: true,
-  cookie: {
-    expires: 2592000000
+app.disable('x-powered-by');
+app.use(helmet());
+
+if (isProduction) {
+  // In real app better to use nginx for static assets
+  const httpHeaders = { maxAge: 31536000, redirect: false, lastModified: true };
+  app.use(express.static(path.resolve(process.cwd(), 'dist'), httpHeaders));
+}
+
+if (!isProduction) {
+  const webpackConfig = getRequire()(path.resolve(process.cwd(), 'webpack.config'));
+  const compiler = webpack(webpackConfig);
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: webpackConfig.output.publicPath,
+      serverSideRender: true,
+      stats: 'errors-only',
+      logLevel: 'error'
+    })
+  );
+  app.use(webpackHotMiddleware(compiler, { log: console.log }));
+}
+
+app.use(assetsParser(isProduction));
+app.use(/^(?!\/?(api|auth|admin)).+$/, router);
+
+app.use((err: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (!isProduction) {
+    return res.status(500).send(err);
   }
-}));
 
-type MiddleWares = Array<{
-  route: string;
-  when: 'pre' | 'post';
-  middleWare: (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => void;
-}>;
+  return res.sendStatus(500);
+});
 
-function mountMiddleWares(middlewares: MiddleWares) {
-  middlewares
-    .filter(m => m.when === 'pre')
-    .forEach(m => app.use(m.route, m.middleWare));
+app.use(cookieParser(SECRET));
 
+const corsOptions = {
+  origin: host,
+  credentials: true
+};
 
-  app.use('/rp', reactMiddleWare);
-  app.use('/auth', authController());
-  app.use('/api', apiController());
-  app.use('/admin', adminController());
+app.use(cors(corsOptions));
+const pgSession = require('connect-pg-simple')(expressSession);
+const sessionPool = require('pg').Pool;
 
-  middlewares
-    .filter(m => m.when === 'post')
-    .forEach(m => app.use(m.route, m.middleWare));
-}
+const sessionMiddleware = expressSession({
+  store: new pgSession({
+    pool: new sessionPool(getDbConnection())
+  }),
+  secret: SECRET,
+  resave: true,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    secure: false
+  }
+});
 
-export function start(middlewares: MiddleWares) {
-  mountMiddleWares(middlewares);
-}
+app.use('/auth', sessionMiddleware, authController);
+app.use('/api', sessionMiddleware, apiController);
+app.use('/admin', sessionMiddleware, adminController);
 
-export default app;
+app.listen(port, () => {
+  console.info(`✅✅✅ Server is running at http://${host}:${port} ✅✅✅`);
+});
