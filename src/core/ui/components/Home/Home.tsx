@@ -19,7 +19,7 @@ export const Home = ({ history, events }) => {
     <>
       <ContentTitle nameTitle="I tuoi eventi" />
       <Container fluid="md" className={styles.container}>
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-center">
           {subscribedEvents.length > 0 &&
             subscribedEvents.map((item: EventProps) => {
               return (
@@ -43,7 +43,7 @@ export const Home = ({ history, events }) => {
         <>
           <ContentTitle nameTitle="Prossimi eventi" />
           <Container fluid="md" className={styles.container}>
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-center">
               {events.map((item: EventProps) => {
                 return (
                   <Col key={item.id} md="auto" xs={6} className={styles.event}>

@@ -1,4 +1,7 @@
-.navbar,
+.navbar {
+  background: rgba(255, 255, 255, 0.3) !important;
+  display: inline-block;
+}
 
 .dropdown-menu > a > a {
     color: black !important;
@@ -11,9 +14,5 @@
 
 .userUsername {
     margin-top: 20px;
-}
-
-.userDropdown > a.dropdown-toggle::after {
-    display: none;
 }
 

@@ -76,7 +76,7 @@ export const SignUp = ({history}) => {
 
     return (
         <Container className={styles.container}>
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-center">
                 <Form noValidate validated={validated} onSubmit={register}>
                     <Form.Group controlId="newUername">
                         <Form.Label>Username</Form.Label>

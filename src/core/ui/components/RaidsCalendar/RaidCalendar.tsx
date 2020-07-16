@@ -65,9 +65,11 @@ export const RaidCalendar = ({ history }) => {
 
   const formatEvents = (events: Array<EventProps>) => {
     return events.map(item => {
+      console.log(item.start);
       return {
         title: item.title,
         start: item.start,
+        end: null,
         extendedProps: {
           internalEvent: item,
         },

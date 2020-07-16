@@ -6,7 +6,7 @@ import styles from './Loading.scss';
 export const Loading = () => {
   return (
     <Container className={styles.container}>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Col md={12}>
           <Spinner className={styles.spinner} animation="border" />
         </Col>

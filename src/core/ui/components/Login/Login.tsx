@@ -47,12 +47,12 @@ export const Login = ({ history }: LoginProps) => {
 
   return (
     <Container className={styles.container}>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Alert variant="danger" show={badCredentialShow}>
           Username o password errati
         </Alert>
       </Row>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate validated={validated} onSubmit={login}>
             <Form.Group controlId="formLogin">

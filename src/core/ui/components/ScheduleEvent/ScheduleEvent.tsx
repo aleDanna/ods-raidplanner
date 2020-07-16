@@ -128,7 +128,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
     <Container className={styles.container}>
       {modalProps && modalProps.modalShow && <ODSModal {...modalProps} />}
 
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate onSubmit={submit}>
             <Form.Group controlId="raidGroup">
