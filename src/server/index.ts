@@ -80,7 +80,7 @@ const sessionMiddleware = expressSession({
   resave: true,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    secure: false
+    secure: isProduction
   }
 });
 
