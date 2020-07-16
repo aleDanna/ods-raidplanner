@@ -76,7 +76,7 @@ app.use(cookieParser(SECRET));
 const pgSession = require('connect-pg-simple')(expressSession);
 const sessionPool = require('pg').Pool;
 
-const sessionMiddleware = expressSession({
+app.use(expressSession({
   store: new pgSession({
     pool: new sessionPool(getDbConnection())
   }),
@@ -87,11 +87,11 @@ const sessionMiddleware = expressSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     secure: isProduction
   }
-});
+}));
 
-app.use('/auth', sessionMiddleware, authController);
-app.use('/api', sessionMiddleware, apiController);
-app.use('/admin', sessionMiddleware, adminController);
+app.use('/auth', authController);
+app.use('/api', apiController);
+app.use('/admin', adminController);
 
 app.listen(port, () => {
   console.info(`✅✅✅ Server is running at ${host} ✅✅✅`);

@@ -3,8 +3,12 @@ import { AsyncComponentLoader } from '@core/ui/components/AsyncComponentLoader/A
 import { Raid } from '@core/ui/components/Raid/Raid';
 import { ContentTitle } from '@core/ui/components/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
+import windowUtils from "@core/common/windowUtils";
 
 export const RaidPage = routeProps => {
+
+  windowUtils.checkAuthenticated();
+
   const id = routeProps.match.params.raidId;
 
   const loadRaid = () =>
