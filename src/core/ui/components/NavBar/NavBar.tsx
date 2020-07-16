@@ -58,14 +58,16 @@ export const NavBar = () => {
               </NavDropdown.Item>
             </NavDropdown>
           )}
-          <NavDropdown title="Raids" id="raids-dropdown">
-            <NavDropdown.Item>
-              <Link to="/raids/grid">Griglia</Link>
-            </NavDropdown.Item>
-            <NavDropdown.Item>
-              <Link to="/raids/calendar">Calendario</Link>
-            </NavDropdown.Item>
-          </NavDropdown>
+          {userData.id && (
+            <NavDropdown title="Raids" id="raids-dropdown">
+              <NavDropdown.Item>
+                <Link to="/raids/grid">Griglia</Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/raids/calendar">Calendario</Link>
+              </NavDropdown.Item>
+            </NavDropdown>
+          )}
         </Nav>
         <Nav>
           {userData.id && (
