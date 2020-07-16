@@ -1,4 +1,3 @@
-import webpack from 'webpack';
 import express from 'express';
 import helmet from 'helmet';
 import path from 'path';
@@ -36,6 +35,7 @@ if (isProduction) {
 
 if (!isProduction) {
   const webpackConfig = getRequire()(path.resolve(process.cwd(), 'webpack.config'));
+  const webpack = require('webpack');
   const compiler = webpack(webpackConfig);
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
