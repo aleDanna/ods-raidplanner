@@ -25,6 +25,8 @@ const app = express();
 const SECRET = 'ods-raidplanner';
 
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
 app.use(helmet());
 
 const corsOptions = {
@@ -80,6 +82,7 @@ const sessionMiddleware = expressSession({
   }),
   secret: SECRET,
   resave: true,
+  saveUninitialized: true,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     secure: isProduction
