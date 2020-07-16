@@ -1,0 +1,27 @@
+.container {
+    margin-top: 20px;
+}
+
+.iconContainer {
+    pointer-events: all !important;
+}
+
+.iconContainer:hover {
+    cursor: pointer !important;
+}
+
+.cellRow {
+    display: flex;
+}
+
+.cellDay {
+    text-align: right !important;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    flex: 1 0 50%;
+    min-height: 60px;
+}

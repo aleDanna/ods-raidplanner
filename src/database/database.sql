@@ -7,6 +7,18 @@ CREATE SEQUENCE characters_seq START 1;
 CREATE SEQUENCE raids_seq START 1;
 CREATE SEQUENCE raid_subscriptions_seq START 1;
 
+CREATE TABLE session (
+  sid varchar NOT NULL COLLATE "default",
+  sess json NOT NULL,
+  expire timestamp(6) NOT NULL
+)
+
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
 CREATE TABLE credentials (
     id numeric primary key DEFAULT NEXTVAL('credentials_seq'),
     username varchar not null unique,
