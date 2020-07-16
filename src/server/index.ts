@@ -91,5 +91,5 @@ app.use('/api', sessionMiddleware, apiController);
 app.use('/admin', sessionMiddleware, adminController);
 
 app.listen(port, () => {
-  console.info(`✅✅✅ Server is running at http://${host}:${port} ✅✅✅`);
+  console.info(`✅✅✅ Server is running at ${host} ✅✅✅`);
 });

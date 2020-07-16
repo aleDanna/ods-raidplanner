@@ -1,9 +1,7 @@
 import { UserProps } from '@core/datatypes/UserProps';
 import {appHost} from "@core/configs/connection.config";
 
-const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
 const host = appHost();
-const port = process.env.PORT || 3001;
 
 const executeRestCall = (url, method, body?) => {
   const params = {
@@ -17,7 +15,7 @@ const executeRestCall = (url, method, body?) => {
   };
 
   // @ts-ignore
-  return fetch(`${protocol}://${host}:${port}${url}`, params).then(res => {
+  return fetch(`${host}${url}`, params).then(res => {
     return res.json().catch(_ => res);
   });
 };
