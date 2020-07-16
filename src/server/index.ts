@@ -28,7 +28,7 @@ app.disable('x-powered-by');
 app.use(helmet());
 
 const corsOptions = {
-  origin: true,
+  origin: host,
   credentials: true
 };
 
