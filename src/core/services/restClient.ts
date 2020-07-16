@@ -1,7 +1,7 @@
 import { UserProps } from '@core/datatypes/UserProps';
 
-const protocol = 'http';
-const host = process.env.HOST || '0.0.0.0';
+const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3001;
 
 const executeRestCall = (url, method, body?) => {

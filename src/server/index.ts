@@ -18,7 +18,7 @@ import { authController } from '@server/controllers/authController';
 import { getDbConnection } from '../database/connection.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const host = process.env.HOST || '0.0.0.0';
+const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3001;
 const app = express();
 
