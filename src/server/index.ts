@@ -1,5 +1,3 @@
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpack from 'webpack';
 import express from 'express';
 import helmet from 'helmet';
@@ -39,6 +37,9 @@ if (isProduction) {
 if (!isProduction) {
   const webpackConfig = getRequire()(path.resolve(process.cwd(), 'webpack.config'));
   const compiler = webpack(webpackConfig);
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+
   app.use(
     webpackDevMiddleware(compiler, {
       publicPath: webpackConfig.output.publicPath,
