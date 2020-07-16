@@ -18,7 +18,7 @@ import { authController } from '@server/controllers/authController';
 import { getDbConnection } from '../database/connection.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 3001;
 const app = express();
 
@@ -26,6 +26,13 @@ const SECRET = 'ods-raidplanner';
 
 app.disable('x-powered-by');
 app.use(helmet());
+
+const corsOptions = {
+  origin: true,
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 if (isProduction) {
   // In real app better to use nginx for static assets
@@ -64,12 +71,6 @@ app.use((err: string, req: express.Request, res: express.Response, next: express
 
 app.use(cookieParser(SECRET));
 
-const corsOptions = {
-  origin: host,
-  credentials: true
-};
-
-app.use(cors(corsOptions));
 const pgSession = require('connect-pg-simple')(expressSession);
 const sessionPool = require('pg').Pool;
 
@@ -81,7 +82,7 @@ const sessionMiddleware = expressSession({
   resave: true,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    secure: isProduction
+    secure: false
   }
 });
 

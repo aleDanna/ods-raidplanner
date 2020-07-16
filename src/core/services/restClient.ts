@@ -1,7 +1,7 @@
 import { UserProps } from '@core/datatypes/UserProps';
 
-const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-const host = process.env.HOST || 'localhost';
+const protocol = 'http';
+const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 3001;
 
 const executeRestCall = (url, method, body?) => {
@@ -9,7 +9,7 @@ const executeRestCall = (url, method, body?) => {
     method: method,
     credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
