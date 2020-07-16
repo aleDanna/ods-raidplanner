@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { getDbConnection } from '../../database/connection.config';
+import { getDbConnection } from '@core/configs/connection.config';
 
 async function executeQuery(query: string, singleResult: boolean) {
   const client = new Client(getDbConnection());

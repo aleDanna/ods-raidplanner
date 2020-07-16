@@ -1,7 +1,8 @@
 import { UserProps } from '@core/datatypes/UserProps';
+import {appHost} from "@core/configs/connection.config";
 
 const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-const host = process.env.HOST || 'localhost';
+const host = appHost();
 const port = process.env.PORT || 3001;
 
 const executeRestCall = (url, method, body?) => {
