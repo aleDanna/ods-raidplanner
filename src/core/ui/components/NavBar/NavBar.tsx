@@ -36,12 +36,13 @@ export const NavBar = () => {
   };
 
   return (
-    <Navbar expand="lg" className={style.navbar}>
+    <Navbar expand="md" className={style.navbar}>
       <Navbar.Brand>
         <Link to="/">
           <Logo />
         </Link>
       </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className={style.links}>
         <Nav className="mr-auto">
           {userData.id && userData.role === 'ADMIN' && (
@@ -66,7 +67,6 @@ export const NavBar = () => {
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
-        <Navbar.Toggle />
         <Nav>
           {userData.id && (
             <>
@@ -96,7 +96,6 @@ export const NavBar = () => {
                 </Row>
               </Form>
               <NavDropdown
-                className={style.userDropdown}
                 title={<UserNavBarIcon username={userData.username} />}
                 id="raids-dropdown">
                 <NavDropdown.Item>

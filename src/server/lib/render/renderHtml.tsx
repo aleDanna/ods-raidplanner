@@ -18,31 +18,32 @@ export const renderHtml = ({ content, styles = [], scripts = [], initialValues =
 
   const html = (
     <html {...htmlAttrs}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=1450" />
-        {helmet.title.toComponent()}
-        {helmet.meta.toComponent()}
-        {helmet.link.toComponent()}
-        {styles.map(href => (
-          <link rel="preload" as="style" key={href} href={href} />
-        ))}
-        {scripts.map(src => (
-          <link rel="preload" as="script" key={src} href={src} />
-        ))}
-        {styles.map(href => (
-          <link rel="stylesheet" key={href} href={href} />
-        ))}
-        <link rel="stylesheet" href="https://unpkg.com/react-day-picker/lib/style.css" />
-        <link rel="preconnect" href={config.apiUrl} />
-        <script dangerouslySetInnerHTML={{ __html: initialValues }} />
-      </head>
-      <body {...bodyAttrs}>
-        <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
-        {scripts.map(src => (
-          <script async key={src} src={src} />
-        ))}
-      </body>
+    <head>
+      <meta charSet="utf-8" />
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Shor Raidplanner</title>
+      {helmet.title.toComponent()}
+      {helmet.meta.toComponent()}
+      {helmet.link.toComponent()}
+      {styles.map(href => (
+        <link rel="preload" as="style" key={href} href={href} />
+      ))}
+      {scripts.map(src => (
+        <link rel="preload" as="script" key={src} href={src} />
+      ))}
+      {styles.map(href => (
+        <link rel="stylesheet" key={href} href={href} />
+      ))}
+      <link rel="preconnect" href={config.apiUrl} />
+      <script dangerouslySetInnerHTML={{ __html: initialValues }} />
+    </head>
+    <body {...bodyAttrs}>
+    <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
+    {scripts.map(src => (
+      <script async key={src} src={src} />
+    ))}
+    </body>
     </html>
   );
   return `<!doctype html>\n${renderToStaticMarkup(html)}`;
