@@ -49,10 +49,10 @@ export const Raid = ({ raid }) => {
         <Alert variant="danger" show={characterMissingShow}>
           Seleziona un personaggio!
         </Alert>
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-center">
           <Form>
             <Form.Group controlId="title">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Form.Label column md={4}>
                   <strong>Evento: </strong>
                 </Form.Label>
@@ -62,7 +62,7 @@ export const Raid = ({ raid }) => {
               </Row>
             </Form.Group>
             <Form.Group controlId="date">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Form.Label column md={4}>
                   <strong>Data: </strong>
                 </Form.Label>
@@ -77,7 +77,7 @@ export const Raid = ({ raid }) => {
               </Row>
             </Form.Group>
             <Form.Group controlId="subscriptions">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Form.Label column md={4}>
                   <strong>Iscrizioni: </strong>
                 </Form.Label>
@@ -88,7 +88,7 @@ export const Raid = ({ raid }) => {
             </Form.Group>
 
             <Form.Group controlId="groups">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Form.Label column md={4}>
                   <strong>Gruppi: </strong>
                 </Form.Label>
@@ -103,7 +103,7 @@ export const Raid = ({ raid }) => {
               </Row>
             </Form.Group>
             <Form.Group controlId="subscriptions-users">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Form.Label column md={4}>
                   <strong>Utenti iscritti: </strong>
                 </Form.Label>
@@ -126,7 +126,7 @@ export const Raid = ({ raid }) => {
               </Row>
             </Form.Group>
             <Form.Group controlId="submit">
-              <Row className="justify-content-md-center">
+              <Row className="justify-content-center">
                 <Col md={12}>
                   {raid.subscriptions.filter(item => item.eso_username === userData.esousername).length === 0 ? (
                     <Button variant="success" onClick={subscribe}>

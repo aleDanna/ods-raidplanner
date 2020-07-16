@@ -147,7 +147,7 @@ export const Characters = ({groups}) => {
       <Alert variant="danger" show={invalidCharacterAlertShow}>
         Username o password errati
       </Alert>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Table responsive striped bordered hover size="sm">
           <thead>
           <tr>

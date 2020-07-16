@@ -110,7 +110,7 @@ export const EditUser = ({roles}) => {
             <>
                 <ContentTitle nameTitle="Risultato" />
                 <Container fluid="md" className={styles.container}>
-                    <Row className="justify-content-md-center">
+                    <Row className="justify-content-center">
                         {user.id ?
                             <Table responsive striped bordered hover size="sm">
                                 <thead>

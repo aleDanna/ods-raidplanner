@@ -64,7 +64,7 @@ export const UserProfile = ({history}) => {
 
   return (
     <Container fluid>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate validated={validated} onSubmit={save}>
             <Form.Group controlId="username">
