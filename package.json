@@ -11,8 +11,6 @@
     "analyze:server": "source-map-explorer dist/index.*",
     "analyze:bundle": "source-map-explorer dist/bundle.*",
     "analyze:vendors": "source-map-explorer dist/vendors.*",
-    "prestart": "rimraf dist",
-    "prebuild": "rimraf dist",
     "dev": "cross-env NODE_ENV=development PORT=3001 nodemon",
     "start": "cross-env NODE_ENV=production PORT=8081 node dist/index.js",
     "build": "run-p build:*",
