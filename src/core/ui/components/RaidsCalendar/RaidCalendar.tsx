@@ -68,6 +68,7 @@ export const RaidCalendar = ({ history }) => {
       return {
         title: item.title,
         start: item.start,
+        end: null,
         extendedProps: {
           internalEvent: item,
         },
