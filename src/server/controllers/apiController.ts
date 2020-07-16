@@ -95,17 +95,21 @@ apiController.delete('/deleteCharacter/:characterId', (req, res) => {
 });
 
 apiController.put('/updateUser', (req, res) => {
-  const actualUser = Object.create(res.locals.user);
+  const actualUser = res.locals.user;
+  const userUpdated = Object.create(actualUser);
 
   // tslint:disable-next-line:forin
   for (const key in req.body.userData) {
-    actualUser[key] = req.body.userData[key];
+    userUpdated[key] = req.body.userData[key];
   }
-  persistenceService.updateUser(actualUser).then(() => {
-    persistenceService.updateUsername(res.locals.user.username, actualUser.username).then(() => {
-      persistenceService.getCharacters(res.locals.user.id).then(characters => {
-        res.locals.user.characters = characters;
-        res.send(res.locals.user);
+  persistenceService.updateUser(userUpdated).then(() => {
+    persistenceService.updateUsername(actualUser.username, userUpdated.username).then(() => {
+      persistenceService.getCharacters(actualUser.id).then(characters => {
+        userUpdated.characters = characters;
+        req.session!.user = userUpdated;
+        req.session!.save(() => {
+          res.send(userUpdated);
+        })
       });
     });
   });
@@ -124,8 +128,7 @@ apiController.post('/saveCharacter', (req, res) => {
 });
 
 apiController.post('/getRaidsByFilter', (req, res) => {
-  const { startDateFilter, endDateFilter, groupFilter } = req.body.filters;
-  persistenceService.getRaidsByFilter(startDateFilter, endDateFilter, groupFilter).then(data => {
+  persistenceService.getRaidsByFilter(req.body.filters).then(data => {
     res.send(data);
   });
 });

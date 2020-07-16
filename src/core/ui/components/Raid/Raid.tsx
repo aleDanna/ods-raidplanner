@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { formatISODateString } from '@core/common/dateUtils';
 import { calculateSubscriptions } from '@core/common/dataUtils';
-import sessionStorageService from '@core/common/sessionStorageService';
+import sessionStorageService from '@core/services/sessionStorageService';
 import subscriptionRestClient from '@core/services/restClient';
 import windowUtils from '@core/common/windowUtils';
 

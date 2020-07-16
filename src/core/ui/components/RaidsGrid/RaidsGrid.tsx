@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Container, Row, Media, Button, Alert } from 'react-bootstrap';
-import sessionStorageService from '@core/common/sessionStorageService';
+import sessionStorageService from '@core/services/sessionStorageService';
 import restClient from '@core/services/restClient';
 import windowUtils from '@core/common/windowUtils';
 import { useState } from 'react';

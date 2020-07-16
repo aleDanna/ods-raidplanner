@@ -1,21 +1,21 @@
 import { UserProps } from '@core/datatypes/UserProps';
+import {appHost} from "@core/configs/connection.config";
 
-const host = process.env.HOST || 'localhost';
-const port = process.env.PORT || 3001;
+const host = appHost();
 
 const executeRestCall = (url, method, body?) => {
   const params = {
     method: method,
     credentials: 'include',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
   };
 
   // @ts-ignore
-  return fetch(`http://${host}:${port}${url}`, params).then(res => {
+  return fetch(`${host}${url}`, params).then(res => {
     return res.json().catch(_ => res);
   });
 };
@@ -50,7 +50,7 @@ export default {
   getRaidDetails(eventId: string) {
     return executeRestCall(`/api/raidDetails/${eventId}`, 'GET');
   },
-  updateUserDetails(userData: UserProps) {
+  updateUserDetails(userData) {
     return executeRestCall(`/api/updateUser`, 'PUT', {
       userData: userData
     });
@@ -88,7 +88,7 @@ export default {
   deleteEvent(eventId: string) {
     return executeRestCall(`/admin/deleteEvent/${eventId}`, 'DELETE');
   },
-  registerUser(user: UserProps) {
+  registerUser(user) {
     return executeRestCall(`/auth/register`, 'POST', {
       userData: user
     });

@@ -2,8 +2,8 @@ import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import { EventProps } from '@core/datatypes/EventProps';
 import { RaidCard } from '../../atoms/RaidCard/RaidCard';
 import * as React from 'react';
-import sessionStorageService from '../../../common/sessionStorageService';
-import { ContentTitle } from '../ContentTitle/ContentTitle';
+import sessionStorageService from '../../../services/sessionStorageService';
+import { ContentTitle } from '../../atoms/ContentTitle/ContentTitle';
 import styles from './Home.scss';
 
 export const Home = ({ history, events }) => {

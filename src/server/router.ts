@@ -14,7 +14,7 @@ export const router = express.Router();
 
 router.get('*', async (req, res, next) => {
   try {
-    const { css: styles, js: scripts } = res.locals.assets;
+    const {css: styles, js: scripts} = res.locals.assets;
     const reqUrl: string = req.url.split(/[?#]/)[0];
     const context: StaticRouterContext = {};
 
@@ -40,7 +40,7 @@ router.get('*', async (req, res, next) => {
       window.__INITIAL_STATE__ = ${serialize(store.getState())};
     `;
 
-    res.send(renderHtml({ content, styles, scripts, initialValues }));
+    res.send(renderHtml({content, styles, scripts, initialValues}));
   } catch (error) {
     console.log(error);
     next(error);

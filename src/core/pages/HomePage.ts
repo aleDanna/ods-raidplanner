@@ -1,12 +1,16 @@
 import restClient from '@core/services/restClient';
 import { AsyncComponentLoader } from '@core/ui/components/AsyncComponentLoader/AsyncComponentLoader';
-import { ContentTitle } from '../ui/components/ContentTitle/ContentTitle';
+import { ContentTitle } from '../ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import RaidTransformer from '@core/features/transformers/raidTransformer';
 import { formatISODateString } from '@core/common/dateUtils';
 import { Home } from '../ui/components/Home/Home';
+import windowUtils from "@core/common/windowUtils";
 
 export const HomePage = routeProps => {
+
+  windowUtils.checkAuthenticated();
+
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setMonth(nextWeek.getMonth() + 1);

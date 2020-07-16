@@ -17,3 +17,9 @@ const localConnection = {
 export const getDbConnection = () => {
   return process.env.NODE_ENV === 'production' ? prodConnection : localConnection;
 };
+
+export const appHost = () => {
+  return process.env.NODE_ENV === 'production' ?
+    `https://ods-raidplanner.herokuapp.com`
+    : `http://localhost:${process.env.PORT || 3001}`;
+}
