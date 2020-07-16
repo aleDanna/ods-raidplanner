@@ -9,14 +9,14 @@ import { useEffect, useState} from "react";
 export const Logo = () => {
 
   const [style, setStyle] = useState({
-    width: '260px',
+    width: '400px',
     height: '60px'
   });
 
   useEffect(() => {
     const loadStyle = async () => {
       setStyle({
-        width: isMobile ? '260px' : '400px',
+        width: isMobile ? '220px' : '400px',
         height: isMobile ? '80px' : '60px'
       })
     };
