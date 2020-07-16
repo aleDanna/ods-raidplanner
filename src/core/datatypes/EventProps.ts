@@ -3,6 +3,7 @@ export interface EventProps {
   title: string;
   group: string;
   start: string;
+  end: string;
   description: string;
   subscriptions: string;
   icon: string;
@@ -14,6 +15,7 @@ export const EmptyEvent: EventProps = {
   icon: '',
   id: '',
   start: '',
+  end: '',
   subscriptions: '',
   title: '',
   group: ''

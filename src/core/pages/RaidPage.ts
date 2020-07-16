@@ -1,7 +1,7 @@
 import restClient from '../services/restClient';
 import { AsyncComponentLoader } from '@core/ui/components/AsyncComponentLoader/AsyncComponentLoader';
 import { Raid } from '@core/ui/components/Raid/Raid';
-import { ContentTitle } from '@core/ui/components/ContentTitle/ContentTitle';
+import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import windowUtils from "@core/common/windowUtils";
 

@@ -10,6 +10,7 @@ export default {
         title: event.name,
         group: event.group_id,
         start: event.start_date,
+        end: event.end_date,
         description: `${event.name} del ${getDateTimeString(event.start_date)}`,
         subscriptions: event.subscriptions,
         icon: event.image_name

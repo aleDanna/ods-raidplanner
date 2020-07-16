@@ -1,4 +1,4 @@
-import sessionStorageService from './sessionStorageService';
+import sessionStorageService from '../services/sessionStorageService';
 import { UserProps } from '@core/datatypes/UserProps';
 import {useEffect} from "react";
 

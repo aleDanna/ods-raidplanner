@@ -2,7 +2,7 @@ import React from 'react';
 import { Jumbotron, Button, Form, Container, Row, Alert, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import sessionStorageService from '@core/common/sessionStorageService';
+import sessionStorageService from '@core/services/sessionStorageService';
 
 import styles from './Login.scss';
 import restClient from '@core/services/restClient';

@@ -134,7 +134,7 @@ export default {
     const query = `UPDATE users u
                        SET name = '${user.name}', 
                            surname = '${user.surname}',
-                           eso_username = '${user.eso_username}',
+                           eso_username = '${user.esousername}',
                            rank = '${user.rank}'
                        WHERE u.id = ${user.id}`;
     return executeQuery(query, true);
@@ -174,16 +174,19 @@ export default {
                             VALUES ('${name}', ${roleId}, ${userId})`;
     return executeQuery(query, true);
   },
-  getRaidsByFilter(startDateFilter: any, endDateFilter: any, groupFilter: any) {
+  getRaidsByFilter(filters) {
     let additionalConditions = '';
-    if (startDateFilter) {
-      additionalConditions = additionalConditions + `AND r.start_date::date >= '${startDateFilter}'::date `;
+    if (filters.startDateFilter) {
+      additionalConditions = additionalConditions + `AND r.start_date::date >= '${filters.startDateFilter}'::date `;
     }
-    if (endDateFilter) {
-      additionalConditions = additionalConditions + `AND r.start_date::date <= '${endDateFilter}'::date `;
+    if (filters.endDateFilter) {
+      additionalConditions = additionalConditions + `AND r.start_date::date <= '${filters.endDateFilter}'::date `;
     }
-    if (groupFilter) {
-      additionalConditions = additionalConditions + `AND ${groupFilter} = rg.id`;
+    if (filters.groupFilter) {
+      additionalConditions = additionalConditions + `AND ${filters.groupFilter} = rg.id`;
+    }
+    if (filters.maxRank) {
+      additionalConditions = additionalConditions + `AND rg.rank <= ${filters.maxRank}`;
     }
 
     const query = `SELECT r.id, r.start_date, r.end_date, 

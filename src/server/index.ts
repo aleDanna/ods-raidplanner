@@ -62,7 +62,6 @@ if (!isProduction) {
 
 app.use(assetsParser(isProduction));
 app.use(/^(?!\/?(api|auth|admin)).+$/, router);
-
 app.use((err: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (!isProduction) {
     return res.status(500).send(err);

@@ -26,6 +26,8 @@
   },
   "author": "aleDanna",
   "dependencies": {
+    "@fullcalendar/daygrid": "^5.1.0",
+    "@fullcalendar/react": "^5.1.0",
     "@hot-loader/react-dom": "^16.8.6",
     "bootstrap": "^4.5.0",
     "classnames": "^2.2.6",

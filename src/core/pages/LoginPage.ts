@@ -1,5 +1,5 @@
 import { Login } from '../ui/components/Login/Login';
-import { ContentTitle } from '../ui/components/ContentTitle/ContentTitle';
+import { ContentTitle } from '../ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '../common/pageBuilder';
 import { PageProps } from '@core/datatypes/PageProps';
 

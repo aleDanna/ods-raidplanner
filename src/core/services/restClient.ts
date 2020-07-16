@@ -50,7 +50,7 @@ export default {
   getRaidDetails(eventId: string) {
     return executeRestCall(`/api/raidDetails/${eventId}`, 'GET');
   },
-  updateUserDetails(userData: UserProps) {
+  updateUserDetails(userData) {
     return executeRestCall(`/api/updateUser`, 'PUT', {
       userData: userData
     });
@@ -88,7 +88,7 @@ export default {
   deleteEvent(eventId: string) {
     return executeRestCall(`/admin/deleteEvent/${eventId}`, 'DELETE');
   },
-  registerUser(user: UserProps) {
+  registerUser(user) {
     return executeRestCall(`/auth/register`, 'POST', {
       userData: user
     });

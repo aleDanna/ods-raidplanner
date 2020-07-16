@@ -1,6 +1,6 @@
 import restClient from '@core/services/restClient';
 import { AsyncComponentLoader } from '@core/ui/components/AsyncComponentLoader/AsyncComponentLoader';
-import { ContentTitle } from '../ui/components/ContentTitle/ContentTitle';
+import { ContentTitle } from '../ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import RaidTransformer from '@core/features/transformers/raidTransformer';
 import { formatISODateString } from '@core/common/dateUtils';
