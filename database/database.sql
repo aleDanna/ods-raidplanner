@@ -69,10 +69,14 @@ CREATE TABLE raid_subscriptions (
 );
 
 INSERT INTO roles (id, name) values
-    (1, 'tank'),
-    (2, 'healer'),
+    (1, 'Tank'),
+    (2, 'Healer'),
     (3, 'Damage Dealer');
 
 INSERT INTO raid_groups (id, name, rank, image_name) values
     (1, 'IV Legione', 1, 'iv_legione_group_icon'),
-    (2, 'V Legione', 2, 'v_legione_group_icon');
+    (2, 'V Legione', 2, 'v_legione_group_icon'),
+    (3, 'Numidian Guard', 3, 'n_guard_group_icon'),
+    (4, 'Two Moons Guard', 4, 'tm_group_icon'),
+    (5, 'Lorkhan Guard', 5, 'lorkhan_group_icon');
+

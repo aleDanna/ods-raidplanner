@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './PageTemplate.scss';
 import { NavBar } from '@core/ui/components/NavBar/NavBar';
-import {Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 
 interface Props {
   children: React.ReactNode;
