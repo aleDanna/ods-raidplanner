@@ -14,7 +14,21 @@ export const NavBar = () => {
   const EMPTY_CHARACTER = '---';
   const [selectedCharacter, setSelectedCharacter] = useState(EMPTY_CHARACTER);
   const [userData, setUserData] = useState(EmptyUserProps);
+  const [navExpanded, setNavExpanded] = useState(false);
 
+  const doLogout = () => {
+    restClient.logout().then(res => {
+      if (res.ok) {
+        sessionStorageService.remove('loggedUser');
+        sessionStorageService.remove('selectedCharacter');
+        location.href = '/login';
+      }
+    });
+  };
+
+  const closeNav = () => {
+    setNavExpanded(false);
+  }
   useEffect(() => {
     const loadUser = async () => {
       const userSession = sessionStorageService.get('loggedUser');
@@ -36,50 +50,45 @@ export const NavBar = () => {
   };
 
   return (
-    <Navbar expand="md" className={style.navbar}>
+    <Navbar expand="md" className={style.navbar}
+            onToggle={(value) => setNavExpanded(value)}
+            expanded={navExpanded}>
       <Navbar.Brand>
-        <Link to="/">
+        <NavDropdown.Item as={Link} to="/">
           <Logo />
-        </Link>
+        </NavDropdown.Item>
       </Navbar.Brand>
+      {userData.id &&
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      }
       <Navbar.Collapse id="basic-navbar-nav" className={style.links}>
         <Nav className="mr-auto">
           {userData.id && userData.role === 'ADMIN' && (
             <NavDropdown title="Admin" id="admin-dropdown">
-              <NavDropdown.Item>
-                <Link to="/admin/schedule">Crea nuovo evento</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/admin/raids">Cerca eventi</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/admin/editUser">Modifica utente</Link>
-              </NavDropdown.Item>
+                <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/schedule">Crea nuovo evento</NavDropdown.Item>
+                <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/raids">Cerca eventi</NavDropdown.Item>
+                <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/editUser">Modifica utente</NavDropdown.Item>
             </NavDropdown>
           )}
           {userData.id && (
-            <NavDropdown title="Raids" id="raids-dropdown">
-              <NavDropdown.Item>
-                <Link to="/raids/grid">Griglia</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/raids/calendar">Calendario</Link>
-              </NavDropdown.Item>
+            <NavDropdown title="Raids" id="raids-dropdown" >
+                <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/grid">Griglia</NavDropdown.Item>
+                <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/calendar">Calendario</NavDropdown.Item>
             </NavDropdown>
           )}
         </Nav>
         <Nav>
           {userData.id && (
             <>
-              <Form inline>
-                <Row>
-                  <Form.Label column md={4}>
-                    Personaggio
-                  </Form.Label>
-                  <Col md={8}>
+              <Row>
+                <Form inline>
+                  <Col md={2}>
+                    <Form.Label column md={4}>
+                      Personaggio
+                    </Form.Label>
+                  </Col>
+                  <Col md={6}>
                     <Form.Control
-                      id="characterForm"
                       as="select"
                       value={selectedCharacter}
                       onChange={e => onCharacterChange(e.target.value)}>
@@ -95,37 +104,26 @@ export const NavBar = () => {
                       </option>
                     </Form.Control>
                   </Col>
-                </Row>
-              </Form>
-              <NavDropdown
-                title={<UserNavBarIcon username={userData.username} />}
-                id="raids-dropdown">
-                <NavDropdown.Item>
-                  <Link to="/profile">Profilo</Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item>
-                  <Link to="/characters">Personaggi</Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item>
-                  <Link to="#" onClick={doLogout}>
-                    Logout
-                  </Link>
-                </NavDropdown.Item>
-              </NavDropdown>
+                  <Col md={4}>
+                    <NavDropdown
+                      title={<UserNavBarIcon username={userData.username} />}
+                      id="raids-dropdown">
+                        <NavDropdown.Item onClick={closeNav} as={Link} to="/profile">Profilo</NavDropdown.Item>
+                        <NavDropdown.Item onClick={closeNav} as={Link} to="/characters">Personaggi</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => {
+                          closeNav();
+                          doLogout();
+                        }} as={Link} to="#">
+                          Logout
+                        </NavDropdown.Item>
+                    </NavDropdown>
+                  </Col>
+                </Form>
+              </Row>
             </>
           )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
   );
-};
-
-const doLogout = () => {
-  restClient.logout().then(res => {
-    if (res.ok) {
-      sessionStorageService.remove('loggedUser');
-      sessionStorageService.remove('selectedCharacter');
-      location.href = '/login';
-    }
-  });
 };
