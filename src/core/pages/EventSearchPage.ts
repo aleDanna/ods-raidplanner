@@ -1,5 +1,5 @@
 import restClient from "../services/restClient";
-import {AsyncComponentLoader} from "@core/ui/components/AsyncComponentLoader/AsyncComponentLoader";
+import {AsyncComponentLoader} from "@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader";
 import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
 import pageBuilder from "@core/common/pageBuilder";
 import {EventSearch} from "@core/ui/components/EventSearch/EventSearch";

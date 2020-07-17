@@ -1,7 +1,7 @@
 import pageBuilder from "@core/common/pageBuilder";
 import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
 import {Characters} from "@core/ui/components/Characters/Characters";
-import {AsyncComponentLoader} from "@core/ui/components/AsyncComponentLoader/AsyncComponentLoader";
+import {AsyncComponentLoader} from "@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader";
 import restClient from "@core/services/restClient";
 
 export const CharactersPage = () => {

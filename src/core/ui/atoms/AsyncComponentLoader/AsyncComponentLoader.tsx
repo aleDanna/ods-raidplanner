@@ -1,6 +1,6 @@
 import Async from 'react-async';
 import * as React from 'react';
-import { Loading } from '../../atoms/Loading/Loading';
+import { Loading } from '../Loading/Loading';
 
 export const AsyncComponentLoader = ({ Component, asyncFn, componentProps, propFetched }) => {
   return (
