@@ -54,9 +54,9 @@ export const NavBar = () => {
             onToggle={(value) => setNavExpanded(value)}
             expanded={navExpanded}>
       <Navbar.Brand>
-        <NavDropdown.Item as={Link} to="/">
+        <Link to="/">
           <Logo />
-        </NavDropdown.Item>
+        </Link>
       </Navbar.Brand>
       {userData.id &&
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
