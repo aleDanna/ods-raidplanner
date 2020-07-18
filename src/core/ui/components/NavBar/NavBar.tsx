@@ -44,7 +44,6 @@ export const NavBar = () => {
   }, []);
 
   const onCharacterChange = character => {
-    console.log(character);
     setSelectedCharacter(character);
     if (character !== EMPTY_CHARACTER) {
       sessionStorageService.saveOrUpdate('selectedCharacter', character);
