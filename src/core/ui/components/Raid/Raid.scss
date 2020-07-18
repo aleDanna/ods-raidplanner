@@ -1,19 +1,11 @@
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    margin-top: 80px;
+.jumbotron {
+  background-color: transparent !important;
 }
 
-.container * {
+.basicLabel {
     font-size: 20px;
 }
 
-.detail:focus {
-    border: none !important;
-    outline: none !important;
-}
-
-.subscriptions {
-    font-size: 15px !important;
+.rowDetails {
+  padding-top: 30px;
 }

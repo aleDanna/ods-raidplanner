@@ -4,6 +4,7 @@ import { Raid } from '@core/ui/components/Raid/Raid';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import windowUtils from "@core/common/windowUtils";
+import raidTransformer from "@core/features/transformers/raidTransformer";
 
 export const RaidPage = routeProps => {
 
@@ -15,7 +16,7 @@ export const RaidPage = routeProps => {
     restClient.getRaidDetails(id).then(raid => {
       return restClient.getSubscriptionsFor(id).then(subscriptions => {
         raid.subscriptions = subscriptions;
-        return raid;
+        return raidTransformer.transform(raid);
       });
     });
 

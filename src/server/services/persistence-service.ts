@@ -80,7 +80,10 @@ export default {
     return executeQuery(query, true);
   },
   getRaid(eventId: any) {
-    const query = `SELECT r.id, r.start_date, r.end_date, rg.name as title
+    const query = `SELECT r.id, r.start_date, r.end_date, 
+                            (SELECT count(*) FROM raid_subscriptions rs 
+                            WHERE rs.raid_ref = r.id) as subscriptions, 
+                            rg.name, rg.image_name, rg.id as group_id
                         FROM raids r, raid_groups rg
                         WHERE r.id = ${eventId}`;
     return executeQuery(query, true);

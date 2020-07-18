@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { formatISODateString } from '@core/common/dateUtils';
+import {Alert, Button, Col, Container, Jumbotron, Media, Row} from 'react-bootstrap';
 import { calculateSubscriptions } from '@core/common/dataUtils';
 import sessionStorageService from '@core/services/sessionStorageService';
 import subscriptionRestClient from '@core/services/restClient';
@@ -44,105 +43,78 @@ export const Raid = ({ raid }) => {
   };
 
   return (
-    <Container fluid>
-      <Container className={styles.container}>
-        <Alert variant="danger" show={characterMissingShow}>
-          Seleziona un personaggio!
-        </Alert>
-        <Row className="justify-content-center">
-          <Form>
-            <Form.Group controlId="title">
-              <Row className="justify-content-center">
-                <Form.Label column md={4}>
-                  <strong>Evento: </strong>
-                </Form.Label>
-                <Col md={8}>
-                  <Form.Control className={styles.detail} plaintext readOnly value={raid.title} />
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="date">
-              <Row className="justify-content-center">
-                <Form.Label column md={4}>
-                  <strong>Data: </strong>
-                </Form.Label>
-                <Col md={8}>
-                  <Form.Control
-                    className={styles.detail}
-                    plaintext
-                    readOnly
-                    value={formatISODateString(raid.start_date, 'iii dd-MM hh:mm')}
-                  />
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="subscriptions">
-              <Row className="justify-content-center">
-                <Form.Label column md={4}>
-                  <strong>Iscrizioni: </strong>
-                </Form.Label>
-                <Col md={8}>
-                  <Form.Control className={styles.detail} plaintext readOnly value={raid.subscriptions.length} />
-                </Col>
-              </Row>
-            </Form.Group>
-
-            <Form.Group controlId="groups">
-              <Row className="justify-content-center">
-                <Form.Label column md={4}>
-                  <strong>Gruppi: </strong>
-                </Form.Label>
-                <Col md={8}>
-                  <Form.Control
-                    className={styles.detail}
-                    plaintext
-                    readOnly
-                    value={calculateSubscriptions(raid.subscriptions.length).groups}
-                  />
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="subscriptions-users">
-              <Row className="justify-content-center">
-                <Form.Label column md={4}>
-                  <strong>Utenti iscritti: </strong>
-                </Form.Label>
-                <Col md={8}>
-                  <Form.Control
-                    className={`${styles.subscriptions} ${styles.detail}`}
-                    as="select"
-                    multiple
-                    readOnly
-                    plaintext>
-                    {raid.subscriptions.map(user => {
-                      return (
-                        <option key={user.id} className={styles.subscriptions}>
-                          {user.eso_username} - {user.character_name} ({user.role_name})
-                        </option>
-                      );
-                    })}
-                  </Form.Control>
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="submit">
-              <Row className="justify-content-center">
-                <Col md={12}>
-                  {raid.subscriptions.filter(item => item.eso_username === userData.esousername).length === 0 ? (
-                    <Button variant="success" onClick={subscribe}>
-                      Iscriviti
-                    </Button>
-                  ) : (
-                    <Button variant="danger" onClick={unsubscribe}>
-                      Annulla iscrizione
-                    </Button>
-                  )}
-                </Col>
-              </Row>
-            </Form.Group>
-          </Form>
-        </Row>
-      </Container>
+    <Container fluid className={styles.container}>
+      <Alert variant="danger" show={characterMissingShow}>
+        Seleziona un personaggio!
+      </Alert>
+      <Row className={`${styles.rowDetails} justify-content-center`}>
+        <Jumbotron className={styles.jumbotron}>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Media>
+              <img src={require(`../../../assets/images/icons/${raid.icon}.jpg`)} />
+            </Media>
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={6}>
+              <span className={styles.basicLabel}>Evento: </span>
+            </Col>
+            <Col md={6}>
+              <span className={styles.basicLabel}><strong>{raid.title}</strong></span>
+            </Col>
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={6}>
+              <span className={styles.basicLabel}>Data: </span>
+            </Col>
+            <Col md={6}>
+              <span className={styles.basicLabel}><strong>{raid.start}</strong></span>
+            </Col>
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={6}>
+              <span className={styles.basicLabel}>Iscrizioni: </span>
+            </Col>
+            <Col md={6}>
+              <span className={styles.basicLabel}><strong>{raid.subscriptions.length}</strong></span>
+            </Col>
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={6}>
+              <span className={styles.basicLabel}>Gruppi: </span>
+            </Col>
+            <Col md={6}>
+              <span className={styles.basicLabel}><strong>{calculateSubscriptions(raid.subscriptions.length).groups}</strong></span>
+            </Col>
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={12}>
+              <span className={styles.basicLabel}>Utenti iscritti: </span>
+            </Col>
+            {raid.subscriptions.map(user => {
+              return (
+                <Row>
+                      <span className={styles.basicLabel}><strong>
+                      {user.eso_username} - {user.character_name} ({user.role_name})
+                    </strong></span>
+                </Row>
+              );
+            })}
+          </Row>
+          <Row className={`${styles.rowDetails} justify-content-center`}>
+            <Col md={12}>
+              {raid.subscriptions.filter(item => item.eso_username === userData.esousername).length === 0 ? (
+                <Button variant="success" onClick={subscribe}>
+                  Iscriviti
+                </Button>
+              ) : (
+                <Button variant="danger" onClick={unsubscribe}>
+                  Annulla iscrizione
+                </Button>
+              )}
+            </Col>
+          </Row>
+        </Jumbotron>
+      </Row>
     </Container>
   );
 };
