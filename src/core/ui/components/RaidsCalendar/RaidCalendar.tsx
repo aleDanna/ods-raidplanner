@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Container, Alert, Col, Row, Media} from 'react-bootstrap';
+import { Container, Alert, Col, Row, Media } from 'react-bootstrap';
 
 import { ODSModal } from '@core/ui/atoms/ConfirmationModal/ODSModal';
 import { calculateSubscriptions } from '@core/common/dataUtils';
@@ -12,7 +12,7 @@ import { EventProps } from '@core/datatypes/EventProps';
 import { EmptyModalProps } from '@core/datatypes/ModalProps';
 
 import styles from './RaidCalendar.scss';
-import RaidTransformer from "@core/features/transformers/raidTransformer";
+import RaidTransformer from '@core/features/transformers/raidTransformer';
 
 export const RaidCalendar = ({ history }) => {
   const [characterMissingShow, setCharacterMissingShow] = useState(false);
@@ -63,8 +63,8 @@ export const RaidCalendar = ({ history }) => {
     });
   };
 
-  const formatEvents = (events: Array<EventProps>) => {
-    return events.map(item => {
+  const formatEvents = (eventList: Array<EventProps>) => {
+    return eventList.map(item => {
       console.log(item.start);
       return {
         title: item.title,
@@ -74,19 +74,19 @@ export const RaidCalendar = ({ history }) => {
           internalEvent: item,
         },
         description: item.description
-      }
-    })
-  }
+      };
+    });
+  };
 
   const eventInfo = (calendarEvent) => {
-    const eventInfo = calendarEvent.event._def.extendedProps.internalEvent;
+    const event = calendarEvent.event._def.extendedProps.internalEvent;
     return (
       <Row className={styles.iconContainer}
-           key={eventInfo.id}>
+           key={event.id}>
         <Col md={2}>
           <Media>
             <img
-              src={require(`../../../assets/images/icons/${eventInfo.icon}.jpg`)}
+              src={require(`../../../assets/images/icons/${event.icon}.jpg`)}
               style={{ width: '25px', height: '25px' }}
             />
           </Media>
@@ -108,14 +108,14 @@ export const RaidCalendar = ({ history }) => {
         return restClient.getSubscribedRaids()
           .then(ids => {
             const subscribedEvents = ids.map(row => {return row.raid_ref; });
-            const events = RaidTransformer.transformArray(data);
-            events.forEach(event => {
+            const raids = RaidTransformer.transformArray(data);
+            raids.forEach(event => {
               event.subscribed = subscribedEvents.indexOf(event.id) > -1;
             });
-            setEvents(events);
+            setEvents(raids);
           });
       });
-  }
+  };
 
   const FullCalendar = require('@fullcalendar/react').default;
   const dayGridPlugin = require('@fullcalendar/daygrid').default;

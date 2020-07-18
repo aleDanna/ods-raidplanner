@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import {Alert, Button, Col, Container, Jumbotron, Media, Row} from 'react-bootstrap';
+import { Alert, Button, Col, Container, Jumbotron, Media, Row } from 'react-bootstrap';
 import { calculateSubscriptions } from '@core/common/dataUtils';
 import sessionStorageService from '@core/services/sessionStorageService';
 import subscriptionRestClient from '@core/services/restClient';
@@ -83,7 +83,9 @@ export const Raid = ({ raid }) => {
               <span className={styles.basicLabel}>Gruppi: </span>
             </Col>
             <Col md={6}>
-              <span className={styles.basicLabel}><strong>{calculateSubscriptions(raid.subscriptions.length).groups}</strong></span>
+              <span className={styles.basicLabel}><strong>
+                {calculateSubscriptions(raid.subscriptions.length).groups}
+              </strong></span>
             </Col>
           </Row>
           <Row className={`${styles.rowDetails} justify-content-center`}>
@@ -92,7 +94,7 @@ export const Raid = ({ raid }) => {
             </Col>
             {raid.subscriptions.map(user => {
               return (
-                <Row>
+                <Row key={user.eso_username}>
                       <span className={styles.basicLabel}><strong>
                       {user.eso_username} - {user.character_name} ({user.role_name})
                     </strong></span>

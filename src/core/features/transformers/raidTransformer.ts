@@ -1,4 +1,4 @@
-import {formatISODateString, getDateTimeString} from '@core/common/dateUtils';
+import { formatISODateString, getDateTimeString } from '@core/common/dateUtils';
 import { EventProps } from '@core/datatypes/EventProps';
 
 export default {

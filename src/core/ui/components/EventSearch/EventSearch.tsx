@@ -1,13 +1,13 @@
-import {useState} from "react";
-import {Button, Col, Container, Form, Modal, Row} from "react-bootstrap";
-import * as React from "react";
-import restClient from "@core/services/restClient";
-import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
-import {RaidCard} from "@core/ui/atoms/RaidCard/RaidCard";
-import RaidTransformer from "@core/features/transformers/raidTransformer";
-import {EmptyEvent, EventProps} from "@core/datatypes/EventProps";
+import { useState } from 'react';
+import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import * as React from 'react';
+import restClient from '@core/services/restClient';
+import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
+import { RaidCard } from '@core/ui/atoms/RaidCard/RaidCard';
+import RaidTransformer from '@core/features/transformers/raidTransformer';
+import { EmptyEvent, EventProps } from '@core/datatypes/EventProps';
 
-import styles from './EventSearch.scss'
+import styles from './EventSearch.scss';
 
 export const EventSearch = ({history, groups}) => {
 
@@ -16,7 +16,7 @@ export const EventSearch = ({history, groups}) => {
 
         const modalProps = {
             show: show
-        }
+        };
 
         const deleteEvent = () => {
             restClient.deleteEvent(eventToDelete.id)
@@ -25,8 +25,8 @@ export const EventSearch = ({history, groups}) => {
                         setShowDeleteModal(false);
                         searchEvents();
                     }
-                })
-        }
+                });
+        };
 
         return (
             <Modal {...modalProps} >
@@ -45,17 +45,17 @@ export const EventSearch = ({history, groups}) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        )
-    }
+        );
+    };
 
-    const EMPTY_GROUP = "---";
+    const EMPTY_GROUP = '---';
 
     const [showResult, setShowResult] = useState(false);
     const [raids, setRaids] = useState<Array<EventProps>>([]);
 
     const [groupFilter, setGroupFilter] = useState(EMPTY_GROUP);
-    const [startDateFilter, setStartDateFilter] = useState("");
-    const [endDateFilter, setEndDateFilter] = useState("");
+    const [startDateFilter, setStartDateFilter] = useState('');
+    const [endDateFilter, setEndDateFilter] = useState('');
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -63,22 +63,22 @@ export const EventSearch = ({history, groups}) => {
         restClient.getRaidsByFilter({
             startDateFilter: startDateFilter ? startDateFilter : null,
             endDateFilter: endDateFilter ? endDateFilter : null,
-            groupFilter: groupFilter && groupFilter != EMPTY_GROUP ? groupFilter : null
+            groupFilter: groupFilter && groupFilter !== EMPTY_GROUP ? groupFilter : null
         })
             .then(events => {
                 setRaids(RaidTransformer.transformArray(events));
                 setShowResult(true);
-            })
-    }
+            });
+    };
 
     const eventDetails = (eventId) => {
         history.push(`/rp/raid/${eventId}`);
-    }
+    };
 
     const onDeleteHandler = (event) => {
         setEventToDelete(event);
         setShowDeleteModal(true);
-    }
+    };
 
     return (
         <>
@@ -103,7 +103,7 @@ export const EventSearch = ({history, groups}) => {
                             <Form.Control required as="select" value={groupFilter}
                                           onChange={e => setGroupFilter(e.target.value)}>
                                 {groups.map(group => {
-                                    return <option value={group.id}>{group.name}</option>
+                                    return <option key={group.id} value={group.id}>{group.name}</option>;
                                 })}
                                 <option selected value={EMPTY_GROUP}>{EMPTY_GROUP}</option>
                             </Form.Control>
@@ -117,12 +117,12 @@ export const EventSearch = ({history, groups}) => {
 
             {showResult &&
             <>
-                <ContentTitle nameTitle={raids.length === 0 ? "Nessun evento trovato" : "Eventi"} />
+                <ContentTitle nameTitle={raids.length === 0 ? 'Nessun evento trovato' : 'Eventi'} />
                 <Container fluid="md" className={styles.container}>
                     <Row>
                         {raids.map((item: EventProps) => {
                             return (
-                                <Col md="auto" xs={6} className={styles.resultEvent}>
+                                <Col key={item.id} md="auto" xs={6} className={styles.resultEvent}>
                                     <RaidCard event={item} />
                                     <Button variant="primary" size="sm" block onClick={() => eventDetails(item.id)}>
                                         Dettagli
@@ -131,13 +131,13 @@ export const EventSearch = ({history, groups}) => {
                                         Elimina
                                     </Button>
                                 </Col>
-                            )
+                            );
                         })}
                     </Row>
                 </Container>
             </>
             }
         </>
-    )
+    );
 
-}
+};

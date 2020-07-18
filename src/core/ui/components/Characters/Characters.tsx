@@ -1,13 +1,12 @@
-import sessionStorageService from "@core/services/sessionStorageService";
-import {Alert, Button, Col, Container, FormControl, FormLabel, Modal, Row, Table} from "react-bootstrap";
-import React, {useState} from "react";
-import restClient from "@core/services/restClient";
-import windowUtils from "@core/common/windowUtils";
+import sessionStorageService from '@core/services/sessionStorageService';
+import { Alert, Button, Col, Container, FormControl, FormLabel, Modal, Row, Table } from 'react-bootstrap';
+import React, { useState } from 'react';
+import restClient from '@core/services/restClient';
+import windowUtils from '@core/common/windowUtils';
 
 import styles from './Characters.scss';
 
 export const Characters = ({groups}) => {
-
 
   const EditModalComponent = ({character}) => {
 
@@ -17,16 +16,16 @@ export const Characters = ({groups}) => {
 
     const modalOptions = {
       show: show
-    }
+    };
 
     const edit = () => {
-      if (upgradedName && upgradedRole !== "") {
+      if (upgradedName && upgradedRole !== '') {
         restClient.updateCharacter(character.characterid, upgradedName, upgradedRole)
           .then((user) => {
             windowUtils.reload(user);
-          })
+          });
       }
-    }
+    };
 
     return (
       <>
@@ -50,7 +49,7 @@ export const Characters = ({groups}) => {
                   defaultValue={character.roleid}
                   onChange={(evt) => setUpgradedRole(evt.target.value)} >
                   {groups.map(group => {
-                    return <option value={group['id']}>{group['name']}</option>
+                    return <option key={group.id} value={group.id}>{group.name}</option>;
                   })}
                   <option selected value={character.roleid}>character.rolename</option>
                 </FormControl>
@@ -67,8 +66,8 @@ export const Characters = ({groups}) => {
           </Modal.Footer>
         </Modal>
       </>
-    )
-  }
+    );
+  };
 
   const DeleteModalComponent = ({character}) => {
 
@@ -76,14 +75,14 @@ export const Characters = ({groups}) => {
 
     const modalOptions = {
       show: show
-    }
+    };
 
     const deleteCharacter = () => {
       restClient.deleteCharacter(character.characterid)
         .then((user) => {
           windowUtils.reload(user);
-        })
-    }
+        });
+    };
 
     return (
       <>
@@ -107,7 +106,9 @@ export const Characters = ({groups}) => {
                 <p><strong>{character.rolename}</strong></p>
               </Row>
               <Row>
-                <span><strong style={{color: 'red'}}>Attenzione, eliminando il personaggio eliminerai tutte le iscrizioni a lui associate. Continuare?</strong></span>
+                <span><strong style={{color: 'red'}}>
+                  Attenzione, eliminando il personaggio eliminerai tutte le iscrizioni a lui associate. Continuare?
+                </strong></span>
               </Row>
             </Container>
           </Modal.Body>
@@ -121,12 +122,12 @@ export const Characters = ({groups}) => {
           </Modal.Footer>
         </Modal>
       </>
-    )
-  }
+    );
+  };
 
-  const characters = sessionStorageService.get("loggedUser").characters;
-  const EMPTY_ROLE = "---";
-  const [newCharacterName, setNewCharacterName] = useState("");
+  const characters = sessionStorageService.get('loggedUser').characters;
+  const EMPTY_ROLE = '---';
+  const [newCharacterName, setNewCharacterName] = useState('');
   const [newCharacterRole, setNewCharacterRole] = useState(EMPTY_ROLE);
   const [invalidCharacterAlertShow, setInvalidCharacterAlertShow] = useState(false);
 
@@ -136,9 +137,8 @@ export const Characters = ({groups}) => {
         .then((user) => {
           windowUtils.reload(user);
         });
-    }
-    else {
-      setInvalidCharacterAlertShow(true)
+    } else {
+      setInvalidCharacterAlertShow(true);
     }
   };
 
@@ -158,7 +158,7 @@ export const Characters = ({groups}) => {
           </thead>
           <tbody>
           {characters.map(character => {
-            return (<tr>
+            return (<tr key={character.id}>
               <td className={styles.characterCell}>
                 <p>{character.charactername}</p>
               </td>
@@ -169,7 +169,7 @@ export const Characters = ({groups}) => {
                 <EditModalComponent character={character} />
                 <DeleteModalComponent character={character} />
               </td>
-            </tr>)
+            </tr>);
           })}
           <tr>
             <td className={styles.characterCell}>
@@ -182,7 +182,7 @@ export const Characters = ({groups}) => {
                 defaultValue={EMPTY_ROLE}
                 onChange={(evt) => setNewCharacterRole(evt.target.value)} >
                 {groups.map(group => {
-                  return <option value={group['id']}>{group['name']}</option>
+                  return <option key={group.id} value={group.id}>{group.name}</option>;
                 })}
                 <option selected>{EMPTY_ROLE}</option>
               </FormControl>
@@ -195,6 +195,6 @@ export const Characters = ({groups}) => {
         </Table>
       </Row>
     </Container>
-  )
+  );
 
-}
+};

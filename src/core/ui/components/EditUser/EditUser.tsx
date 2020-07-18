@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from 'react';
 import {
     Alert,
     Button,
@@ -8,10 +8,10 @@ import {
     Modal,
     Row,
     Table
-} from "react-bootstrap";
-import * as React from "react";
-import restClient from "@core/services/restClient";
-import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
+} from 'react-bootstrap';
+import * as React from 'react';
+import restClient from '@core/services/restClient';
+import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 
 import styles from './EditUser.scss';
 
@@ -20,7 +20,7 @@ export const EditUser = ({roles}) => {
     const [showResult, setShowResult] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState('');
     const [user, setUser] = useState<any>(null);
     const [rankValid, setRankValid] = useState(true);
     const [roleValid, setRoleValid] = useState(true);
@@ -29,7 +29,7 @@ export const EditUser = ({roles}) => {
 
         const modalOptions = {
             show: show
-        }
+        };
 
         return (
             <>
@@ -49,36 +49,33 @@ export const EditUser = ({roles}) => {
                     </Modal.Footer>
                 </Modal>
             </>
-        )
-    }
-
+        );
+    };
 
     const searchUser = () => {
         restClient.findUser(username)
             .then ((data) => {
                 setUser(data);
                 setShowResult(true);
-            })
-    }
+            });
+    };
 
     const onRankChange = (rank) => {
-        if(rank < 1) {
+        if (rank < 1) {
             setRankValid(false);
-        }
-        else {
+        } else {
             user.rank = rank;
             setRankValid(true);
         }
-    }
+    };
 
     const onRoleChange = (role) => {
-        if(roles.indexOf(role) <= -1) {
+        if (roles.indexOf(role) <= -1) {
             setRoleValid(false);
-        }
-        else {
+        } else {
             user.role = role;
         }
-    }
+    };
 
     const update = () => {
         restClient.updateUser(user)
@@ -86,8 +83,8 @@ export const EditUser = ({roles}) => {
                 if (res.status === 200) {
                     setShowSuccessModal(true);
                 }
-            })
-    }
+            });
+    };
 
     return (
         <>
@@ -146,7 +143,7 @@ export const EditUser = ({roles}) => {
                                                      isInvalid={!roleValid}
                                                      onChange={(evt) => onRoleChange(evt.target.value)}>
                                             {roles.map(role => {
-                                                return <option value={role}>{role}</option>
+                                                return <option key={role} value={role}>{role}</option>;
                                             })}
                                         </FormControl>
                                     </td>
@@ -166,6 +163,6 @@ export const EditUser = ({roles}) => {
             </>
             }
         </>
-    )
+    );
 
-}
+};

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 
-
 export const UserNavBarIcon = ({ username }) => {
   return (
     <>
@@ -20,7 +19,5 @@ export const UserNavBarIcon = ({ username }) => {
         <span><strong>{username}</strong></span>
       </Row>
     </>
-
-
   );
 };

@@ -5,7 +5,7 @@ import pageBuilder from '@core/common/pageBuilder';
 import RaidTransformer from '@core/features/transformers/raidTransformer';
 import { formatISODateString } from '@core/common/dateUtils';
 import { Home } from '../ui/components/Home/Home';
-import windowUtils from "@core/common/windowUtils";
+import windowUtils from '@core/common/windowUtils';
 
 export const HomePage = routeProps => {
 

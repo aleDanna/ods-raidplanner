@@ -1,8 +1,8 @@
-import restClient from "@core/services/restClient";
-import {AsyncComponentLoader} from "@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader";
-import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
-import pageBuilder from "@core/common/pageBuilder";
-import {EditUser} from "@core/ui/components/EditUser/EditUser";
+import restClient from '@core/services/restClient';
+import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader';
+import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
+import pageBuilder from '@core/common/pageBuilder';
+import { EditUser } from '@core/ui/components/EditUser/EditUser';
 
 export const EditUserPage = (routeProps) => {
 
@@ -12,8 +12,7 @@ export const EditUserPage = (routeProps) => {
                 return userRoles;
             });
 
-
-    const title = ContentTitle({nameTitle: "Aggiorna utente"})
+    const title = ContentTitle({nameTitle: 'Aggiorna utente'});
     const mainComponent = AsyncComponentLoader({
         Component: EditUser,
         asyncFn: loadRoles,
@@ -22,4 +21,4 @@ export const EditUserPage = (routeProps) => {
     });
 
     return pageBuilder.build(title, mainComponent);
-}
+};

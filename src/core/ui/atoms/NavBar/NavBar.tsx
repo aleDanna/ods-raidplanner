@@ -28,7 +28,8 @@ export const NavBar = () => {
 
   const closeNav = () => {
     setNavExpanded(false);
-  }
+  };
+
   useEffect(() => {
     const loadUser = async () => {
       const userSession = sessionStorageService.get('loggedUser');

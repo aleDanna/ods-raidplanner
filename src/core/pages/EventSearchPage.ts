@@ -1,8 +1,8 @@
-import restClient from "../services/restClient";
-import {AsyncComponentLoader} from "@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader";
-import {ContentTitle} from "@core/ui/atoms/ContentTitle/ContentTitle";
-import pageBuilder from "@core/common/pageBuilder";
-import {EventSearch} from "@core/ui/components/EventSearch/EventSearch";
+import restClient from '../services/restClient';
+import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader';
+import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
+import pageBuilder from '@core/common/pageBuilder';
+import { EventSearch } from '@core/ui/components/EventSearch/EventSearch';
 
 export const EventSearchPage = (routeProps) => {
 
@@ -12,7 +12,7 @@ export const EventSearchPage = (routeProps) => {
                 return data;
             });
 
-    const titleComponent = ContentTitle({nameTitle: "Cerca eventi"})
+    const titleComponent = ContentTitle({nameTitle: 'Cerca eventi'});
     const mainComponent = AsyncComponentLoader({
         Component: EventSearch,
         asyncFn: loadGroups,
@@ -21,4 +21,4 @@ export const EventSearchPage = (routeProps) => {
     });
 
     return pageBuilder.build(titleComponent, mainComponent);
-}
+};

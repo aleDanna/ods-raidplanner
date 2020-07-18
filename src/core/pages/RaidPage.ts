@@ -3,8 +3,8 @@ import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncC
 import { Raid } from '@core/ui/components/Raid/Raid';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
-import windowUtils from "@core/common/windowUtils";
-import raidTransformer from "@core/features/transformers/raidTransformer";
+import windowUtils from '@core/common/windowUtils';
+import raidTransformer from '@core/features/transformers/raidTransformer';
 
 export const RaidPage = routeProps => {
 

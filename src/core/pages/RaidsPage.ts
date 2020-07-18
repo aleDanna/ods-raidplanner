@@ -6,8 +6,8 @@ import pageBuilder from '@core/common/pageBuilder';
 import RaidTransformer from '@core/features/transformers/raidTransformer';
 import { RaidCalendar } from '@core/ui/components/RaidsCalendar/RaidCalendar';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
-import {formatISODateString} from "@core/common/dateUtils";
-import sessionStorageService from "@core/services/sessionStorageService";
+import { formatISODateString } from '@core/common/dateUtils';
+import sessionStorageService from '@core/services/sessionStorageService';
 
 export const RaidsPage = (routeProps) => {
   const mode = routeProps.match.params.mode;

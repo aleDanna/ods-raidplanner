@@ -1,5 +1,5 @@
 import { UserProps } from '@core/datatypes/UserProps';
-import {appHost} from "@core/configs/connection.config";
+import { appHost } from '@core/configs/connection.config';
 
 const host = appHost();
 
@@ -50,7 +50,7 @@ export default {
   getRaidDetails(eventId: string) {
     return executeRestCall(`/api/raidDetails/${eventId}`, 'GET');
   },
-  updateUserDetails(userData) {
+  updateUserDetails(userData: any) {
     return executeRestCall(`/api/updateUser`, 'PUT', {
       userData: userData
     });
@@ -88,7 +88,7 @@ export default {
   deleteEvent(eventId: string) {
     return executeRestCall(`/admin/deleteEvent/${eventId}`, 'DELETE');
   },
-  registerUser(user) {
+  registerUser(user: any) {
     return executeRestCall(`/auth/register`, 'POST', {
       userData: user
     });

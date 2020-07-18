@@ -1,7 +1,7 @@
 import sessionStorageService from '../services/sessionStorageService';
 import { UserProps } from '@core/datatypes/UserProps';
-import {useEffect} from "react";
-import restClient from "@core/services/restClient";
+import { useEffect } from 'react';
+import restClient from '@core/services/restClient';
 
 export default {
   reload: (user?: UserProps) => {
@@ -18,13 +18,12 @@ export default {
           .then(res => {
             if (res.status === 204) {
               window.location.href = '/login';
-            }
-            else {
+            } else {
               sessionStorageService.saveOrUpdate('loggedUser', res);
               location.reload();
             }
-          })
+          });
       }
-    })
+    });
   }
 };
