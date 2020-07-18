@@ -58,11 +58,11 @@ export const RaidsGrid = ({ events, history }) => {
             </Container>
           </Col>
           <Col>
-            <Container fluid="md">
+            <Container fluid>
               <Row>
                 {eventList.map((value, _) => {
                   return (
-                    <Col key={value.id} md="auto" xs={6} className={styles.event}>
+                    <Col key={value.id} md="auto" xs={6} className={styles.raidgridEvent}>
                       <RaidCard event={value} />
                       {value.subscribed ? (
                         <Button variant="danger" size="sm" block onClick={() => unsubscribe(value.id)}>
