@@ -1,6 +1,7 @@
-import { Col, Form, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap';
+import { Col, Form, Nav, Navbar, NavDropdown, NavLink, Row } from 'react-bootstrap';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 import sessionStorageService from '../../../services/sessionStorageService';
 import { UserNavBarIcon } from '../UserNavBarIcon/UserNavBarIcon';
 import { useEffect, useState } from 'react';
@@ -75,12 +76,14 @@ export const NavBar = () => {
                 <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/editUser">Modifica utente</NavDropdown.Item>
             </NavDropdown>
           )}
-          {userData.id && (
+          {userData.id && !isMobile && (
             <NavDropdown title="Raids" id="raids-dropdown" >
-                <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/grid">Griglia</NavDropdown.Item>
-                <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/calendar">Calendario</NavDropdown.Item>
-            </NavDropdown>
-          )}
+            <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/grid">Griglia</NavDropdown.Item>
+            <NavDropdown.Item onClick={closeNav} as={Link} to="/raids/calendar">Calendario</NavDropdown.Item>
+            </NavDropdown>)
+          }
+          {userData.id && isMobile &&
+          (<NavLink onClick={closeNav} as={Link} to="/raids/grid">Raids Disponibili</NavLink>)}
         </Nav>
         <Nav>
           {userData.id && (

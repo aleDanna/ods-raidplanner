@@ -108,6 +108,12 @@ export const RaidsGrid = ({ events, history }) => {
 
   return (
     <Container className={styles.container}>
+      {events.length === 0 && (
+        <Alert variant="warning">
+          Non ci sono eventi disponibili nelle prossime due settimane.
+          Usa la versione Desktop per accedere al calendario
+        </Alert>
+      )}
       <Alert variant="danger" show={characterMissingShow}>
         Seleziona un personaggio!
       </Alert>
