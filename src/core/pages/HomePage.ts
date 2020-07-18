@@ -22,7 +22,9 @@ export const HomePage = routeProps => {
         endDateFilter: formatISODateString(nextWeek.toISOString(), 'yyyy-MM-dd')
       })
       .then(data => {
+        console.log(data);
         return restClient.getSubscribedRaids().then(ids => {
+          console.log(ids);
           const subscribedEvents = ids.map(row => {
             return row.raid_ref;
           });

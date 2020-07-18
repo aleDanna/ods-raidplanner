@@ -34,12 +34,17 @@ export const NavBar = () => {
       const userSession = sessionStorageService.get('loggedUser');
       if (userSession) {
         setUserData(userSession);
+        const character = sessionStorageService.get('selectedCharacter');
+        if (character) {
+          setSelectedCharacter(character);
+        }
       }
     };
     loadUser();
   }, []);
 
   const onCharacterChange = character => {
+    console.log(character);
     setSelectedCharacter(character);
     if (character !== EMPTY_CHARACTER) {
       sessionStorageService.saveOrUpdate('selectedCharacter', character);

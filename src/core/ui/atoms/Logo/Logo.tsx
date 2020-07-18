@@ -11,6 +11,6 @@ export const Logo = () => {
   useEffect(() => {
     setImage(isMobile ? logoMobile : logoFull);
   })
-  
+
   return <img src={image} className={`align-top`} alt="logo" />;
 }

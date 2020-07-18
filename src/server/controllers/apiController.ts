@@ -128,7 +128,9 @@ apiController.post('/saveCharacter', (req, res) => {
 });
 
 apiController.post('/getRaidsByFilter', (req, res) => {
+  console.log(req.body.filters);
   persistenceService.getRaidsByFilter(req.body.filters).then(data => {
+    console.log(data);
     res.send(data);
   });
 });
