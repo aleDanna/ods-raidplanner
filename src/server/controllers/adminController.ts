@@ -1,6 +1,7 @@
 import persistenceService from '../services/persistence-service';
 import express from 'express';
 import bodyParser from 'body-parser';
+import {formatISODateString} from "@core/common/dateUtils";
 
 export const adminController = express.Router();
 
@@ -26,9 +27,24 @@ adminController.get('/raidGroups', (req, res) => {
 });
 
 adminController.post('/schedule', (req, res) => {
-  persistenceService.saveEvent(req.body.raid).then(() => {
-    res.sendStatus(200);
-  });
+  const event = req.body.raid;
+
+  const eventStartDate = new Date(event.startDate);
+  const eventEndDate = new Date(event.endDate);
+
+  let i = 0;
+  const numOfSaves = event.recurrent ? 12 : 1;
+  while (i < numOfSaves) {
+    persistenceService.saveEvent({
+      startDate: formatISODateString(eventStartDate.toISOString(), 'yyyy-MM-dd HH:mm:ss'),
+      endDate: formatISODateString(eventEndDate.toISOString(), 'yyyy-MM-dd HH:mm:ss'),
+      raidGroup: event.raidGroup
+    });
+    eventStartDate.setMonth(eventStartDate.getMonth() + 1);
+    eventEndDate.setMonth(eventEndDate.getMonth() + 1);
+    i++;
+  }
+  res.sendStatus(200);
 });
 
 adminController.delete('/deleteEvent/:eventId', (req, res) => {
