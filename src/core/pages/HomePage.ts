@@ -12,14 +12,14 @@ export const HomePage = routeProps => {
   windowUtils.checkAuthenticated();
 
   const today = new Date();
-  const nextWeek = new Date();
-  nextWeek.setMonth(nextWeek.getMonth() + 1);
+  const nextMonth = new Date();
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
 
   const loadEvents = () =>
     restClient
       .getRaidsByFilter({
         startDateFilter: formatISODateString(today.toISOString(), 'yyyy-MM-dd'),
-        endDateFilter: formatISODateString(nextWeek.toISOString(), 'yyyy-MM-dd')
+        endDateFilter: formatISODateString(nextMonth.toISOString(), 'yyyy-MM-dd')
       })
       .then(data => {
         return restClient.getSubscribedRaids().then(ids => {

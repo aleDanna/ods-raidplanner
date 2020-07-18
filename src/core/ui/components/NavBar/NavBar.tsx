@@ -34,6 +34,10 @@ export const NavBar = () => {
       const userSession = sessionStorageService.get('loggedUser');
       if (userSession) {
         setUserData(userSession);
+        const character = sessionStorageService.get('selectedCharacter');
+        if (character) {
+          setSelectedCharacter(character);
+        }
       }
     };
     loadUser();
@@ -107,7 +111,7 @@ export const NavBar = () => {
                   <Col md={4}>
                     <NavDropdown
                       title={<UserNavBarIcon username={userData.username} />}
-                      id="raids-dropdown">
+                      id="user-dropdown">
                         <NavDropdown.Item onClick={closeNav} as={Link} to="/profile">Profilo</NavDropdown.Item>
                         <NavDropdown.Item onClick={closeNav} as={Link} to="/characters">Personaggi</NavDropdown.Item>
                         <NavDropdown.Item onClick={() => {

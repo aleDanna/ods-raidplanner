@@ -53,3 +53,7 @@ content {
   color: black !important;
   text-decoration: none !important;
 }
+
+a#user-dropdown.dropdown-toggle.nav-link::after {
+  display: none !important;
+}

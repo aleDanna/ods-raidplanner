@@ -9,7 +9,6 @@ authController.use(bodyParser.urlencoded({ extended: false }));
 authController.use(bodyParser.json());
 
 authController.use((req, res, next) => {
-  console.log(req.session);
   console.log('Authentication service called: ', new Date());
   next();
 });
