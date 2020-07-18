@@ -6,12 +6,22 @@ import pageBuilder from '@core/common/pageBuilder';
 import RaidTransformer from '@core/features/transformers/raidTransformer';
 import { RaidCalendar } from '@core/ui/components/RaidsCalendar/RaidCalendar';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
+import {formatISODateString} from "@core/common/dateUtils";
+import sessionStorageService from "@core/services/sessionStorageService";
 
 export const RaidsPage = (routeProps) => {
   const mode = routeProps.match.params.mode;
 
+  const today = new Date();
+  const nextMonth = new Date();
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+
   const loadRaids = () =>
-    restClient.getAvailableRaids()
+    restClient.getRaidsByFilter({
+        startDateFilter: formatISODateString(today.toISOString(), 'yyyy-MM-dd'),
+        endDateFilter: formatISODateString(nextMonth.toISOString(), 'yyyy-MM-dd'),
+        maxRank: sessionStorageService.get('loggedUser').rank
+    })
       .then(data => {
         return restClient.getSubscribedRaids()
           .then(ids => {
