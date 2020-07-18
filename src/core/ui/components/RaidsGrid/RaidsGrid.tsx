@@ -58,7 +58,7 @@ export const RaidsGrid = ({ events, history }) => {
             </Container>
           </Col>
           <Col>
-            <Container fluid="md">
+            <Container fluid>
               <Row>
                 {eventList.map((value, _) => {
                   return (
