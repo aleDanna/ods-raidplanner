@@ -91,7 +91,7 @@ export const RaidCalendar = ({ history }) => {
             />
           </Media>
         </Col>
-        <Col md={10}>
+        <Col md={2}>
           <span><strong>{calendarEvent.event.title}</strong></span>
         </Col>
       </Row>

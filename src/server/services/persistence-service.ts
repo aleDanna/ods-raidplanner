@@ -75,15 +75,9 @@ export default {
     return executeQuery(query, false);
   },
   saveEvent(event: any) {
-    const save = eventToSave => {
-      const query = `INSERT INTO raids (start_date, end_date, group_ref) 
-                            VALUES ('${eventToSave.startDate}', '${eventToSave.endDate}', ${eventToSave.raidGroup})`;
-      return executeQuery(query, true);
-    };
-    // if (event.recurrent) {
-    //     //TODO save for next year every week
-    // }
-    return save(event);
+    const query = `INSERT INTO raids (start_date, end_date, group_ref) 
+                            VALUES ('${event.startDate}', '${event.endDate}', ${event.raidGroup})`;
+    return executeQuery(query, true);
   },
   getRaid(eventId: any) {
     const query = `SELECT r.id, r.start_date, r.end_date, rg.name as title
@@ -147,7 +141,7 @@ export default {
   },
   getRoles() {
     const query = `SELECT *
-                       FROM roles`;
+                   FROM roles`;
     return executeQuery(query, false);
   },
   updateCharacter(characterId: any, name: any, roleId: any) {
