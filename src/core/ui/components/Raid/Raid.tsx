@@ -92,16 +92,17 @@ export const Raid = ({ raid }) => {
             <Col md={12}>
               <span className={styles.basicLabel}>Utenti iscritti: </span>
             </Col>
+          </Row>
             {raid.subscriptions.map(user => {
               return (
-                <Row key={user.eso_username}>
-                      <span className={styles.basicLabel}><strong>
+                <Row className={`justify-content-center`}
+                     key={user.eso_username}>
+                    <span className={styles.userLabel}><strong>
                       {user.eso_username} - {user.character_name} ({user.role_name})
                     </strong></span>
                 </Row>
               );
             })}
-          </Row>
           <Row className={`${styles.rowDetails} justify-content-center`}>
             <Col md={12}>
               {raid.subscriptions.filter(item => item.eso_username === userData.esousername).length === 0 ? (
