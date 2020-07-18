@@ -109,5 +109,8 @@ export default {
   },
   logout() {
     return executeRestCall(`/auth/logout`, 'GET');
+  },
+  recoverSession() {
+    return executeRestCall('/auth/recoverSession', 'GET');
   }
 };
