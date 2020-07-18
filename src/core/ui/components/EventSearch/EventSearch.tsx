@@ -66,7 +66,7 @@ export const EventSearch = ({history, groups}) => {
             groupFilter: groupFilter && groupFilter != EMPTY_GROUP ? groupFilter : null
         })
             .then(events => {
-                setRaids(RaidTransformer.transform(events));
+                setRaids(RaidTransformer.transformArray(events));
                 setShowResult(true);
             })
     }

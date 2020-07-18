@@ -108,7 +108,7 @@ export const RaidCalendar = ({ history }) => {
         return restClient.getSubscribedRaids()
           .then(ids => {
             const subscribedEvents = ids.map(row => {return row.raid_ref; });
-            const events = RaidTransformer.transform(data);
+            const events = RaidTransformer.transformArray(data);
             events.forEach(event => {
               event.subscribed = subscribedEvents.indexOf(event.id) > -1;
             });

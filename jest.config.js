@@ -31,7 +31,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/__tests__/*.+(ts|js)', '**/*.test.(ts|js)'],
-  transform: {
+  transformArray: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   }
 };
