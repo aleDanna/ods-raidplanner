@@ -209,8 +209,7 @@ export default {
   },
   saveCredentials(username: any, password: any, role: any) {
     const query = `INSERT INTO credentials (username, password, role) 
-                            VALUES ('${username}', '${password}', '${role}'); 
-                            SELECT currval('credentials_seq');`;
+                            VALUES ('${username}', '${password}', '${role}');`;
     return executeQuery(query, true);
   },
   saveUser(name: any, surname: any, esoUsername: any, rank: any, username: any) {
