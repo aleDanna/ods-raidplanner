@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { RaidCard } from '@core/ui/atoms/RaidCard/RaidCard';
 
 import styles from './RaidsGrid.scss';
+import { isMobile } from 'react-device-detect';
 
 export const RaidsGrid = ({ events, history }) => {
   const [characterMissingShow, setCharacterMissingShow] = useState(false);
@@ -59,7 +60,7 @@ export const RaidsGrid = ({ events, history }) => {
           </Col>
           <Col>
             <Container fluid>
-              <Row>
+              <Row className={`${isMobile && 'justify-content-center'}`}>
                 {eventList.map((value, _) => {
                   return (
                     <Col key={value.id} md="auto" xs={6} className={styles.raidgridEvent}>
@@ -111,7 +112,7 @@ export const RaidsGrid = ({ events, history }) => {
       {events.length === 0 && (
         <Alert variant="warning">
           Non ci sono eventi disponibili nelle prossime due settimane.
-          Usa la versione Desktop per accedere al calendario
+          {isMobile && 'Usa la versione Desktop per accedere al calendario'}
         </Alert>
       )}
       <Alert variant="danger" show={characterMissingShow}>
