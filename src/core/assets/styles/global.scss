@@ -13,8 +13,7 @@ body {
   min-height: 100%;
   font-family: fantasy !important;
   background-image: url("../images/background.jpg") !important;
-  background-size: cover;
-  background-repeat: repeat-y;
+  background-size: inherit;
 }
 
 content {

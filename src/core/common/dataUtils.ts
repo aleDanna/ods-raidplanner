@@ -9,3 +9,14 @@ export const calculateSubscriptions = subscriptions => {
     newGroupStack: newGroupCompletedAt
   };
 };
+
+export const UNALLOWED_WORDS = ['\'', '"', ' ', '*', '(', ')', '[', ']', '{', '}', '|', '/', ','];
+
+export const fieldChecker = (str) => {
+  for (const i in UNALLOWED_WORDS) {
+    if (str.indexOf(UNALLOWED_WORDS[i]) !== -1) {
+      return true;
+    }
+  }
+  return false;
+};

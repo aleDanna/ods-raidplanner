@@ -1,5 +1,6 @@
 import { Client } from 'pg';
 import { getDbConnection } from '@core/configs/connection.config';
+import { RaidSearchFilterProps } from '@core/datatypes/RaidSearchFilterProps';
 
 async function executeQuery(query: string, singleResult: boolean) {
   const client = new Client(getDbConnection());
@@ -128,6 +129,8 @@ export default {
     return executeQuery(query, true);
   },
   updateUser(user: any) {
+    user.name = user.name.replace(/'/g, '\'\'');
+    user.surname = user.surname.replace(/'/g, '\'\'');
     const query = `UPDATE users u
                        SET name = '${user.name}', 
                            surname = '${user.surname}',
@@ -148,8 +151,9 @@ export default {
     return executeQuery(query, false);
   },
   updateCharacter(characterId: any, name: any, roleId: any) {
+    const nameEscaped = name.replace(/'/g, '\'\'');
     const query = `UPDATE characters c
-                       SET name = '${name}', 
+                       SET name = '${nameEscaped}', 
                            role_ref = '${roleId}'
                        WHERE c.id = ${characterId}`;
     return executeQuery(query, true);
@@ -167,11 +171,12 @@ export default {
     });
   },
   addCharacter(userId: any, name: any, roleId: any) {
+    const nameEscaped = name.replace(/'/g, '\'\'');
     const query = `INSERT INTO characters (name, role_ref, user_ref) 
-                            VALUES ('${name}', ${roleId}, ${userId})`;
+                            VALUES ('${nameEscaped}', ${roleId}, ${userId})`;
     return executeQuery(query, true);
   },
-  getRaidsByFilter(filters) {
+  getRaidsByFilter(filters: RaidSearchFilterProps) {
     let additionalConditions = '';
     if (filters.startDateFilter) {
       additionalConditions = additionalConditions + `AND r.start_date::date >= '${filters.startDateFilter}'::date `;
@@ -213,8 +218,10 @@ export default {
     return executeQuery(query, true);
   },
   saveUser(name: any, surname: any, esoUsername: any, rank: any, username: any) {
+    const nameEscaped = name.replace(/'/g, '\'\'');
+    const surnameEscaped = surname.replace(/'/g, '\'\'');
     const query = `INSERT INTO users (name, surname, eso_username, rank, credentials_ref) 
-                            VALUES ('${name}', '${surname}', '${esoUsername}', 
+                            VALUES ('${nameEscaped}', '${surnameEscaped}', '${esoUsername}', 
                             ${rank}, (SELECT id FROM credentials WHERE username = '${username}'))`;
     return executeQuery(query, true);
   },
