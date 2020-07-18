@@ -2,7 +2,7 @@ import { Col, Form, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import sessionStorageService from '../../../services/sessionStorageService';
-import { UserNavBarIcon } from '../../atoms/UserNavBarIcon/UserNavBarIcon';
+import { UserNavBarIcon } from '../UserNavBarIcon/UserNavBarIcon';
 import { useEffect, useState } from 'react';
 import { Logo } from '@core/ui/atoms';
 import { EmptyUserProps } from '@core/datatypes/UserProps';

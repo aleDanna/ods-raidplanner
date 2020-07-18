@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './PageTemplate.scss';
-import { NavBar } from '@core/ui/components/NavBar/NavBar';
+import { NavBar } from '@core/ui/atoms/NavBar/NavBar';
 import {Container} from "react-bootstrap";
 
 interface Props {
@@ -9,11 +9,13 @@ interface Props {
 
 export function PageTemplate({ children }: Props) {
   return (
+    <>
     <div className={styles.pageTemplate}>
       <NavBar />
-      <Container fluid>
+      <Container>
           {children}
       </Container>
     </div>
-  );
+  </>
+);
 }
