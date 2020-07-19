@@ -86,7 +86,8 @@ export default {
                             WHERE rs.raid_ref = r.id) as subscriptions, 
                             rg.name, rg.image_name, rg.id as group_id
                         FROM raids r, raid_groups rg
-                        WHERE r.id = ${eventId}`;
+                        WHERE r.id = ${eventId}
+                        AND r.group_ref = rg.id`;
     return executeQuery(query, true);
   },
   getSubscriptionsByEventId(eventId: any) {
