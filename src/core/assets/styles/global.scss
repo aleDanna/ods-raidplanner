@@ -4,7 +4,7 @@
 @import "../../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 html, body {
-  height: 100%;
+  width: 100%;
 }
 
 body {
@@ -12,36 +12,9 @@ body {
   flex-direction: column;
   min-height: 100%;
   font-family: fantasy !important;
-  background-image: url("../images/background.jpg") !important;
-  background-size: inherit;
-}
-
-content {
-  flex: 100%;
-  min-height: 100%;
-}
-
-.DayPicker {
-  width: 100%;
-  pointer-events: none !important;
-}
-
-.DayPicker:focus {
-  border: none !important;
-  outline: none !important;
-}
-
-.DayPicker-Months {
-  display: flex;
-  flex-direction: column;
-}
-
-.DayPicker-Caption {
-  text-align: center !important;
-}
-
-.DayPicker-Day {
-  border: 1px solid #000000;
+  background-color: #bcc9c9;
+  background-image: linear-gradient(to bottom, #99a3a2 0%, #bcc9c9 50%, #99a3a2 75%);
+  background-repeat: no-repeat;
 }
 
 .dropdown-menu {
