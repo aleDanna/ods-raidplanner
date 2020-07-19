@@ -29,6 +29,7 @@ export const RaidCalendar = ({ history }) => {
         });
       } else {
         setCharacterMissingShow(true);
+        windowUtils.scrollTop();
       }
     };
 

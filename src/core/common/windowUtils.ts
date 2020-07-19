@@ -25,5 +25,8 @@ export default {
           });
       }
     });
+  },
+  scrollTop() {
+    window.scrollTo(0, 0);
   }
 };

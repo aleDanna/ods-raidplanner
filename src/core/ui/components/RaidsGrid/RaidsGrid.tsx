@@ -28,6 +28,7 @@ export const RaidsGrid = ({ events, history }) => {
       });
     } else {
       setCharacterMissingShow(true);
+      windowUtils.scrollTop();
     }
   };
 

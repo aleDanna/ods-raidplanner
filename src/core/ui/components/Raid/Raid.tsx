@@ -33,6 +33,7 @@ export const Raid = ({ raid }) => {
       });
     } else {
       setCharacterMissingShow(true);
+      windowUtils.scrollTop();
     }
   };
 
