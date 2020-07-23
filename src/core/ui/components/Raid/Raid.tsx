@@ -99,37 +99,37 @@ export const Raid = ({ raid, history }) => {
               </Col>
             </Row>
           </Jumbotron>
+        </Row>
 
-          <Row className="justify-content-center">
-            <Col md={12}>
-              <span className={styles.basicLabel}><strong>Iscrizioni</strong></span>
-            </Col>
-            {raid.subscriptions.map(user => {
-              return (
-                  <Col md={3} key={user.esoUsername}>
-                    <UserCard esoUsername={user.esoUsername}
-                              characterName={user.characterName} role={user.roleName} />
-                  </Col>
-              );
-            })}
-          </Row>
-          <Row className={`${styles.rowDetails} justify-content-center`}>
-            <Col md={12}>
-              {raid.subscriptions.filter(item => item.esoUsername === userData.esousername).length === 0 ? (
-                <Button variant="success" onClick={subscribe}>
-                  Iscriviti
-                </Button>
-              ) : (
-                <Button variant="danger" onClick={unsubscribe}>
-                  Annulla iscrizione
-                </Button>
-              )}
-              {userData.role === 'ADMIN' && (
-                <Button variant="primary" onClick={goToGroups}>
-                  Gruppi
-                </Button>)}
-            </Col>
-          </Row>
+        <Row className="justify-content-center">
+          <Col md={12}>
+            <span className={styles.basicLabel}><strong>Iscrizioni</strong></span>
+          </Col>
+          {raid.subscriptions.map(user => {
+            return (
+              <Col md={3} key={user.esoUsername}>
+                <UserCard esoUsername={user.esoUsername}
+                          characterName={user.characterName} role={user.roleName} />
+              </Col>
+            );
+          })}
+        </Row>
+        <Row className={`${styles.rowDetails} justify-content-center`}>
+          <Col md={12}>
+            {raid.subscriptions.filter(item => item.esoUsername === userData.esousername).length === 0 ? (
+              <Button variant="success" onClick={subscribe}>
+                Iscriviti
+              </Button>
+            ) : (
+              <Button variant="danger" onClick={unsubscribe}>
+                Annulla iscrizione
+              </Button>
+            )}
+            {userData.role === 'ADMIN' && (
+              <Button variant="primary" onClick={goToGroups}>
+                Gruppi
+              </Button>)}
+          </Col>
         </Row>
       </Container>
     </>
