@@ -5,6 +5,7 @@ import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import windowUtils from '@core/common/windowUtils';
 import raidTransformer from '@core/features/transformers/raidTransformer';
+import subscriptionTransformer from '@core/features/transformers/subscriptionTransformer';
 
 export const RaidPage = routeProps => {
 
@@ -15,7 +16,7 @@ export const RaidPage = routeProps => {
   const loadRaid = () =>
     restClient.getRaidDetails(id).then(raid => {
       return restClient.getSubscriptionsFor(id).then(subscriptions => {
-        raid.subscriptions = subscriptions;
+        raid.subscriptions = subscriptionTransformer.transformArray(subscriptions);
         return raidTransformer.transform(raid);
       });
     });
@@ -24,7 +25,7 @@ export const RaidPage = routeProps => {
   const mainComponent = AsyncComponentLoader({
     Component: Raid,
     asyncFn: loadRaid,
-    componentProps: {},
+    componentProps: {history: routeProps.history},
     propFetched: 'raid'
   });
 

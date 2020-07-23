@@ -47,6 +47,7 @@
     "ramda": "^0.26.1",
     "react": "^16.9.43",
     "react-async": "^10.0.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-bootstrap": "^1.0.1",
     "react-day-picker": "^7.4.8",
     "react-device-detect": "^1.13.1",
@@ -61,7 +62,8 @@
     "redux-actions": "^2.6.5",
     "redux-thunk": "2.3.0",
     "reselect": "^4.0.0",
-    "serialize-javascript": "^2.1.1"
+    "serialize-javascript": "^2.1.1",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

@@ -1,7 +1,7 @@
 import persistenceService from '../services/persistence-service';
 import express from 'express';
 import bodyParser from 'body-parser';
-import {formatISODateString} from "@core/common/dateUtils";
+import { formatISODateString } from '@core/common/dateUtils';
 
 export const adminController = express.Router();
 
@@ -71,4 +71,25 @@ adminController.put('/updateUser', (req, res) => {
       res.sendStatus(200);
     });
   });
+});
+
+adminController.put('/saveRaidGrouping', (req, res) => {
+  const groups = req.body.groups;
+  let ok = true;
+  console.log(groups);
+  groups.forEach((subscriptions, groupNumber) => {
+    if (ok) {
+      subscriptions.forEach(subscription => {
+        if (ok) {
+          subscription.groupNumber = groupNumber;
+          persistenceService.updateGroupNumber(subscription).catch(err => {
+            res.sendStatus(500);
+            console.log(err);
+            ok = false;
+          });
+        }
+      });
+    }
+  });
+  res.sendStatus(200);
 });

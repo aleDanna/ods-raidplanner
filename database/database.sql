@@ -65,6 +65,7 @@ CREATE TABLE raid_subscriptions (
     id numeric primary key DEFAULT NEXTVAL('raid_subscriptions_seq'),
     character_ref numeric not null references characters,
     raid_ref numeric not null references raids,
+    group_number numeric not null DEFAULT 0,
     UNIQUE (character_ref, raid_ref)
 );
 

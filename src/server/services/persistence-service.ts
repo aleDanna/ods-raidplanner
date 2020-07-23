@@ -1,6 +1,7 @@
 import { Client } from 'pg';
 import { getDbConnection } from '@core/configs/connection.config';
 import { RaidSearchFilterProps } from '@core/datatypes/RaidSearchFilterProps';
+import { SubscriptionProps } from '@core/datatypes/SubscriptionProps';
 
 async function executeQuery(query: string, singleResult: boolean) {
   const client = new Client(getDbConnection());
@@ -91,7 +92,7 @@ export default {
     return executeQuery(query, true);
   },
   getSubscriptionsByEventId(eventId: any) {
-    const query = `SELECT u.id, u.eso_username, c.name as character_name, r.name as role_name
+    const query = `SELECT rs.id, u.eso_username, c.name as character_name, r.name as role_name, rs.group_number
                        FROM users u, characters c, roles r, raid_subscriptions rs 
                        WHERE rs.raid_ref = ${eventId} 
                          AND c.user_ref = u.id
@@ -236,6 +237,13 @@ export default {
     const query = `UPDATE users u
                        SET rank = ${rank} 
                        WHERE u.id = ${id}`;
+    return executeQuery(query, true);
+  },
+  updateGroupNumber(subscription: SubscriptionProps) {
+    const query = `UPDATE raid_subscriptions rs
+                       SET group_number = ${subscription.groupNumber} 
+                       WHERE rs.id = ${subscription.id}`;
+    console.log(query);
     return executeQuery(query, true);
   }
 };
