@@ -1,11 +1,12 @@
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import React, { useEffect, useState } from 'react';
 
-import styles from './GroupingPanel.scss';
 import { calculateSubscriptions } from '@core/common/dataUtils';
 import { UserCard } from '@core/ui/atoms/UserCard/UserCard';
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import restClient from '@core/services/restClient';
+
+import styles from './RaidGrouping.scss';
 
 export const RaidGrouping = ({subscriptions, history}) => {
 
