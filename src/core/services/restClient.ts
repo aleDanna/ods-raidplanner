@@ -112,5 +112,11 @@ export default {
   },
   recoverSession() {
     return executeRestCall('/auth/recoverSession', 'GET');
+  },
+  saveRaidGrouping(groups: Array<Array<any>>) {
+    return executeRestCall(`/admin/saveRaidGrouping`, 'PUT', {
+      groups: groups
+    });
+
   }
 };

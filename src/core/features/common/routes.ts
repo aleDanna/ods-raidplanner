@@ -10,6 +10,7 @@ import {EditUserPage} from "@core/pages/EditUserPage";
 import {EventSearchPage} from "@core/pages/EventSearchPage";
 import {SignUpPage} from "@core/pages/SignUpPage";
 import {UserProfilePage} from "@core/pages/UserProfilePage";
+import { RaidGroupPage } from '@core/pages/RaidGroupPage';
 
 export const commonRoutes: AppRoute[] = [
   {
@@ -41,6 +42,11 @@ export const commonRoutes: AppRoute[] = [
     path: '/raid/:raidId',
     exact: true,
     component: RaidPage
+  },
+  {
+    path: '/raid/:raidId/groups',
+    exact: true,
+    component: RaidGroupPage
   },
   {
     path: '/admin/schedule',
