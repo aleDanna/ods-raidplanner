@@ -36,12 +36,10 @@ export const commonRoutes: AppRoute[] = [
   },
   {
     path: '/raids/grid',
-    exact: true,
     component: RaidsGridPage
   },
   {
     path: '/raids/calendar',
-    exact: true,
     component: RaidsCalendarPage
   },
   {

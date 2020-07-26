@@ -1,13 +1,10 @@
-import { isMobile } from 'react-device-detect';
 import restClient from '../services/restClient';
 import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
-import { RaidCalendar } from '@core/ui/components/RaidsCalendar/RaidCalendar';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
 
 export const RaidsGridPage = (routeProps) => {
-  const mode = routeProps.match.params.mode;
 
   async function loadRaids () {
 
@@ -21,21 +18,13 @@ export const RaidsGridPage = (routeProps) => {
     });
   }
 
-  async function emptyLoad () {
-    console.log('loading calendar...');
-    return {};
-  }
-
-  const isCalendarView = mode === 'calendar' && !isMobile;
-  const title = isCalendarView ? 'Calendario' : 'Raid disponibili';
-
-  const titleComponent = ContentTitle({nameTitle: title});
+  const titleComponent = ContentTitle({nameTitle: 'Raid disponibili'});
   const mainComponent =
     AsyncComponentLoader({
-      Component: isCalendarView ? RaidCalendar : RaidsGrid,
-      asyncFn: isCalendarView ? emptyLoad : loadRaids,
+      Component: RaidsGrid,
+      asyncFn: loadRaids,
       componentProps: {history: routeProps.history},
-      propFetched: isCalendarView ? '' : 'events'
+      propFetched: 'events'
     });
 
   return pageBuilder.build(titleComponent, mainComponent);
