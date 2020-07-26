@@ -42,7 +42,7 @@ export const RaidsGrid = ({ events, history }) => {
     history.push(`/raid/${eventId}`);
   };
 
-  const events2group = groupBy(events, 'title');
+  const events2group = groupBy(events, 'name');
 
   const generateGroups = () => {
     const fragments = [];
@@ -91,7 +91,7 @@ export const RaidsGrid = ({ events, history }) => {
     // tslint:disable-next-line:forin
     for (const title in events2group) {
       const raids = events2group[title];
-      const imageName = raids[0].icon;
+      const imageName = raids[0].image_name;
       // @ts-ignore
       fragments.push(groupRow(title, imageName, raids));
     }
