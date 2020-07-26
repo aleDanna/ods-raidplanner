@@ -28,5 +28,11 @@ export default {
   },
   scrollTop() {
     window.scrollTo(0, 0);
+  },
+  goToHome(user?: UserProps) {
+    if (user) {
+      sessionStorageService.saveOrUpdate('loggedUser', user);
+    }
+    window.location.href = '/';
   }
 };

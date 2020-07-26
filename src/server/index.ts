@@ -15,7 +15,7 @@ import { router } from './router';
 import { apiController } from '@server/controllers/apiController';
 import { adminController } from '@server/controllers/adminController';
 import { authController } from '@server/controllers/authController';
-import {appHost, getDbConnection} from '@core/configs/connection.config';
+import { appHost, getDbConnection } from '@core/configs/connection.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const host = appHost();

@@ -1,6 +1,6 @@
 import express from 'express';
-import persistenceService from '../services/persistence-service';
 import bodyParser from 'body-parser';
+import { CredentialRestService, UserRestService } from '@server/services/rest-service';
 
 export const authController = express.Router();
 
@@ -13,26 +13,20 @@ authController.use((req, res, next) => {
   next();
 });
 
-authController.post('/login', (req, res) => {
+authController.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  persistenceService
-    .authenticate(username, password)
-    .then(user => {
-      if (user) {
-        persistenceService.getCharacters(user.id).then(characters => {
-          user.characters = characters;
-          req.session!.user = user;
-          req.session!.save(() => {
-            console.log('session saved!');
-            res.send(req.session!.user);
-          });
-        });
-      } else {
-        res.sendStatus(405);
-      }
-    })
-    .catch(() => res.sendStatus(500));
+
+  const result = await CredentialRestService.authenticate({
+    username: username,
+    password: password
+  });
+
+  req.session!.user = result;
+  req.session!.save(() => {
+    console.log('session saved!');
+    res.send(req.session!.user);
+  });
 });
 
 authController.get('/logout', (req, res) => {
@@ -45,30 +39,33 @@ authController.get('/recoverSession', (req, res) => {
   userSession ? res.send(userSession) : res.sendStatus(204);
 });
 
-authController.get('/checkUsername/:username', (req, res) => {
-  const userSession = req.session!.user;
-  persistenceService.getUserByUsername(req.params.username).then(user => {
-    res.send({
-      isValid: user === null || (userSession && user.id === userSession.id)
-    });
+authController.get('/checkUsername/:username', async (req, res) => {
+  const result = await UserRestService.getUser(req.params.username);
+  res.send({
+    isValid: result === null
   });
 });
 
-authController.get('/checkEsoUsername/:username', (req, res) => {
-  const userSession = req.session!.user;
-  persistenceService.getUserByESOUsername(req.params.username).then(userId => {
-    res.send({
-      isValid: userId === null || (userSession && userId === userSession.id)
-    });
+authController.get('/checkEsoUsername/:username', async (req, res) => {
+  const result = await UserRestService.findByEsoUsername(req.params.username);
+  res.send({
+    isValid: result === null
   });
 });
 
-authController.post('/register', (req, res) => {
+authController.post('/register', async (req, res) => {
   console.log(req.body);
-  const { username, password, name, surname, esoUsername } = req.body.userData;
-  persistenceService.saveCredentials(username, password, 'DEFAULT').then(() => {
-    persistenceService.saveUser(name, surname, esoUsername, 1, username).then(() => {
-      res.sendStatus(200);
-    });
+  const {username, password, name, surname, esoUsername} = req.body.userData;
+  const result = await CredentialRestService.register({
+    name: name as string,
+    surname: surname as string,
+    esoUsername: esoUsername as string,
+    rank: 1,
+    credential: {
+      username: username as string,
+      password: password as string,
+      role: 'DEFAULT'
+    }
   });
+  res.send(result);
 });

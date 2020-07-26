@@ -1,6 +1,6 @@
-import persistenceService from '../services/persistence-service';
 import express from 'express';
 import bodyParser from 'body-parser';
+import { CharacterRestService, RaidRestService, UserRestService } from '@server/services/rest-service';
 
 export const apiController = express.Router();
 
@@ -20,115 +20,89 @@ apiController.use((req, res, next) => {
 apiController.use(bodyParser.urlencoded({ extended: false }));
 apiController.use(bodyParser.json());
 
-apiController.get('/getRaids', (req, res) => {
-  persistenceService
-    .getAllowedEvents(res.locals.user.id)
-    .then(allowedRaids => res.send(allowedRaids))
-    .catch(err => res.send(err));
+apiController.get('/getRaids', async (req, res) => {
+  const result = await RaidRestService.getRaidsByFilter({
+    maxRank: res.locals.user.rank
+  });
+  res.send(result);
 });
 
-apiController.get('/subscribedRaids', (req, res) => {
-  persistenceService
-    .getSubscribedRaids(res.locals.user.id)
-    .then(raidIds => res.send(raidIds))
-    .catch(err => res.send(err));
+apiController.get('/raidDetails/:raidId', async (req, res) => {
+  const result = await RaidRestService.getRaid(req.params.raidId);
+  res.send(result);
 });
 
-apiController.post('/subscribe', (req, res) => {
+apiController.get('/subscribedRaids', async (req, res) => {
+  const result = await RaidRestService.getSubscribedRaids(res.locals.user.id);
+  res.send(result);
+});
+
+apiController.post('/subscribe', async (req, res) => {
   const { eventId, characterId } = req.body;
-  const user = {
-    id: res.locals.user.id,
-    characterId: characterId
-  };
-  persistenceService.addSubscription(eventId, user).then(() => {
-    res.sendStatus(200);
-  });
+  console.log(req.body);
+  const result = await RaidRestService.subscribeToRaid(eventId, characterId);
+  res.send(result);
 });
 
-apiController.delete('/unsubscribe/:eventId', (req, res) => {
-  const eventId = req.params.eventId;
+apiController.delete('/unsubscribe/:raidId', async (req, res) => {
+  const raidId = req.params.raidId;
   const userId = res.locals.user.id;
-
-  console.log('unsubscribing...', eventId, userId);
-  persistenceService.getSubscribedCharacter(eventId, userId).then(character => {
-    persistenceService.removeSubscription(eventId, character.id).then(() => {
-      res.sendStatus(200);
-    });
-  });
+  const result = await RaidRestService.unsubscribe(raidId, userId);
+  res.send(result);
 });
 
-apiController.get('/subscriptionsFor/:eventId', (req, res) => {
-  persistenceService.getSubscriptionsByEventId(req.params.eventId).then(subscriptions => {
-    res.send(subscriptions);
-  });
+apiController.get('/allRoles', async (req, res) => {
+  const result = await CharacterRestService.getRoles();
+  res.send(result);
 });
 
-apiController.get('/raidDetails/:eventId', (req, res) => {
-  persistenceService.getRaid(req.params.eventId).then(raid => {
-    res.send(raid);
-  });
-});
+apiController.put('/updateCharacter', async (req, res) => {
+  const character = req.body;
 
-apiController.get('/allRoles', (req, res) => {
-  persistenceService.getRoles().then(roles => {
-    res.send(roles);
-  });
-});
-
-apiController.put('/updateCharacter', (req, res) => {
-  const { characterId, name, roleId } = req.body;
-  persistenceService.updateCharacter(characterId, name, roleId).then(() => {
-    persistenceService.getCharacters(res.locals.user.id).then(characters => {
-      res.locals.user.characters = characters;
-      res.send(res.locals.user);
-    });
-  });
+  const updatedCharacter = await CharacterRestService.updateCharacter(character);
+  if (updatedCharacter) {
+    console.log(res.locals.user.username);
+    req.session!.user = await UserRestService.getUser(res.locals.user.credential.username);
+    res.send(req.session!.user);
+  }
 });
 
 apiController.delete('/deleteCharacter/:characterId', (req, res) => {
-  persistenceService.deleteCharacter(req.params.characterId).then(() => {
-    persistenceService.getCharacters(res.locals.user.id).then(characters => {
-      res.locals.user.characters = characters;
+  CharacterRestService.deleteCharacter(req.params.characterId)
+    .then(async () => {
+      res.locals.user = await UserRestService.getUser(res.locals.user.credential.username);
       res.send(res.locals.user);
     });
+});
+
+apiController.put('/updateUser', async (req, res) => {
+  const user = req.body.userData;
+  const result = await UserRestService.updateUser(user);
+  req.session!.user = result;
+  req.session!.save(() => {
+    res.send(result);
   });
 });
 
-apiController.put('/updateUser', (req, res) => {
-  const actualUser = res.locals.user;
-  const userUpdated = Object.create(actualUser);
+apiController.post('/saveCharacter', async (req, res) => {
+  const character = req.body;
+  const savedCharacter = await CharacterRestService.saveCharacter(character);
 
-  // tslint:disable-next-line:forin
-  for (const key in req.body.userData) {
-    userUpdated[key] = req.body.userData[key];
+  if (savedCharacter) {
+    console.log(res.locals.user.username);
+    req.session!.user = await UserRestService.getUser(res.locals.user.credential.username);
+    res.send(req.session!.user);
   }
-  persistenceService.updateUser(userUpdated).then(() => {
-    persistenceService.updateUsername(actualUser.username, userUpdated.username).then(() => {
-      persistenceService.getCharacters(actualUser.id).then(characters => {
-        userUpdated.characters = characters;
-        req.session!.user = userUpdated;
-        req.session!.save(() => {
-          res.send(userUpdated);
-        })
-      });
-    });
-  });
 });
 
-apiController.post('/saveCharacter', (req, res) => {
-  const { name, roleId } = req.body;
-  const userId = res.locals.user.id;
-
-  persistenceService.addCharacter(userId, name, roleId).then(() => {
-    persistenceService.getCharacters(res.locals.user.id).then(characters => {
-      res.locals.user.characters = characters;
-      res.send(res.locals.user);
-    });
-  });
+apiController.post('/getRaidsByFilter', async (req, res) => {
+  const filters = req.body.filters;
+  console.log(filters);
+  const result = await RaidRestService.getRaidsByFilter(filters);
+  res.send(result);
 });
 
-apiController.post('/getRaidsByFilter', (req, res) => {
-  persistenceService.getRaidsByFilter(req.body.filters).then(data => {
-    res.send(data);
-  });
+apiController.get('/getEsoUsername/:userId', async (req, res) => {
+  const result = await UserRestService.getEsoUsername(req.params.userId);
+  res.send(result);
 });

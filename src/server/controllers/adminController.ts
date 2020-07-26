@@ -1,7 +1,7 @@
-import persistenceService from '../services/persistence-service';
 import express from 'express';
 import bodyParser from 'body-parser';
-import { formatISODateString } from '@core/common/dateUtils';
+import { RaidRestService, UserRestService } from '@server/services/rest-service';
+import { SubscriptionProps } from '@core/datatypes/SubscriptionProps';
 
 export const adminController = express.Router();
 
@@ -12,7 +12,7 @@ adminController.use(bodyParser.json());
 adminController.use((req, res, next) => {
   const userSession = req.session!.user;
   console.log('Admin api service called: ', new Date());
-  if (userSession && userSession.role === 'ADMIN') {
+  if (userSession && userSession.credential.role === 'ADMIN') {
     res.locals.user = userSession;
     next();
   } else {
@@ -20,76 +20,48 @@ adminController.use((req, res, next) => {
   }
 });
 
-adminController.get('/raidGroups', (req, res) => {
-  persistenceService.getRaidGroups().then(raidGroups => {
-    res.send(raidGroups);
-  });
+adminController.get('/raidGroups', async (req, res) => {
+  const result = await RaidRestService.getRaidGroups();
+  res.send(result);
 });
 
-adminController.post('/schedule', (req, res) => {
+adminController.post('/schedule', async (req, res) => {
   const event = req.body.raid;
 
-  const eventStartDate = new Date(event.startDate);
-  const eventEndDate = new Date(event.endDate);
-
-  let i = 0;
-  const numOfSaves = event.recurrent ? 12 : 1;
-  while (i < numOfSaves) {
-    persistenceService.saveEvent({
-      startDate: formatISODateString(eventStartDate.toISOString(), 'yyyy-MM-dd HH:mm:ss'),
-      endDate: formatISODateString(eventEndDate.toISOString(), 'yyyy-MM-dd HH:mm:ss'),
-      raidGroup: event.raidGroup
-    });
-    eventStartDate.setMonth(eventStartDate.getMonth() + 1);
-    eventEndDate.setMonth(eventEndDate.getMonth() + 1);
-    i++;
-  }
-  res.sendStatus(200);
+  const result = await RaidRestService.scheduleEvent(event);
+  res.send(result);
 });
 
-adminController.delete('/deleteEvent/:eventId', (req, res) => {
-  persistenceService.deleteEvent(req.params.eventId).then(() => {
-    res.sendStatus(200);
-  });
+adminController.delete('/deleteEvent/:eventId', async (req, res) => {
+  const result = await RaidRestService.deleteRaid(req.params.eventId);
+  res.send(result);
 });
 
-adminController.get('/findUser/:username', (req, res) => {
-  persistenceService.getUserByUsername(req.params.username).then(raidGroups => {
-    res.send(raidGroups);
-  });
+adminController.get('/findUser/:username', async (req, res) => {
+  const result = await UserRestService.getUser(req.params.username);
+  res.send(result);
 });
 
-adminController.get('/allUserRoles', (req, res) => {
-  // TODO migrate in future as typo table on db
-  res.send(['DEFAULT', 'ADMIN']);
+adminController.get('/allUserRoles', async (req, res) => {
+  const result = await UserRestService.getRoles();
+  res.send(result);
 });
 
-adminController.put('/updateUser', (req, res) => {
-  const { id, rank, role, credentials_id } = req.body.userData;
-  persistenceService.updateRoleCredentials(credentials_id, role).then(() => {
-    persistenceService.updateRank(id, rank).then(() => {
-      res.sendStatus(200);
-    });
-  });
+adminController.put('/updateUser', async (req, res) => {
+  const user = req.body.userData;
+  const result = await UserRestService.updateUser(user);
+  res.send(result);
 });
 
-adminController.put('/saveRaidGrouping', (req, res) => {
+adminController.put('/saveRaidGrouping', async (req, res) => {
   const groups = req.body.groups;
-  let ok = true;
-  console.log(groups);
+  const dataToSend = new Array<SubscriptionProps>();
   groups.forEach((subscriptions, groupNumber) => {
-    if (ok) {
       subscriptions.forEach(subscription => {
-        if (ok) {
           subscription.groupNumber = groupNumber;
-          persistenceService.updateGroupNumber(subscription).catch(err => {
-            res.sendStatus(500);
-            console.log(err);
-            ok = false;
-          });
-        }
-      });
-    }
-  });
-  res.sendStatus(200);
+          dataToSend.push(subscription);
+        });
+    });
+  const result = await RaidRestService.updateSubscriptions(dataToSend);
+  res.send(result);
 });

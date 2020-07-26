@@ -16,7 +16,8 @@ export interface RouteComponentProps<T = {}> extends RouteConfigComponentProps<T
 
 export interface AppRoute extends RouteConfig, ExtraRoureProps {
   routes?: AppRoute[];
-  component: React.ComponentType<RouteComponentProps> | React.ComponentType;
+  component?: React.ComponentType<RouteComponentProps> | React.ComponentType;
+  render?: any;
 }
 
 export const appRoutes = unnest([commonRoutes]) as AppRoute[];

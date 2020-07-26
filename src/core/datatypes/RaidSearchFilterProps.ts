@@ -1,6 +1,6 @@
 export interface RaidSearchFilterProps {
-  startDateFilter?: string;
-  endDateFilter?: string;
-  groupFilter?: string;
-  maxRank?: number;
+  startDateFilter?: Date | undefined;
+  endDateFilter?: Date | undefined;
+  groupFilter?: string | undefined;
+  maxRank?: number | undefined;
 }

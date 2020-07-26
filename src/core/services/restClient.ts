@@ -1,5 +1,8 @@
 import { UserProps } from '@core/datatypes/UserProps';
 import { appHost } from '@core/configs/connection.config';
+import { RaidSearchFilterProps } from '@core/datatypes/RaidSearchFilterProps';
+import { RaidProps } from '@core/datatypes/RaidProps';
+import { CharacterProps } from '@core/datatypes/CharacterProps';
 
 const host = appHost();
 
@@ -44,8 +47,8 @@ export default {
       raid: event
     });
   },
-  getSubscriptionsFor(eventId: string) {
-    return executeRestCall(`/api/subscriptionsFor/${eventId}`, 'GET');
+  getEsoUsername(userId: number) {
+    return executeRestCall(`/api/getEsoUsername/${userId}`, 'GET');
   },
   getRaidDetails(eventId: string) {
     return executeRestCall(`/api/raidDetails/${eventId}`, 'GET');
@@ -64,28 +67,21 @@ export default {
   getRoles() {
     return executeRestCall(`/api/allRoles`, 'GET');
   },
-  updateCharacter(characterId: string, newName: string, newRoleId: string) {
-    return executeRestCall(`/api/updateCharacter`, 'PUT', {
-      characterId: characterId,
-      name: newName,
-      roleId: newRoleId
-    });
+  updateCharacter(character: CharacterProps) {
+    return executeRestCall(`/api/updateCharacter`, 'PUT', character);
   },
   deleteCharacter(characterId: string) {
     return executeRestCall(`/api/deleteCharacter/${characterId}`, 'DELETE');
   },
-  saveCharacter(name: string, role: string) {
-    return executeRestCall(`/api/saveCharacter`, 'POST', {
-      name: name,
-      roleId: role
-    });
+  saveCharacter(character: CharacterProps) {
+    return executeRestCall(`/api/saveCharacter`, 'POST', character);
   },
-  getRaidsByFilter(filters: any) {
+  getRaidsByFilter(filters: RaidSearchFilterProps): Promise<Array<RaidProps>> {
     return executeRestCall(`/api/getRaidsByFilter`, 'POST', {
       filters: filters
     });
   },
-  deleteEvent(eventId: string) {
+  deleteEvent(eventId: number) {
     return executeRestCall(`/admin/deleteEvent/${eventId}`, 'DELETE');
   },
   registerUser(user: any) {

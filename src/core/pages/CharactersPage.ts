@@ -3,23 +3,26 @@ import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import { Characters } from '@core/ui/components/Characters/Characters';
 import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncComponentLoader';
 import restClient from '@core/services/restClient';
+import windowUtils from '@core/common/windowUtils';
 
 export const CharactersPage = () => {
 
-    const loadGroups = () =>
-        restClient.getRoles()
-            .then(roles => {
-                return roles;
-            });
+  windowUtils.checkAuthenticated();
 
-    const contentTitle = ContentTitle({nameTitle: 'Personaggi'});
+  const loadRoles = () =>
+    restClient.getRoles()
+      .then(roles => {
+        return roles;
+      });
 
-    const mainComponent = AsyncComponentLoader({
-        Component: Characters,
-        asyncFn: loadGroups,
-        componentProps: {},
-        propFetched: 'groups'
-    });
+  const contentTitle = ContentTitle({nameTitle: 'Personaggi'});
 
-    return pageBuilder.build(contentTitle, mainComponent);
+  const mainComponent = AsyncComponentLoader({
+    Component: Characters,
+    asyncFn: loadRoles,
+    componentProps: {},
+    propFetched: 'roles'
+  });
+
+  return pageBuilder.build(contentTitle, mainComponent);
 };

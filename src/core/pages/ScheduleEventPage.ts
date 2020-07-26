@@ -3,8 +3,12 @@ import { ScheduleEvent } from '@core/ui/components/ScheduleEvent/ScheduleEvent';
 import subscriptionRestClient from '@core/services/restClient';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
+import windowUtils from '@core/common/windowUtils';
 
 export const ScheduleEventPage = () => {
+
+  windowUtils.checkAuthenticated();
+
   const loadRaidGroups = () =>
     subscriptionRestClient.getRaidGroups().then(data => {
       return data;

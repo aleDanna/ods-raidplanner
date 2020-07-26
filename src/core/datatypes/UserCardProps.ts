@@ -1,11 +1,13 @@
+import { CharacterRoleProps, EmptyCharacterRole } from '@core/datatypes/CharacterRoleProps';
+
 export interface UserCardProps {
   esoUsername: string;
   characterName: string;
-  role: string;
+  role: CharacterRoleProps;
 }
 
 export const EmptyUserCardProps: UserCardProps = {
   characterName: '',
   esoUsername: '',
-  role: ''
+  role: EmptyCharacterRole
 };

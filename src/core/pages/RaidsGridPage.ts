@@ -3,8 +3,11 @@ import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncC
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
+import windowUtils from '@core/common/windowUtils';
 
 export const RaidsGridPage = (routeProps) => {
+
+  windowUtils.checkAuthenticated();
 
   async function loadRaids () {
 

@@ -3,22 +3,23 @@ import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncC
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import { EditUser } from '@core/ui/components/EditUser/EditUser';
+import windowUtils from '@core/common/windowUtils';
 
 export const EditUserPage = (routeProps) => {
 
-    const loadRoles = () =>
-        restClient.getUserRoles()
-            .then(userRoles => {
-                return userRoles;
-            });
+  windowUtils.checkAuthenticated();
 
-    const title = ContentTitle({nameTitle: 'Aggiorna utente'});
-    const mainComponent = AsyncComponentLoader({
-        Component: EditUser,
-        asyncFn: loadRoles,
-        componentProps: {},
-        propFetched: 'roles'
-    });
+  async function loadRoles() {
+    return await restClient.getUserRoles();
+  }
 
-    return pageBuilder.build(title, mainComponent);
+  const title = ContentTitle({nameTitle: 'Aggiorna utente'});
+  const mainComponent = AsyncComponentLoader({
+    Component: EditUser,
+    asyncFn: loadRoles,
+    componentProps: {},
+    propFetched: 'roles'
+  });
+
+  return pageBuilder.build(title, mainComponent);
 };

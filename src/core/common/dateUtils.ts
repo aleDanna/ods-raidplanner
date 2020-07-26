@@ -9,10 +9,5 @@ export const getDateTimeString = date => {
 };
 
 export const addTimeStringToDate = (date, timeString) => {
-  const isoDateString = date + 'T' + timeString;
-  return formatISODateString(isoDateString, 'yyyy-MM-dd HH:mm:ss');
-};
-
-export const formatTimeStringToDate = timeString => {
-  return addTimeStringToDate(new Date(1970, 1, 1), timeString);
+  return date + 'T' + timeString;
 };

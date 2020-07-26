@@ -11,15 +11,17 @@ import {
   DifferentDayEventCreationModalContent,
   EventCreatedModalContent
 } from '@core/ui/templates/EventCreationModalContents';
+import { getGroupValue } from '@core/common/dataUtils';
+import { EventScheduleProps } from '@core/datatypes/EventScheduleProps';
+import { EmptyRaidGroup, RaidGroupProps } from '@core/datatypes/RaidGroupProps';
 
 export const ScheduleEvent = ({ raidGroups }) => {
   const START_TIME_DEFAULT_VALUE = '21:30';
   const END_TIME_DEFAULT_VALUE = '00:30';
   const RECURRENT_DEFAULT_VALUE = false;
   const EVENT_DATE_DEFAULT_VALUE = formatISODateString(new Date().toISOString(), 'yyyy-MM-dd');
-  const EMPTY_RAID_GROUP = '---';
 
-  const [selectedRaidGroup, setSelectedRaidGroup] = useState(EMPTY_RAID_GROUP);
+  const [selectedRaidGroup, setSelectedRaidGroup] = useState(-1);
   const [eventDate, setEventDate] = useState(EVENT_DATE_DEFAULT_VALUE);
   const [startTime, setStartTime] = useState(START_TIME_DEFAULT_VALUE);
   const [endTime, setEndTime] = useState(END_TIME_DEFAULT_VALUE);
@@ -78,20 +80,24 @@ export const ScheduleEvent = ({ raidGroups }) => {
       return new Date(eventDate) < today;
     },
     invalidRaidGroup: () => {
-      return selectedRaidGroup === EMPTY_RAID_GROUP;
+      return selectedRaidGroup === EmptyRaidGroup.id;
     }
   };
 
   const saveRaid = (startDate, endDate) => {
-    const eventToSave = {
-      startDate: startDate.toLocaleString(),
-      endDate: endDate.toLocaleString(),
-      raidGroup: selectedRaidGroup,
+    const eventToSave: EventScheduleProps = {
+      raid: {
+        startDate: startDate,
+        endDate: endDate,
+        raidGroup: {
+          id: selectedRaidGroup
+        }
+      },
       recurrent: recurrent
     };
     setModalProps(EmptyModalProps);
     restClient.scheduleEvent(eventToSave).then(() => {
-      setSelectedRaidGroup(EMPTY_RAID_GROUP);
+      setSelectedRaidGroup(EmptyRaidGroup.id);
       setEventDate(EVENT_DATE_DEFAULT_VALUE);
       setStartTime(START_TIME_DEFAULT_VALUE);
       setEndTime(END_TIME_DEFAULT_VALUE);
@@ -139,11 +145,11 @@ export const ScheduleEvent = ({ raidGroups }) => {
                 as="select"
                 value={selectedRaidGroup}
                 onChange={handleRaidGroupChange}>
-                <option key={0}>{EMPTY_RAID_GROUP}</option>
-                {raidGroups.map(value => {
+                <option key={0}>{EmptyRaidGroup.name}</option>
+                {raidGroups.map((value: RaidGroupProps) => {
                   return (
                     <option key={value.id} value={value.id}>
-                      {value.name}
+                      {getGroupValue(value.name!).description}
                     </option>
                   );
                 })}

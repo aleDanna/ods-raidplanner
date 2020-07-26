@@ -4,8 +4,6 @@ import { Raid } from '@core/ui/components/Raid/Raid';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import windowUtils from '@core/common/windowUtils';
-import raidTransformer from '@core/features/transformers/raidTransformer';
-import subscriptionTransformer from '@core/features/transformers/subscriptionTransformer';
 
 export const RaidPage = routeProps => {
 
@@ -13,13 +11,14 @@ export const RaidPage = routeProps => {
 
   const id = routeProps.match.params.raidId;
 
-  const loadRaid = () =>
-    restClient.getRaidDetails(id).then(raid => {
-      return restClient.getSubscriptionsFor(id).then(subscriptions => {
-        raid.subscriptions = subscriptionTransformer.transformArray(subscriptions);
-        return raidTransformer.transform(raid);
-      });
-    });
+  async function loadRaid () {
+    const raid = await restClient.getRaidDetails(id);
+    for (const subscription of raid.subscriptions) {
+      const valueDTO = await restClient.getEsoUsername(subscription.character.userId);
+      subscription.esoUsername = valueDTO.value;
+    }
+    return raid;
+  }
 
   const title = ContentTitle({ nameTitle: 'Dettagli evento' });
   const mainComponent = AsyncComponentLoader({

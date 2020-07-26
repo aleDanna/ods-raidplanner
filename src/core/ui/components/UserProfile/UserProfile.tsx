@@ -5,8 +5,8 @@ import { useState } from 'react';
 import restClient from '@core/services/restClient';
 
 import styles from './UserProfile.scss';
-import windowUtils from '@core/common/windowUtils';
 import { fieldChecker } from '@core/common/dataUtils';
+import windowUtils from '@core/common/windowUtils';
 
 export const UserProfile = ({history}) => {
 
@@ -67,7 +67,11 @@ export const UserProfile = ({history}) => {
     setForm('esousername', esoUsername);
   };
 
-  const save = (evt) => {
+  // tslint:disable-next-line:typedef
+  async function save(evt) {
+
+    console.log(userDataForm);
+
     const form = evt.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -75,17 +79,19 @@ export const UserProfile = ({history}) => {
       evt.stopPropagation();
     }
 
-    restClient.updateUserDetails(userDataForm)
-      .then((user) => {
-        windowUtils.reload(user);
-      });
-
     setValidated(true);
     evt.preventDefault();
-  };
+    const result = await restClient.updateUserDetails(userDataForm);
+    console.log(result);
+    windowUtils.goToHome(result);
+  }
 
   const setForm = (field, value) => {
-    userDataForm[field] = value;
+    if (field === 'username') {
+      userDataForm.credential[field] = value;
+    } else {
+      userDataForm[field] = value;
+    }
   };
 
   return (
@@ -95,7 +101,7 @@ export const UserProfile = ({history}) => {
           <Form noValidate validated={validated} onSubmit={save}>
             <Form.Group controlId="username">
               <Form.Label>Username</Form.Label>
-              <Form.Control required type="text" defaultValue={userDataForm.username}
+              <Form.Control required type="text" defaultValue={userDataForm.credential.username}
                             readOnly={!editMode}
                             isInvalid={!validUsername}
                             onChange={e => onUsernameChange(e.currentTarget.value)}/>
@@ -127,7 +133,7 @@ export const UserProfile = ({history}) => {
             </Form.Group>
             <Form.Group controlId="esousername">
               <Form.Label>ESO Username</Form.Label>
-              <Form.Control required type="text" defaultValue={userDataForm.esousername}
+              <Form.Control required type="text" defaultValue={userDataForm.esoUsername}
                             readOnly={!editMode}
                             isInvalid={!validESOUsername}
                             onChange={e => onESOUsernameChange(e.target.value)}/>

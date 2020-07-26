@@ -18,7 +18,8 @@ export const RaidGrouping = ({subscriptions, history}) => {
   const numOfGroups = calculateSubscriptions(subscriptions.length).groups;
 
   useEffect(() => {
-    const sortFunction = (x, y) => x.roleName.localeCompare(y.roleName);
+    const sortFunction = (x, y) =>
+      x.character.role.roleName.localeCompare(y.character.role.roleName);
     if (!itemsReady) {
 
       for (let i = 0; i <= numOfGroups; i++) {
@@ -36,8 +37,9 @@ export const RaidGrouping = ({subscriptions, history}) => {
     ...draggableStyle
   });
 
-  const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? 'lightblue' : 'floralwhite',
+  const getListStyle = (groupNumber, isDraggingOver) => ({
+    background: isDraggingOver ? 'lightblue' :
+      groupNumber === '0' ? '#99e099' : 'floralwhite',
     borderRadius: 5,
     minWidth: 230,
     width: 230
@@ -55,14 +57,14 @@ export const RaidGrouping = ({subscriptions, history}) => {
               <>
                 <Row className="justify-content-center"
                      ref={provided.innerRef}
-                     style={getListStyle(snapshot.isDraggingOver)}
+                     style={getListStyle(i, snapshot.isDraggingOver)}
                      {...provided.droppableProps}
                 >
                   <p className={styles.listTitle}><strong>{title}</strong></p>
-                  {groups[i].map((user, index) => (
+                  {groups[i].map((subscription, index) => (
                     <Draggable
-                      key={user.esoUsername}
-                      draggableId={user.esoUsername}
+                      key={subscription.esoUsername}
+                      draggableId={subscription.esoUsername}
                       index={index}
                     >
                       {(elemProvided) => (
@@ -75,9 +77,9 @@ export const RaidGrouping = ({subscriptions, history}) => {
                               elemProvided.draggableProps.style
                             )}>
                             <UserCard
-                              esoUsername={user.esoUsername}
-                              characterName={user.characterName}
-                              role={user.roleName} />
+                              esoUsername={subscription.esoUsername}
+                              characterName={subscription.character.name}
+                              role={subscription.character.role} />
                           </div>
                           {elemProvided.placeholder}
                         </div>
@@ -113,14 +115,15 @@ export const RaidGrouping = ({subscriptions, history}) => {
       return list;
     };
 
-    const isMovable = (user, group, destGroupNumber) => {
+    const isMovable = (subscription, group, destGroupNumber) => {
       if (destGroupNumber !== '0') {
-        const role = user.roleName;
+        const role = subscription.character.role.roleName;
         let maxRolesInGroup = 2;
-        if (role === 'Damage Dealer') {
+        if (role === 'DAMAGE_DEALER') {
           maxRolesInGroup = 8;
         }
-        return group.filter(item => item.roleName === role).length < maxRolesInGroup && group.length < 12;
+        return group.filter(
+          item => item.character.role.roleName === role).length < maxRolesInGroup && group.length < 12;
       }
       return true;
     };
