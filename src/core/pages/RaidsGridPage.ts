@@ -6,7 +6,7 @@ import pageBuilder from '@core/common/pageBuilder';
 import { RaidCalendar } from '@core/ui/components/RaidsCalendar/RaidCalendar';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
 
-export const RaidsPage = (routeProps) => {
+export const RaidsGridPage = (routeProps) => {
   const mode = routeProps.match.params.mode;
 
   async function loadRaids () {
@@ -23,7 +23,7 @@ export const RaidsPage = (routeProps) => {
 
   async function emptyLoad () {
     console.log('loading calendar...');
-    return routeProps.history;
+    return {};
   }
 
   const isCalendarView = mode === 'calendar' && !isMobile;
@@ -34,8 +34,8 @@ export const RaidsPage = (routeProps) => {
     AsyncComponentLoader({
       Component: isCalendarView ? RaidCalendar : RaidsGrid,
       asyncFn: isCalendarView ? emptyLoad : loadRaids,
-      componentProps: isCalendarView ? {} : {events: {}, history: routeProps.history},
-      propFetched: isCalendarView ? 'history' : 'events'
+      componentProps: {history: routeProps.history},
+      propFetched: isCalendarView ? '' : 'events'
     });
 
   return pageBuilder.build(titleComponent, mainComponent);
