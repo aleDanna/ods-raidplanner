@@ -27,5 +27,5 @@ export const appHost = () => {
 export const restServerHost = () => {
   return process.env.NODE_ENV === 'production' ?
     'https://ods-raidplanner-rest.herokuapp.com' :
-    'http://localhost:9000';
+    'http://localhost:8080';
 };
