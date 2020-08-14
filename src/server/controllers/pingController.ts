@@ -18,6 +18,7 @@ pingController.use((req, res, next) => {
   next();
 });
 
-pingController.get('/check', async () => {
+pingController.get('/check', async (req, res) => {
   console.log('Ping process completed correctly');
+  res.sendStatus(200);
 });
