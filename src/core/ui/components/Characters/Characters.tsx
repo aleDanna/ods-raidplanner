@@ -17,6 +17,11 @@ export const Characters = ({roles}) => {
   const [newCharacterName, setNewCharacterName] = useState('');
   const [newCharacterRole, setNewCharacterRole] = useState(-1);
   const [invalidCharacterAlertShow, setInvalidCharacterAlertShow] = useState(false);
+  const [serverErrorAlertShow, setServerErrorAlertShow] = useState(false);
+
+  const onServerError = () => {
+    setServerErrorAlertShow(true);
+  };
 
   const EditModalComponent = ({character}) => {
 
@@ -28,21 +33,19 @@ export const Characters = ({roles}) => {
       show: show
     };
 
-    const edit = () => {
+    async function edit() {
       if (upgradedName && upgradedRole !== '') {
-        restClient.updateCharacter({
+        const user = await restClient.updateCharacter({
           id: character.id,
           name: upgradedName,
-          role: {
-            id: upgradedRole
-          },
-          userId: userData.id
-        })
-          .then((user) => {
-            windowUtils.reload(user);
-          });
+          role: {id: upgradedRole},
+          userId: userData.id},
+          onServerError);
+        if (user) {
+          windowUtils.reload(user);
+        }
       }
-    };
+    }
 
     return (
       <>
@@ -94,15 +97,15 @@ export const Characters = ({roles}) => {
       show: show
     };
 
-    const deleteCharacter = () => {
+    async function deleteCharacter() {
       if (character.id === sessionStorageService.get('selectedCharacter')) {
         sessionStorageService.remove('selectedCharacter');
       }
-      restClient.deleteCharacter(character.id)
-        .then((user) => {
-          windowUtils.reload(user);
-        });
-    };
+      const user = await restClient.deleteCharacter(character.id, onServerError);
+      if (user) {
+        windowUtils.reload(user);
+      }
+    }
 
     return (
       <>
@@ -145,27 +148,30 @@ export const Characters = ({roles}) => {
     );
   };
 
-  const saveCharacter = () => {
+  async function saveCharacter() {
     if (newCharacterName && newCharacterRole !== -1) {
-      restClient.saveCharacter({
+      const user = await restClient.saveCharacter({
         name: newCharacterName,
         role: {
           id: newCharacterRole
         },
         userId: userData.id
-      })
-        .then((user) => {
-          windowUtils.reload(user);
-        });
+      }, onServerError);
+      if (user) {
+        windowUtils.reload(user);
+      }
     } else {
       setInvalidCharacterAlertShow(true);
     }
-  };
+  }
 
   return (
     <Container className={styles.container}>
+      <Alert variant="danger" show={serverErrorAlertShow}>
+        Si é verificato un errore durante la modifica...
+      </Alert>
       <Alert variant="danger" show={invalidCharacterAlertShow}>
-        Username o password errati
+        Dati mancanti
       </Alert>
       <Row className="justify-content-center">
         <Table responsive striped bordered hover size="sm">

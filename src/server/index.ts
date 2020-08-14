@@ -15,6 +15,8 @@ import { router } from './router';
 import { apiController } from '@server/controllers/apiController';
 import { adminController } from '@server/controllers/adminController';
 import { authController } from '@server/controllers/authController';
+import { pingController } from '@server/controllers/pingController';
+
 import { appHost, getDbConnection } from '@core/configs/connection.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -61,7 +63,7 @@ if (!isProduction) {
 }
 
 app.use(assetsParser(isProduction));
-app.use(/^(?!\/?(api|auth|admin)).+$/, router);
+app.use(/^(?!\/?(api|auth|admin|ping)).+$/, router);
 app.use((err: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (!isProduction) {
     return res.status(500).send(err);
@@ -91,6 +93,7 @@ app.use(expressSession({
 app.use('/auth', authController);
 app.use('/api', apiController);
 app.use('/admin', adminController);
+app.use('/ping', pingController);
 
 app.listen(port, () => {
   console.info(`✅✅✅ Server is running at ${host} ✅✅✅`);

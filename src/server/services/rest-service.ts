@@ -1,18 +1,14 @@
 import { restServerHost } from '@core/configs/connection.config';
 import { UserProps } from '@core/datatypes/UserProps';
-import { RaidGroupProps } from '@core/datatypes/RaidGroupProps';
-import { RaidProps } from '@core/datatypes/RaidProps';
 import { EventScheduleProps } from '@core/datatypes/EventScheduleProps';
 import { SubscriptionProps } from '@core/datatypes/SubscriptionProps';
 import { RaidSearchFilterProps } from '@core/datatypes/RaidSearchFilterProps';
 import { LoginProps } from '@core/datatypes/LoginProps';
-import { CharacterRoleProps } from '@core/datatypes/CharacterRoleProps';
 import { CharacterProps } from '@core/datatypes/CharacterProps';
-import { VauleProps } from '@core/datatypes/VauleProps';
 
 const host = restServerHost();
 
-const executeRestCall = (url, method, body?) => {
+async function executeRestCall(url, method, body?) {
   const params = {
     method: method,
     credentials: 'include',
@@ -24,19 +20,9 @@ const executeRestCall = (url, method, body?) => {
   };
 
   // @ts-ignore
-  return fetch(`${host}${url}`, params)
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error(res.statusText);
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      return null;
-    });
-};
+  const result = await fetch(`${host}${url}`, params);
+  return result.ok ? await result.json() : result;
+}
 
 const userEndpoint = '/users';
 const raidEndpoint = '/raids';
@@ -44,94 +30,73 @@ const credentialEndpoint = '/credential';
 const characterEndpoint = '/characters';
 
 export const UserRestService = {
-  getUser: async (username: string): Promise<UserProps> => {
-    const result = await executeRestCall(`${userEndpoint}/findUser/${username}`, 'GET');
-    return result as UserProps;
+  getUser: async (username: string) => {
+    return executeRestCall(`${userEndpoint}/findUser/${username}`, 'GET');
   },
-  getRoles: async (): Promise<Array<RaidGroupProps>> => {
-    const result = await executeRestCall(`${userEndpoint}/roles`, 'GET');
-    return result as Array<RaidGroupProps>;
+  getRoles: async () => {
+    return executeRestCall(`${userEndpoint}/roles`, 'GET');
   },
-  updateUser: async (user: UserProps): Promise<UserProps> => {
-    const result = await executeRestCall(`${userEndpoint}/updateUser`, 'PUT', user);
-    return result as UserProps;
+  updateUser: async (user: UserProps) => {
+    return executeRestCall(`${userEndpoint}/updateUser`, 'PUT', user);
   },
-  findByEsoUsername: async (esoUsername: string): Promise<UserProps> => {
-    const result = await executeRestCall(`${userEndpoint}/findByEsoUsername/${esoUsername}`, 'GET');
-    return result as UserProps;
+  findByEsoUsername: async (esoUsername: string) => {
+    return executeRestCall(`${userEndpoint}/findByEsoUsername/${esoUsername}`, 'GET');
   },
-  getEsoUsername: async (userId: number): Promise<VauleProps> => {
-    const result = await executeRestCall(`${userEndpoint}/esoUsername/${userId}`, 'GET');
-    return result as VauleProps;
+  getEsoUsername: async (userId: number) => {
+    return executeRestCall(`${userEndpoint}/esoUsername/${userId}`, 'GET');
   }
- };
+};
 
 export const RaidRestService = {
-  getRaid: async (raidId: number): Promise<RaidProps> => {
-    const result = await executeRestCall(`${raidEndpoint}/${raidId}`, 'GET');
-    return result as RaidProps;
+  getRaid: async (raidId: number) => {
+    return executeRestCall(`${raidEndpoint}/${raidId}`, 'GET');
   },
-  getRaidGroups: async (): Promise<Array<RaidGroupProps>> => {
-    const result = await executeRestCall(`${raidEndpoint}/raidGroups`, 'GET');
-    return result as Array<RaidGroupProps>;
+  getRaidGroups: async () => {
+    return executeRestCall(`${raidEndpoint}/raidGroups`, 'GET');
   },
-  scheduleEvent: async (event: EventScheduleProps): Promise<RaidProps> => {
-    console.log(event);
-    const result = await executeRestCall(`${raidEndpoint}/schedule`, 'POST', event);
-    return result as RaidProps;
+  scheduleEvent: async (event: EventScheduleProps) => {
+    return executeRestCall(`${raidEndpoint}/schedule`, 'POST', event);
   },
-  deleteRaid: async (raidId: number): Promise<Response> => {
-    const result = await executeRestCall(`${raidEndpoint}/deleteEvent/${raidId}`, 'DELETE');
-    return result as Response;
+  deleteRaid: async (raidId: number) => {
+    return executeRestCall(`${raidEndpoint}/deleteEvent/${raidId}`, 'DELETE');
   },
-  updateSubscriptions: async (subscriptions: Array<SubscriptionProps>): Promise<Response> => {
-    const result = await executeRestCall(`${raidEndpoint}/updateSubscriptions`, 'PUT', subscriptions);
-    return result as Response;
+  updateSubscriptions: async (subscriptions: Array<SubscriptionProps>) => {
+    return executeRestCall(`${raidEndpoint}/updateSubscriptions`, 'PUT', subscriptions);
   },
-  getRaidsByFilter: async (filters: RaidSearchFilterProps): Promise<Array<RaidProps>> => {
-    const result = await executeRestCall(`${raidEndpoint}/getRaidsByFilter`, 'POST', filters);
-    return result as Array<RaidProps>;
+  getRaidsByFilter: async (filters: RaidSearchFilterProps) => {
+    return executeRestCall(`${raidEndpoint}/getRaidsByFilter`, 'POST', filters);
   },
-  subscribeToRaid: async (raidId: number, characterId: number): Promise<SubscriptionProps> => {
-    const result = await executeRestCall(`${raidEndpoint}/subscribe/${raidId}/${characterId}`, 'GET');
-    return result as SubscriptionProps;
+  subscribeToRaid: async (raidId: number, characterId: number) => {
+    return executeRestCall(`${raidEndpoint}/subscribe/${raidId}/${characterId}`, 'GET');
   },
-  unsubscribe: async (raidId: number, userId: number): Promise<Response> => {
-    const result = await executeRestCall(`${raidEndpoint}/unsubscribe/${raidId}/${userId}`, 'DELETE');
-    return result as Response;
+  unsubscribe: async (raidId: number, userId: number) => {
+    return executeRestCall(`${raidEndpoint}/unsubscribe/${raidId}/${userId}`, 'DELETE');
   },
-  getSubscribedRaids: async (userId: number): Promise<Array<RaidProps>> => {
-    const result = await executeRestCall(`${raidEndpoint}/subscribedRaids/${userId}`, 'GET');
-    return result as Array<RaidProps>;
+  getSubscribedRaids: async (userId: number) => {
+    return executeRestCall(`${raidEndpoint}/subscribedRaids/${userId}`, 'GET');
   },
 };
 
 export const CredentialRestService = {
-  authenticate: async (login: LoginProps): Promise<UserProps> => {
-    const result = await executeRestCall(`${credentialEndpoint}/authenticate`, 'POST', login);
-    return result as UserProps;
+  authenticate: (login: LoginProps) => {
+    return executeRestCall(`${credentialEndpoint}/authenticate`, 'POST', login);
   },
-  register: async (user: UserProps): Promise<UserProps> => {
-    const result = await executeRestCall(`${credentialEndpoint}/register`, 'POST', user);
-    return result as UserProps;
+  register: async (user: UserProps) => {
+    return executeRestCall(`${credentialEndpoint}/register`, 'POST', user);
   }
 };
 
 export const CharacterRestService = {
-  getRoles: async (): Promise<Array<CharacterRoleProps>> => {
-    const result = await executeRestCall(`${characterEndpoint}/roles`, 'GET');
-    return result as Array<CharacterRoleProps>;
+  getRoles: async () => {
+    return executeRestCall(`${characterEndpoint}/roles`, 'GET');
   },
-  saveCharacter: async (character: CharacterProps): Promise<CharacterProps> => {
-    const result = await executeRestCall(`${characterEndpoint}/save`, 'POST', character);
-    return result as CharacterProps;
+  saveCharacter: async (character: CharacterProps) => {
+    return executeRestCall(`${characterEndpoint}/save`, 'POST', character);
   },
-  updateCharacter: async (character: CharacterProps): Promise<CharacterProps> => {
-    const result = await executeRestCall(`${characterEndpoint}/update`, 'PUT', character);
-    return result as CharacterProps;
+  updateCharacter: async (character: CharacterProps) => {
+    return executeRestCall(`${characterEndpoint}/update`, 'PUT', character);
   },
-  deleteCharacter: async (characterId: number): Promise<Response> => {
-    const result = await executeRestCall(`${characterEndpoint}/delete/${characterId}`, 'DELETE');
-    return result as Response;
+  deleteCharacter: async (characterId: number) => {
+    return executeRestCall(`${characterEndpoint}/delete/${characterId}`, 'DELETE');
   },
 };

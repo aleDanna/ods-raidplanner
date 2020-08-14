@@ -90,7 +90,7 @@ export const SignUp = ({history}) => {
     }
   };
 
-  const register = (evt) => {
+  async function register(evt: any) {
     const form = evt.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -98,20 +98,20 @@ export const SignUp = ({history}) => {
       evt.stopPropagation();
     }
 
-    restClient.registerUser({
+    const user = await restClient.registerUser({
       username: username,
       password: password,
       name: name,
       surname: surname,
       esoUsername: esoUsername
-    })
-      .then(() => {
-        history.push('/login');
-      });
+    });
+    if (user) {
+      history.push('/login');
+      setValidated(true);
+    }
 
-    setValidated(true);
     evt.preventDefault();
-  };
+  }
 
   return (
     <Container className={styles.container}>

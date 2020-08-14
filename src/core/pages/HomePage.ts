@@ -18,7 +18,8 @@ export const HomePage = routeProps => {
     return await restClient.getRaidsByFilter({
       startDateFilter: today,
       endDateFilter: next2Weeks
-    });
+    }, (status) =>
+      console.error('Home page failed to fetch events from backend: ', status));
   }
 
   const titleComponent = ContentTitle({ nameTitle: 'Home' });

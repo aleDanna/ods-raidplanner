@@ -97,7 +97,6 @@ apiController.post('/saveCharacter', async (req, res) => {
 
 apiController.post('/getRaidsByFilter', async (req, res) => {
   const filters = req.body.filters;
-  console.log(filters);
   const result = await RaidRestService.getRaidsByFilter(filters);
   res.send(result);
 });

@@ -7,13 +7,14 @@ import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import restClient from '@core/services/restClient';
 
 import styles from './RaidGrouping.scss';
+import windowUtils from '@core/common/windowUtils';
 
 export const RaidGrouping = ({subscriptions, history}) => {
 
   const [groups, setGroups] = useState<Array<Array<any>>>([]);
   const [itemsReady, setItemsReady] = useState(false);
   const [showFullRoleAlert, setShowFullRoleAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [serverErrorAlert, setServerErrorAlert] = useState(false);
 
   const numOfGroups = calculateSubscriptions(subscriptions.length).groups;
 
@@ -115,24 +116,15 @@ export const RaidGrouping = ({subscriptions, history}) => {
       return list;
     };
 
-    const isMovable = (subscription, group, destGroupNumber) => {
-      if (destGroupNumber !== '0') {
-        const role = subscription.character.role.roleName;
-        let maxRolesInGroup = 2;
-        if (role === 'DAMAGE_DEALER') {
-          maxRolesInGroup = 8;
-        }
-        return group.filter(
-          item => item.character.role.roleName === role).length < maxRolesInGroup && group.length < 12;
-      }
-      return true;
+    const isMovable = (subscription, group) => {
+      return group.length < 12;
     };
 
     const move = (groupSource, groupDestination, droppableSource, droppableDestination) => {
       const sourceClone = Array.from(groupSource);
       const destClone = Array.from(groupDestination);
       const movingUser = sourceClone[droppableSource.index];
-      if (isMovable(movingUser, destClone, droppableDestination.droppableId)) {
+      if (isMovable(movingUser, destClone)) {
         const [removed] = sourceClone.splice(droppableSource.index, 1);
         destClone.splice(droppableDestination.index, 0, removed);
 
@@ -142,9 +134,6 @@ export const RaidGrouping = ({subscriptions, history}) => {
         setGroups(groups);
         setShowFullRoleAlert(false);
       } else {
-        setAlertMessage(destClone.length === 12 ?
-          'Massimo numero utenti raggiunti per il gruppo!' :
-          'Non ci sono piú posizioni disponibili per questo ruolo!');
         setShowFullRoleAlert(true);
       }
     };
@@ -172,14 +161,23 @@ export const RaidGrouping = ({subscriptions, history}) => {
     }
   };
 
-  const saveGrouping = () => {
-    restClient.saveRaidGrouping(groups).then(() => history.goBack());
-  };
+  async function saveGrouping() {
+    const result = await restClient.saveRaidGrouping(groups, () => {
+      setServerErrorAlert(true);
+      windowUtils.scrollTop();
+    });
+    if (result) {
+      history.goBack();
+    }
+  }
 
   return (
     <Container className={styles.container}>
+      <Alert variant="danger" show={serverErrorAlert}>
+        Si é verificato un errore...
+      </Alert>
       <Alert variant="danger" show={showFullRoleAlert}>
-        {alertMessage}
+        Massimo numero utenti raggiunti per il gruppo!
       </Alert>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Row className="justify-content-center">

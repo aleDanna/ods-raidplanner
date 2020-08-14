@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
 import sessionStorageService from '@core/services/sessionStorageService';
 import { useState } from 'react';
 import restClient from '@core/services/restClient';
@@ -18,6 +18,8 @@ export const UserProfile = ({history}) => {
   const [usernameError, setUsernameError] = useState('');
   const [esoUsernameError, setEsoUsernameError] = useState('');
 
+  const [showServerErrorAlert, setShowServerErrorAlert] = useState(false);
+
   const userData = sessionStorageService.get('loggedUser');
   const userDataForm: any = {};
 
@@ -31,10 +33,10 @@ export const UserProfile = ({history}) => {
         .then((res) => {
           if (invalidCheck) {
             setUsernameError('UNALLOWED_CHARS');
-          } else if (!res.isValid) {
+          } else if (res.status === 200) {
             setUsernameError('ALREADY_IN_USE');
           }
-          setValidUsername(res.isValid && !invalidCheck);
+          setValidUsername(res.status === 404 && !invalidCheck);
         });
     } else {
       if (invalidCheck) {
@@ -52,10 +54,10 @@ export const UserProfile = ({history}) => {
         .then((res) => {
           if (invalidCheck) {
             setEsoUsernameError('UNALLOWED_CHARS');
-          } else if (!res.isValid) {
+          } else if (res.status === 200) {
             setEsoUsernameError('ALREADY_IN_USE');
           }
-          setValidESOUsername(res.isValid && !invalidCheck);
+          setValidESOUsername(res.status === 404 && !invalidCheck);
         });
     } else {
       if (invalidCheck) {
@@ -81,9 +83,11 @@ export const UserProfile = ({history}) => {
 
     setValidated(true);
     evt.preventDefault();
-    const result = await restClient.updateUserDetails(userDataForm);
-    console.log(result);
-    windowUtils.goToHome(result);
+    const user = await restClient.updateUserDetails(userDataForm, () => setShowServerErrorAlert(true));
+
+    if (user) {
+      windowUtils.goToHome(user);
+    }
   }
 
   const setForm = (field, value) => {
@@ -96,6 +100,9 @@ export const UserProfile = ({history}) => {
 
   return (
     <Container fluid>
+      <Alert variant="danger" show={showServerErrorAlert} >
+        Si é verificato un errore
+      </Alert>
       <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate validated={validated} onSubmit={save}>

@@ -19,7 +19,7 @@ export const EditUser = ({roles}) => {
 
   const [showResult, setShowResult] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+  const [showNotFoundAlert, setShowNotFoundAlert] = useState(false);
   const [username, setUsername] = useState('');
   const [user, setUser] = useState<any>(null);
   const [rankValid, setRankValid] = useState(true);
@@ -61,9 +61,16 @@ export const EditUser = ({roles}) => {
       setShowResult(false);
       setUser(null);
     }
-    const result = await restClient.findUser(username);
-    setUser(result);
-    setShowResult(true);
+    const result = await restClient.findUser(username, (status) => {
+      if (status === 404) {
+        setShowNotFoundAlert(true);
+      }
+    });
+    if (result) {
+      setUser(result);
+      setShowResult(true);
+      setShowNotFoundAlert(false);
+    }
   }
 
   const onRankChange = (rank) => {
@@ -93,6 +100,9 @@ export const EditUser = ({roles}) => {
 
   return (
     <>
+      <Alert variant="warning" show={showNotFoundAlert}>
+        Utente non trovato
+      </Alert>
       <ConfirmModal show={showSuccessModal} />
       <Container className={styles.container}>
         <Row>

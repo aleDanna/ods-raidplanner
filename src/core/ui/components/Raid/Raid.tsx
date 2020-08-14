@@ -13,6 +13,11 @@ import { formatISODateString } from '@core/common/dateUtils';
 
 export const Raid = ({ raid, history }) => {
   const [userData, setUserData] = useState(EmptyUserProps);
+  const [serverErrorAlertShow, setServerErrorAlertShow] = useState(false);
+
+  const onServerError = () => {
+      setServerErrorAlertShow(true);
+  };
 
   useEffect(() => {
     const userSession = sessionStorageService.get('loggedUser');
@@ -27,8 +32,9 @@ export const Raid = ({ raid, history }) => {
     const characterId = sessionStorageService.get('selectedCharacter');
     if (characterId) {
       setCharacterMissingShow(false);
-      subscriptionRestClient.subscribe(raid.id, characterId).then(() => {
+      subscriptionRestClient.subscribe(raid.id, characterId, onServerError).then(() => {
         windowUtils.reload();
+        setServerErrorAlertShow(false);
       });
     } else {
       setCharacterMissingShow(true);
@@ -37,7 +43,7 @@ export const Raid = ({ raid, history }) => {
   };
 
   const unsubscribe = () => {
-    subscriptionRestClient.unsubscribe(raid.id).then(() => {
+    subscriptionRestClient.unsubscribe(raid.id, onServerError).then(() => {
       windowUtils.reload();
     });
   };
@@ -51,6 +57,9 @@ export const Raid = ({ raid, history }) => {
 
   return (
     <>
+      <Alert variant="danger" show={serverErrorAlertShow} >
+        Si é verificato un errore
+      </Alert>
       <Container fluid className={styles.container}>
         <Alert variant="danger" show={characterMissingShow}>
           Seleziona un personaggio!

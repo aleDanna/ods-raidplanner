@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import * as React from 'react';
 import restClient from '@core/services/restClient';
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
@@ -12,6 +12,7 @@ import { getGroupValue } from '@core/common/dataUtils';
 export const EventSearch = ({history, groups}) => {
 
   const [eventToDelete, setEventToDelete] = useState(EmptyRaid);
+  const [showEventsNotFoundAlert, setShowEventsNotFoundAlert] = useState(false);
   const DeleteEventModal = ({show}) => {
 
     const modalProps = {
@@ -19,7 +20,8 @@ export const EventSearch = ({history, groups}) => {
     };
 
     const deleteEvent = () => {
-      restClient.deleteEvent(eventToDelete.id!)
+      restClient.deleteEvent(eventToDelete.id!,
+        (status) => console.error('an error occurred removing event: ', status))
         .then((res) => {
           if (res.status === 200) {
             setShowDeleteModal(false);
@@ -65,8 +67,15 @@ export const EventSearch = ({history, groups}) => {
       startDateFilter: startDateFilter ? new Date(startDateFilter) : undefined,
       endDateFilter: endDateFilter ? new Date(endDateFilter) : undefined,
       groupFilter: groupFilter && groupFilter !== EMPTY_GROUP ? groupFilter : undefined
+    }, (status) => {
+      if (status === 404) {
+        setShowEventsNotFoundAlert(true);
+      } else {
+        console.error('an error occurred fetching events...', status);
+      }
     });
     setRaids(result);
+    setShowEventsNotFoundAlert(false);
     setShowResult(true);
   }
 
@@ -81,6 +90,9 @@ export const EventSearch = ({history, groups}) => {
 
   return (
     <>
+      <Alert variant="warning" show={showEventsNotFoundAlert} >
+        Nessun evento trovato
+      </Alert>
       <DeleteEventModal show={showDeleteModal}/>
       <Container className={styles.container}>
         <Form noValidate>

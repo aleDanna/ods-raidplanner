@@ -63,5 +63,5 @@ adminController.put('/saveRaidGrouping', async (req, res) => {
         });
     });
   const result = await RaidRestService.updateSubscriptions(dataToSend);
-  res.send(result);
+  res.sendStatus(result.status);
 });

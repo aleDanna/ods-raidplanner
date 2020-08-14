@@ -17,16 +17,21 @@ authController.post('/login', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  const result = await CredentialRestService.authenticate({
+  const response = await CredentialRestService.authenticate({
     username: username,
     password: password
   });
 
-  req.session!.user = result;
-  req.session!.save(() => {
-    console.log('session saved!');
-    res.send(req.session!.user);
-  });
+  if (response.id) {
+    req.session!.user = response;
+    req.session!.save(() => {
+      console.log('session saved!');
+      res.send(req.session!.user);
+    });
+  } else {
+    res.sendStatus(response.status);
+  }
+
 });
 
 authController.get('/logout', (req, res) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
 import { addTimeStringToDate, formatISODateString } from '@core/common/dateUtils';
 import restClient from '@core/services/restClient';
 
@@ -26,6 +26,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
   const [startTime, setStartTime] = useState(START_TIME_DEFAULT_VALUE);
   const [endTime, setEndTime] = useState(END_TIME_DEFAULT_VALUE);
   const [recurrent, setRecurrent] = useState(RECURRENT_DEFAULT_VALUE);
+  const [showServerErrorAlert, setShowServerErrorAlert] = useState(false);
 
   const [modalProps, setModalProps] = useState(EmptyModalProps);
 
@@ -84,7 +85,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
     }
   };
 
-  const saveRaid = (startDate, endDate) => {
+  async function saveRaid(startDate: any, endDate: any) {
     const eventToSave: EventScheduleProps = {
       raid: {
         startDate: startDate,
@@ -96,7 +97,12 @@ export const ScheduleEvent = ({ raidGroups }) => {
       recurrent: recurrent
     };
     setModalProps(EmptyModalProps);
-    restClient.scheduleEvent(eventToSave).then(() => {
+    const event = await restClient.scheduleEvent(eventToSave, () => {
+      setShowServerErrorAlert(true);
+    });
+
+    if (event) {
+      setShowServerErrorAlert(false);
       setSelectedRaidGroup(EmptyRaidGroup.id);
       setEventDate(EVENT_DATE_DEFAULT_VALUE);
       setStartTime(START_TIME_DEFAULT_VALUE);
@@ -104,8 +110,8 @@ export const ScheduleEvent = ({ raidGroups }) => {
       setRecurrent(RECURRENT_DEFAULT_VALUE);
 
       openModal('EVENT_CREATED_MODAL');
-    });
-  };
+    }
+  }
 
   const submit = evt => {
     const startDate = addTimeStringToDate(eventDate, startTime);
@@ -133,7 +139,9 @@ export const ScheduleEvent = ({ raidGroups }) => {
   return (
     <Container className={styles.container}>
       {modalProps && modalProps.modalShow && <ODSModal {...modalProps} />}
-
+      <Alert variant="danger" show={showServerErrorAlert}>
+        Si é verificato un errore
+      </Alert>
       <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate onSubmit={submit}>
