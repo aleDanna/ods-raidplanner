@@ -10,10 +10,7 @@ export const Home = ({ history, events }) => {
   const userData = sessionStorageService.get('loggedUser');
   const isAdmin = userData.credential.role === 'ADMIN';
   const subscribedEvents = events.filter(event => event.subscriptions.filter(
-    subscription => {
-      return subscription.character.userId === userData.id;
-    }
-  ));
+    subscription => subscription.character.userId === userData.id).length > 0);
 
   const eventDetails = eventId => {
     history.push(`/raid/${eventId}`);
