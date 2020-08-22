@@ -30,7 +30,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
 
   const [modalProps, setModalProps] = useState(EmptyModalProps);
 
-  const openModal = modalType => {
+  const openModal = (modalType, event?) => {
     const changeEndDateAndScheduleEvent = () => {
       const startDate = addTimeStringToDate(eventDate, startTime);
       const date = new Date(eventDate);
@@ -54,7 +54,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
         content = <EventCreatedModalContent />;
         confirmButtonText = 'OK';
         // tslint:disable-next-line:no-empty
-        confirmAction = () => {};
+        confirmAction = () => window.location.href = `/raid/${event.id}`;
         break;
       default:
         console.error('tipo di modale sconosciuta');
@@ -110,7 +110,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
       setEndTime(END_TIME_DEFAULT_VALUE);
       setRecurrent(RECURRENT_DEFAULT_VALUE);
 
-      openModal('EVENT_CREATED_MODAL');
+      openModal('EVENT_CREATED_MODAL', event);
     }
   }
 
