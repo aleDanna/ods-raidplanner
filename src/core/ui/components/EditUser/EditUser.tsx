@@ -139,7 +139,7 @@ export const EditUser = ({roles}) => {
                 <tbody>
                 <tr>
                   <td className={styles.userCell}>
-                    <p>{user.username}</p>
+                    <p>{user.credential.username}</p>
                   </td>
                   <td className={styles.userCell}>
                     <p>{user.name}</p>

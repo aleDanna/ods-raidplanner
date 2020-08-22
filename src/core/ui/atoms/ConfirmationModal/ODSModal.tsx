@@ -14,6 +14,7 @@ export const ODSModal = (props: ModalProps) => {
     confirmAction,
     closeAction,
     confirmButtonVariant,
+    displayConfirm,
     reset
   } = props;
 
@@ -60,9 +61,11 @@ export const ODSModal = (props: ModalProps) => {
               {closeButtonText}
             </Button>
           )}
+          { displayConfirm &&
           <Button variant={confirmButtonVariant ? confirmButtonVariant : `primary`} onClick={confirmActionWrapper}>
             {confirmButtonText}
           </Button>
+          }
         </Modal.Footer>
       </Modal>
     </>

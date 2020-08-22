@@ -128,16 +128,16 @@ export const Raid = ({ raid, history }) => {
         }
         <Row className={`${styles.rowDetails} justify-content-center`}>
           <Col md={12}>
-            {raid.subscriptions.filter(subscription =>
+            {userData.rank >= raid.raidGroup.rank ? raid.subscriptions.filter(subscription =>
               subscription.esoUsername === userData.esoUsername).length === 0 ? (
-              <Button variant="success" onClick={subscribe}>
+                <Button variant="success" onClick={subscribe}>
                 Iscriviti
               </Button>
             ) : (
               <Button variant="danger" onClick={unsubscribe}>
                 Annulla iscrizione
               </Button>
-            )}
+            ) : null}
             {userData.credential.role === 'ADMIN' && (
               <Button variant="primary" onClick={goToGroups}>
                 Gruppi

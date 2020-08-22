@@ -23,7 +23,7 @@ export const NavBar = () => {
       if (res.ok) {
         sessionStorageService.remove('loggedUser');
         sessionStorageService.remove('selectedCharacter');
-        location.href = '/login';
+        window.location.href = '/login';
       }
     });
   };

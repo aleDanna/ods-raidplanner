@@ -70,7 +70,7 @@ export const RaidsGrid = ({ events, history }) => {
                   return (
                     <Col key={event.id} md="auto" xs={6} className={styles.raidgridEvent}>
                       <RaidCard event={event} />
-                      {isSubscribed(event) ? (
+                      {userData.rank >= event.raidGroup.rank!! ? isSubscribed(event) ? (
                         <Button variant="danger" size="sm" block onClick={() => unsubscribe(event.id)}>
                           Rimuovi iscrizione
                         </Button>
@@ -78,7 +78,7 @@ export const RaidsGrid = ({ events, history }) => {
                         <Button variant="success" size="sm" block onClick={() => subscribe(event.id)}>
                           Iscriviti
                         </Button>
-                      )}
+                      ) : null }
                       <Button variant="secondary" size="sm" block onClick={() => eventDetails(event.id)}>
                         Dettagli evento
                       </Button>

@@ -36,6 +36,7 @@ authController.post('/login', async (req, res) => {
 
 authController.get('/logout', (req, res) => {
   req.session!.destroy(() => console.log('session removed!'));
+  delete req.session;
   res.sendStatus(200);
 });
 

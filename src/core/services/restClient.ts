@@ -13,14 +13,14 @@ const executeRestCall = (url, method, body?, errorCallback?) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body)
+    body: body ? JSON.stringify(body) : null
   };
 
   // @ts-ignore
   return fetch(`${host}${url}`, params)
     .then(res => {
       if (res.ok) {
-        return res.json();
+        return res.json().catch(e => res);
       } else {
         if (errorCallback) {
           errorCallback(res.status);
@@ -34,9 +34,6 @@ const executeRestCall = (url, method, body?, errorCallback?) => {
 };
 
 export default {
-  getAvailableRaids() {
-    return executeRestCall(`/api/getRaids`, 'GET');
-  },
   subscribe(eventId: string, characterId: string, errorCallback?: Function) {
     return executeRestCall(`/api/subscribe`, 'POST', {
       eventId: eventId,

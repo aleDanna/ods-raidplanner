@@ -17,7 +17,7 @@ import { adminController } from '@server/controllers/adminController';
 import { authController } from '@server/controllers/authController';
 import { pingController } from '@server/controllers/pingController';
 
-import { appHost, getDbConnection } from '@core/configs/connection.config';
+import { appHost } from '@core/configs/connection.config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const host = appHost();
@@ -74,13 +74,7 @@ app.use((err: string, req: express.Request, res: express.Response, next: express
 
 app.use(cookieParser(SECRET));
 
-const pgSession = require('connect-pg-simple')(expressSession);
-const sessionPool = require('pg').Pool;
-
 app.use(expressSession({
-  store: new pgSession({
-    pool: new sessionPool(getDbConnection())
-  }),
   secret: SECRET,
   resave: true,
   saveUninitialized: true,

@@ -3,7 +3,11 @@ import { Container, Alert, Col, Row, Media } from 'react-bootstrap';
 
 import { ODSModal } from '@core/ui/atoms/ConfirmationModal/ODSModal';
 import { calculateSubscriptions, getGroupValue } from '@core/common/dataUtils';
-import { UserSubscribeModalContent, UserUnsubscribeModalContent } from '@core/ui/templates/RaidsCalendarModalContents';
+import {
+  UserNotAllowedToRegister,
+  UserSubscribeModalContent,
+  UserUnsubscribeModalContent
+} from '@core/ui/templates/RaidsCalendarModalContents';
 import restClient from '@core/services/restClient';
 import sessionStorageService from '@core/services/sessionStorageService';
 import { useState } from 'react';
@@ -50,20 +54,21 @@ export const RaidCalendar = ({ history }) => {
     setModalProps({
       modalShow: true,
       title: getGroupValue(event.raidGroup.name).description,
-      content: isSubscribed ? (
+      content: userData.rank >= event.raidGroup.rank ? isSubscribed ? (
         <UserUnsubscribeModalContent event={event} />
       ) : (
         <UserSubscribeModalContent
           event={event}
           subscriptions={calculateSubscriptions(event.subscriptions.length)}
         />
-      ),
+      ) : <UserNotAllowedToRegister />,
       detailsActionText: 'Dettagli evento',
       confirmButtonText: isSubscribed ? 'Rimuovi iscrizione' : 'Iscriviti',
       closeButtonText: 'Annulla',
       detailsAction: () => eventDetails(event.id),
       confirmAction: isSubscribed ? unsubscribe : subscribe,
       confirmButtonVariant: isSubscribed ? 'danger' : 'success',
+      displayConfirm: userData.rank >= event.raidGroup.rank,
       reset: () => setModalProps(EmptyModalProps)
     });
   };

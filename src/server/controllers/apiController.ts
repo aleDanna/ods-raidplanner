@@ -20,13 +20,6 @@ apiController.use((req, res, next) => {
 apiController.use(bodyParser.urlencoded({ extended: false }));
 apiController.use(bodyParser.json());
 
-apiController.get('/getRaids', async (req, res) => {
-  const result = await RaidRestService.getRaidsByFilter({
-    maxRank: res.locals.user.rank
-  });
-  res.send(result);
-});
-
 apiController.get('/raidDetails/:raidId', async (req, res) => {
   const result = await RaidRestService.getRaid(req.params.raidId);
   res.send(result);

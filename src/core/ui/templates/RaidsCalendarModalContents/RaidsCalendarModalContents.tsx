@@ -4,7 +4,8 @@ import { getGroupValue } from '@core/common/dataUtils';
 export const UserSubscribeModalContent = ({ event, subscriptions }) => {
   return (
     <>
-      <p>{`Confermare l'iscrizione all'evento ${getGroupValue(event.raidGroup.name).description} del ${event.startDate}?`}</p>
+      <p>{`Confermare l'iscrizione all'evento ${getGroupValue(event.raidGroup.name).description}
+       del ${event.startDate}?`}</p>
       <p>
         Utenti attualmente iscritti:
         <strong>
@@ -33,4 +34,8 @@ export const UserUnsubscribeModalContent = ({ event }) => {
       <p>Vuoi annullare l'iscrizione?</p>
     </>
   );
+};
+
+export const UserNotAllowedToRegister = () => {
+  return (<p>Non sei abilitato a registrarti a questo evento</p>);
 };

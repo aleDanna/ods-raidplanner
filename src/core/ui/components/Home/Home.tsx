@@ -19,7 +19,7 @@ export const Home = ({ history, events }) => {
 
   return (
     <>
-      <ContentTitle nameTitle="Prossimi eventi" />
+      <ContentTitle nameTitle="Eventi a cui sei iscritto" />
       <Container fluid="md" className={styles.container}>
         <Row className="justify-content-center">
           {subscribedEvents.length > 0 &&

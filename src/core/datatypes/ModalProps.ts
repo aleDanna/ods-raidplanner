@@ -9,6 +9,7 @@ export interface ModalProps {
   confirmAction: any;
   closeAction?: any;
   confirmButtonVariant?: any;
+  displayConfirm?: boolean;
   reset: any;
 }
 
