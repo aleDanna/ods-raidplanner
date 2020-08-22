@@ -7,7 +7,7 @@ import { getGroupValue } from '@core/common/dataUtils';
 
 export const RaidCard = ({ event }) => {
   return (
-    <Container fluid="md" className={styles.content}>
+    <Container fluid="md" className={styles.content}>      
       <span>Evento: {getGroupValue(event.raidGroup.name).description}</span>
       <span>Data: {formatISODateString(event.startDate, 'dd-MM')}</span>
       <span>Ora: {formatISODateString(event.startDate, 'hh:mm')}</span>
