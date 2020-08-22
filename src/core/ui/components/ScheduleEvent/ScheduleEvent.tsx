@@ -68,6 +68,7 @@ export const ScheduleEvent = ({ raidGroups }) => {
       closeButtonText: closeButtonText,
       confirmAction: confirmAction,
       confirmButtonVariant: 'success',
+      displayConfirm: true,
       reset: () => setModalProps(EmptyModalProps)
     });
   };
