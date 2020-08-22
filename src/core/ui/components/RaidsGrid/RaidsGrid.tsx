@@ -8,16 +8,12 @@ import { RaidCard } from '@core/ui/atoms/RaidCard/RaidCard';
 
 import styles from './RaidsGrid.scss';
 import { isMobile } from 'react-device-detect';
+import { getGroupValue } from '@core/common/dataUtils';
+import { RaidProps } from '@core/datatypes/RaidProps';
 
 export const RaidsGrid = ({ events, history }) => {
   const [characterMissingShow, setCharacterMissingShow] = useState(false);
-
-  const groupBy = (array, key) => {
-    return array.reduce((result, currentValue) => {
-      (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
-      return result;
-    }, {});
-  };
+  const userData = sessionStorageService.get('loggedUser');
 
   const subscribe = eventId => {
     const characterId = sessionStorageService.get('selectedCharacter');
@@ -41,17 +37,25 @@ export const RaidsGrid = ({ events, history }) => {
   const eventDetails = eventId => {
     history.push(`/raid/${eventId}`);
   };
+  
+  const events2group = events.reduce((result, event) => {
+    (result[event.raidGroup.name] = result[event.raidGroup.name] || []).push(event);
+    return result;
+  }, {});
 
-  const events2group = groupBy(events, 'name');
+  const isSubscribed = (event: RaidProps) => {
+    return event.subscriptions!.filter(
+      subscription => subscription.character.userId === userData.id).length > 0;
+  };
 
   const generateGroups = () => {
     const fragments = [];
-    const groupRow = (title, imageName, eventList) => {
+    const groupRow = (type, imageName, eventList) => {
       return (
         <Row>
           <Col md={2} xs={12} className={styles.summaryColumn}>
             <Container className={styles.summaryContent}>
-              <Row>{title}</Row>
+              <Row>{getGroupValue(type).description}</Row>
               <Row>
                 <Media>
                   <img src={require(`../../../assets/images/icons/${imageName}.jpg`)} />
@@ -62,20 +66,20 @@ export const RaidsGrid = ({ events, history }) => {
           <Col>
             <Container fluid>
               <Row className={`${isMobile && 'justify-content-center'}`}>
-                {eventList.map((value, _) => {
+                {eventList.map((event: RaidProps) => {
                   return (
-                    <Col key={value.id} md="auto" xs={6} className={styles.raidgridEvent}>
-                      <RaidCard event={value} />
-                      {value.subscribed ? (
-                        <Button variant="danger" size="sm" block onClick={() => unsubscribe(value.id)}>
+                    <Col key={event.id} md="auto" xs={6} className={styles.raidgridEvent}>
+                      <RaidCard event={event} />
+                      {userData.rank >= event.raidGroup.rank!! ? isSubscribed(event) ? (
+                        <Button variant="danger" size="sm" block onClick={() => unsubscribe(event.id)}>
                           Rimuovi iscrizione
                         </Button>
                       ) : (
-                        <Button variant="success" size="sm" block onClick={() => subscribe(value.id)}>
+                        <Button variant="success" size="sm" block onClick={() => subscribe(event.id)}>
                           Iscriviti
                         </Button>
-                      )}
-                      <Button variant="secondary" size="sm" block onClick={() => eventDetails(value.id)}>
+                      ) : null }
+                      <Button variant="secondary" size="sm" block onClick={() => eventDetails(event.id)}>
                         Dettagli evento
                       </Button>
                     </Col>
@@ -89,11 +93,13 @@ export const RaidsGrid = ({ events, history }) => {
     };
 
     // tslint:disable-next-line:forin
-    for (const title in events2group) {
-      const raids = events2group[title];
-      const imageName = raids[0].image_name;
+    for (const type in events2group) {
+      const raids = events2group[type];
+      console.log(events2group);
+      console.log(raids);
+      const imageName = raids[0].raidGroup.imageName;
       // @ts-ignore
-      fragments.push(groupRow(title, imageName, raids));
+      fragments.push(groupRow(type, imageName, raids));
     }
 
     // @ts-ignore

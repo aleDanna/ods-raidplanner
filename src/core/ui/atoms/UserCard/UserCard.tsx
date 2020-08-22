@@ -3,23 +3,9 @@ import React from 'react';
 import { UserCardProps } from '@core/datatypes/UserCardProps';
 
 import styles from './UserCard.scss';
+import { getRoleValue } from '@core/common/dataUtils';
 
 export const UserCard = (user: UserCardProps) => {
-
-  const roleStyle = {
-    'Damage Dealer': {
-      name: 'DD',
-      color: '#e5653c'
-    },
-    'Tank': {
-      name: 'T',
-      color: '#377ea7'
-    },
-    'Healer': {
-      name: 'H',
-      color: '#bbb586'
-    }
-  };
 
   return (
     <Card className={styles.card}>
@@ -30,8 +16,8 @@ export const UserCard = (user: UserCardProps) => {
               {user.esoUsername}
             </Col>
             <Col md={3} sm={3} xs={3}>
-                <span className={styles.roleDot} style={{background: roleStyle[user.role].color}}>
-                  <strong>{roleStyle[user.role].name}</strong>
+                <span className={styles.roleDot} style={{background: getRoleValue(user.role.roleName!).color}}>
+                  <strong>{getRoleValue(user.role.roleName!).tag}</strong>
                 </span>
             </Col>
           </Row>

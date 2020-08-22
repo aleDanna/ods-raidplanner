@@ -10,10 +10,11 @@ import { EmptyUserProps } from '@core/datatypes/UserProps';
 
 import style from './NavBar.scss';
 import restClient from '@core/services/restClient';
+import { getRoleValue } from '@core/common/dataUtils';
 
 export const NavBar = () => {
   const EMPTY_CHARACTER = '---';
-  const [selectedCharacter, setSelectedCharacter] = useState(EMPTY_CHARACTER);
+  const [selectedCharacter, setSelectedCharacter] = useState(-1);
   const [userData, setUserData] = useState(EmptyUserProps);
   const [navExpanded, setNavExpanded] = useState(false);
 
@@ -22,7 +23,7 @@ export const NavBar = () => {
       if (res.ok) {
         sessionStorageService.remove('loggedUser');
         sessionStorageService.remove('selectedCharacter');
-        location.href = '/login';
+        window.location.href = '/login';
       }
     });
   };
@@ -47,11 +48,11 @@ export const NavBar = () => {
 
   const onCharacterChange = character => {
     setSelectedCharacter(character);
-    if (character !== EMPTY_CHARACTER) {
+    if (character !== -1) {
       sessionStorageService.saveOrUpdate('selectedCharacter', character);
     } else {
       sessionStorageService.remove('selectedCharacter');
-      setSelectedCharacter(EMPTY_CHARACTER);
+      setSelectedCharacter(-1);
     }
   };
 
@@ -69,7 +70,7 @@ export const NavBar = () => {
       }
       <Navbar.Collapse id="basic-navbar-nav" className={style.links}>
         <Nav className="mr-auto">
-          {userData.id && userData.role === 'ADMIN' && (
+          {userData.id && userData.credential.role === 'ADMIN' && (
             <NavDropdown title="Admin" id="admin-dropdown">
                 <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/schedule">Crea nuovo evento</NavDropdown.Item>
                 <NavDropdown.Item onClick={closeNav} as={Link} to="/admin/raids">Cerca eventi</NavDropdown.Item>
@@ -99,22 +100,20 @@ export const NavBar = () => {
                     <Form.Control
                       as="select"
                       value={selectedCharacter}
-                      onChange={e => onCharacterChange(e.target.value)}>
-                      {userData.characters.map(value => {
+                      onChange={e => onCharacterChange(Number(e.target.value))}>
+                      {userData.characters!.map(value => {
                         return (
-                          <option key={value.characterid} value={value.characterid}>
-                            {value.charactername} ( {value.rolename} )
+                          <option key={value.id} value={value.id}>
+                            {value.name} ( {getRoleValue(value.role.roleName!).tag} )
                           </option>
                         );
                       })}
-                      <option key={0} defaultValue={selectedCharacter}>
-                        {EMPTY_CHARACTER}
-                      </option>
+                      <option key={0} value={-1}>{EMPTY_CHARACTER}</option>
                     </Form.Control>
                   </Col>
                   <Col md={4}>
                     <NavDropdown
-                      title={<UserNavBarIcon username={userData.username} />}
+                      title={<UserNavBarIcon username={userData.credential.username} />}
                       id="user-dropdown">
                         <NavDropdown.Item onClick={closeNav} as={Link} to="/profile">Profilo</NavDropdown.Item>
                         <NavDropdown.Item onClick={closeNav} as={Link} to="/characters">Personaggi</NavDropdown.Item>

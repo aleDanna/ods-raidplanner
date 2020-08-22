@@ -2,24 +2,32 @@ import * as React from 'react';
 import { Container, Alert, Col, Row, Media } from 'react-bootstrap';
 
 import { ODSModal } from '@core/ui/atoms/ConfirmationModal/ODSModal';
-import { calculateSubscriptions } from '@core/common/dataUtils';
-import { UserSubscribeModalContent, UserUnsubscribeModalContent } from '@core/ui/templates/RaidsCalendarModalContents';
+import { calculateSubscriptions, getGroupValue } from '@core/common/dataUtils';
+import {
+  UserNotAllowedToRegister,
+  UserSubscribeModalContent,
+  UserUnsubscribeModalContent
+} from '@core/ui/templates/RaidsCalendarModalContents';
 import restClient from '@core/services/restClient';
 import sessionStorageService from '@core/services/sessionStorageService';
 import { useState } from 'react';
 import windowUtils from '@core/common/windowUtils';
-import { EventProps } from '@core/datatypes/EventProps';
+import { RaidProps } from '@core/datatypes/RaidProps';
 import { EmptyModalProps } from '@core/datatypes/ModalProps';
 
 import styles from './RaidCalendar.scss';
-import RaidTransformer from '@core/features/transformers/raidTransformer';
 
 export const RaidCalendar = ({ history }) => {
+  const userData = sessionStorageService.get('loggedUser');
   const [characterMissingShow, setCharacterMissingShow] = useState(false);
   const [modalProps, setModalProps] = useState(EmptyModalProps);
-  const [events, setEvents] = useState(new Array<EventProps>());
+  const [events, setEvents] = useState(new Array<RaidProps>());
 
   const openModal = event => {
+
+    const isSubscribed = event.subscriptions.filter(
+      subscription => subscription.character.userId === userData.id).length > 0;
+
     const subscribe = () => {
       const characterId = sessionStorageService.get('selectedCharacter');
       if (characterId) {
@@ -45,36 +53,36 @@ export const RaidCalendar = ({ history }) => {
 
     setModalProps({
       modalShow: true,
-      title: event.title,
-      content: event.subscribed ? (
-        <UserUnsubscribeModalContent description={event.description} />
+      title: getGroupValue(event.raidGroup.name).description,
+      content: userData.rank >= event.raidGroup.rank ? isSubscribed ? (
+        <UserUnsubscribeModalContent event={event} />
       ) : (
         <UserSubscribeModalContent
-          description={event.description}
-          subscriptions={calculateSubscriptions(event.subscriptions)}
+          event={event}
+          subscriptions={calculateSubscriptions(event.subscriptions.length)}
         />
-      ),
+      ) : <UserNotAllowedToRegister />,
       detailsActionText: 'Dettagli evento',
-      confirmButtonText: event.subscribed ? 'Rimuovi iscrizione' : 'Iscriviti',
+      confirmButtonText: isSubscribed ? 'Rimuovi iscrizione' : 'Iscriviti',
       closeButtonText: 'Annulla',
       detailsAction: () => eventDetails(event.id),
-      confirmAction: event.subscribed ? unsubscribe : subscribe,
-      confirmButtonVariant: event.subscribed ? 'danger' : 'success',
+      confirmAction: isSubscribed ? unsubscribe : subscribe,
+      confirmButtonVariant: isSubscribed ? 'danger' : 'success',
+      displayConfirm: userData.rank >= event.raidGroup.rank,
       reset: () => setModalProps(EmptyModalProps)
     });
   };
 
-  const formatEvents = (eventList: Array<EventProps>) => {
+  const formatEvents = (eventList: Array<RaidProps>) => {
     return eventList.map(item => {
-      console.log(item.start);
       return {
-        title: item.title,
-        start: item.start,
+        title: getGroupValue(item.raidGroup.name!).description,
+        start: item.startDate,
         end: null,
         extendedProps: {
           internalEvent: item,
         },
-        description: item.description
+        description: 'FIX THIS!!!'
       };
     });
   };
@@ -87,36 +95,31 @@ export const RaidCalendar = ({ history }) => {
         <Col md={2}>
           <Media>
             <img
-              src={require(`../../../assets/images/icons/${event.icon}.jpg`)}
+              src={require(`../../../assets/images/icons/${event.raidGroup.imageName}.jpg`)}
               style={{ width: '25px', height: '25px' }}
             />
           </Media>
         </Col>
         <Col md={2}>
-          <span><strong>{calendarEvent.event.title}</strong></span>
+          <span><strong>{getGroupValue(event.raidGroup.name).description}</strong></span>
         </Col>
       </Row>
     );
   };
 
-  const onMonthChange = (dateInfo) => {
-    restClient.getRaidsByFilter({
-      startDateFilter: dateInfo.startStr,
-      endDateFilter: dateInfo.endStr,
-      maxRank: sessionStorageService.get('loggedUser').rank
-    })
-      .then(data => {
-        return restClient.getSubscribedRaids()
-          .then(ids => {
-            const subscribedEvents = ids.map(row => {return row.raid_ref; });
-            const raids = RaidTransformer.transformArray(data);
-            raids.forEach(event => {
-              event.subscribed = subscribedEvents.indexOf(event.id) > -1;
-            });
-            setEvents(raids);
-          });
+  async function onMonthChange(dateInfo: any) {
+
+      const today = dateInfo.start;
+      const next2Weeks = dateInfo.end;
+      next2Weeks.setDate(next2Weeks.getDate() + 14);
+
+      const result = await restClient.getRaidsByFilter({
+        startDateFilter: today,
+        endDateFilter: next2Weeks
       });
-  };
+
+      setEvents(result);
+  }
 
   const FullCalendar = require('@fullcalendar/react').default;
   const dayGridPlugin = require('@fullcalendar/daygrid').default;

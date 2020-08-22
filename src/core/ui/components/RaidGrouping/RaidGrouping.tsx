@@ -7,18 +7,20 @@ import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import restClient from '@core/services/restClient';
 
 import styles from './RaidGrouping.scss';
+import windowUtils from '@core/common/windowUtils';
 
 export const RaidGrouping = ({subscriptions, history}) => {
 
   const [groups, setGroups] = useState<Array<Array<any>>>([]);
   const [itemsReady, setItemsReady] = useState(false);
   const [showFullRoleAlert, setShowFullRoleAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [serverErrorAlert, setServerErrorAlert] = useState(false);
 
   const numOfGroups = calculateSubscriptions(subscriptions.length).groups;
 
   useEffect(() => {
-    const sortFunction = (x, y) => x.roleName.localeCompare(y.roleName);
+    const sortFunction = (x, y) =>
+      x.character.role.roleName.localeCompare(y.character.role.roleName);
     if (!itemsReady) {
 
       for (let i = 0; i <= numOfGroups; i++) {
@@ -36,8 +38,9 @@ export const RaidGrouping = ({subscriptions, history}) => {
     ...draggableStyle
   });
 
-  const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? 'lightblue' : 'floralwhite',
+  const getListStyle = (groupNumber, isDraggingOver) => ({
+    background: isDraggingOver ? 'lightblue' :
+      groupNumber === '0' ? '#99e099' : 'floralwhite',
     borderRadius: 5,
     minWidth: 230,
     width: 230
@@ -55,14 +58,14 @@ export const RaidGrouping = ({subscriptions, history}) => {
               <>
                 <Row className="justify-content-center"
                      ref={provided.innerRef}
-                     style={getListStyle(snapshot.isDraggingOver)}
+                     style={getListStyle(i, snapshot.isDraggingOver)}
                      {...provided.droppableProps}
                 >
                   <p className={styles.listTitle}><strong>{title}</strong></p>
-                  {groups[i].map((user, index) => (
+                  {groups[i].map((subscription, index) => (
                     <Draggable
-                      key={user.esoUsername}
-                      draggableId={user.esoUsername}
+                      key={subscription.esoUsername}
+                      draggableId={subscription.esoUsername}
                       index={index}
                     >
                       {(elemProvided) => (
@@ -75,9 +78,9 @@ export const RaidGrouping = ({subscriptions, history}) => {
                               elemProvided.draggableProps.style
                             )}>
                             <UserCard
-                              esoUsername={user.esoUsername}
-                              characterName={user.characterName}
-                              role={user.roleName} />
+                              esoUsername={subscription.esoUsername}
+                              characterName={subscription.character.name}
+                              role={subscription.character.role} />
                           </div>
                           {elemProvided.placeholder}
                         </div>
@@ -113,23 +116,15 @@ export const RaidGrouping = ({subscriptions, history}) => {
       return list;
     };
 
-    const isMovable = (user, group, destGroupNumber) => {
-      if (destGroupNumber !== '0') {
-        const role = user.roleName;
-        let maxRolesInGroup = 2;
-        if (role === 'Damage Dealer') {
-          maxRolesInGroup = 8;
-        }
-        return group.filter(item => item.roleName === role).length < maxRolesInGroup && group.length < 12;
-      }
-      return true;
+    const isMovable = (subscription, group) => {
+      return group.length < 12;
     };
 
     const move = (groupSource, groupDestination, droppableSource, droppableDestination) => {
       const sourceClone = Array.from(groupSource);
       const destClone = Array.from(groupDestination);
       const movingUser = sourceClone[droppableSource.index];
-      if (isMovable(movingUser, destClone, droppableDestination.droppableId)) {
+      if (isMovable(movingUser, destClone)) {
         const [removed] = sourceClone.splice(droppableSource.index, 1);
         destClone.splice(droppableDestination.index, 0, removed);
 
@@ -139,9 +134,6 @@ export const RaidGrouping = ({subscriptions, history}) => {
         setGroups(groups);
         setShowFullRoleAlert(false);
       } else {
-        setAlertMessage(destClone.length === 12 ?
-          'Massimo numero utenti raggiunti per il gruppo!' :
-          'Non ci sono piú posizioni disponibili per questo ruolo!');
         setShowFullRoleAlert(true);
       }
     };
@@ -169,14 +161,23 @@ export const RaidGrouping = ({subscriptions, history}) => {
     }
   };
 
-  const saveGrouping = () => {
-    restClient.saveRaidGrouping(groups).then(() => history.goBack());
-  };
+  async function saveGrouping() {
+    const result = await restClient.saveRaidGrouping(groups, () => {
+      setServerErrorAlert(true);
+      windowUtils.scrollTop();
+    });
+    if (result) {
+      history.goBack();
+    }
+  }
 
   return (
     <Container className={styles.container}>
+      <Alert variant="danger" show={serverErrorAlert}>
+        Si é verificato un errore...
+      </Alert>
       <Alert variant="danger" show={showFullRoleAlert}>
-        {alertMessage}
+        Massimo numero utenti raggiunti per il gruppo!
       </Alert>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Row className="justify-content-center">

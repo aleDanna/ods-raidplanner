@@ -2,8 +2,11 @@ import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncC
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import { RaidCalendar } from '@core/ui/components/RaidsCalendar/RaidCalendar';
+import windowUtils from '@core/common/windowUtils';
 
 export const RaidsCalendarPage = (routeProps) => {
+
+  windowUtils.checkAuthenticated();
 
   async function emptyLoad () {
     console.log('loading calendar...');

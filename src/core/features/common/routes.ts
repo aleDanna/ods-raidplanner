@@ -12,12 +12,18 @@ import { SignUpPage } from '@core/pages/SignUpPage';
 import { UserProfilePage } from '@core/pages/UserProfilePage';
 import { RaidGroupPage } from '@core/pages/RaidGroupPage';
 import { RaidsCalendarPage } from '@core/pages/RaidsCalendarPage';
+import { ErrorPage } from '@core/pages/ErrorPage';
 
 export const commonRoutes: AppRoute[] = [
   {
     path: '/',
     exact: true,
     component: HomePage
+  },
+  {
+    path: '/error',
+    exact: true,
+    component: ErrorPage
   },
   {
     path: '/signup',

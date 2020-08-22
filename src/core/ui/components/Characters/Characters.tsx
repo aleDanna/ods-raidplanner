@@ -5,27 +5,47 @@ import restClient from '@core/services/restClient';
 import windowUtils from '@core/common/windowUtils';
 
 import styles from './Characters.scss';
+import { getRoleValue } from '@core/common/dataUtils';
+import { CharacterRoleProps } from '@core/datatypes/CharacterRoleProps';
 
-export const Characters = ({groups}) => {
+export const Characters = ({roles}) => {
+
+  console.log(roles);
+  const userData = sessionStorageService.get('loggedUser');
+  const characters = userData.characters;
+  const EMPTY_ROLE = '---';
+  const [newCharacterName, setNewCharacterName] = useState('');
+  const [newCharacterRole, setNewCharacterRole] = useState(-1);
+  const [invalidCharacterAlertShow, setInvalidCharacterAlertShow] = useState(false);
+  const [serverErrorAlertShow, setServerErrorAlertShow] = useState(false);
+
+  const onServerError = () => {
+    setServerErrorAlertShow(true);
+  };
 
   const EditModalComponent = ({character}) => {
 
     const [show, setShow] = useState(false);
-    const [upgradedName, setUpgradedName] = useState(character.charactername);
-    const [upgradedRole, setUpgradedRole] = useState(character.roleid);
+    const [upgradedName, setUpgradedName] = useState(character.name);
+    const [upgradedRole, setUpgradedRole] = useState(character.role.id);
 
     const modalOptions = {
       show: show
     };
 
-    const edit = () => {
+    async function edit() {
       if (upgradedName && upgradedRole !== '') {
-        restClient.updateCharacter(character.characterid, upgradedName, upgradedRole)
-          .then((user) => {
-            windowUtils.reload(user);
-          });
+        const user = await restClient.updateCharacter({
+          id: character.id,
+          name: upgradedName,
+          role: {id: upgradedRole},
+          userId: userData.id},
+          onServerError);
+        if (user) {
+          windowUtils.reload(user);
+        }
       }
-    };
+    }
 
     return (
       <>
@@ -39,19 +59,19 @@ export const Characters = ({groups}) => {
               <Row>
                 <FormLabel column md={2}><strong>Nome personaggio: </strong></FormLabel>
                 <FormControl
-                  defaultValue={character.charactername}
+                  defaultValue={character.name}
                   onChange={(evt) => setUpgradedName(evt.target.value)} />
               </Row>
               <Row>
                 <FormLabel column md={2}><strong>Ruolo: </strong></FormLabel>
                 <FormControl
                   as="select"
-                  defaultValue={character.roleid}
+                  defaultValue={character.role.id}
                   onChange={(evt) => setUpgradedRole(evt.target.value)} >
-                  {groups.map(group => {
-                    return <option key={group.id} value={group.id}>{group.name}</option>;
+                  {roles.map(role => {
+                    return <option selected={role.roleName === character.role.roleName}
+                                   key={role.id} value={role.id}>{getRoleValue(role.roleName).description}</option>;
                   })}
-                  <option selected value={character.roleid}>character.rolename</option>
                 </FormControl>
               </Row>
             </Container>
@@ -77,12 +97,15 @@ export const Characters = ({groups}) => {
       show: show
     };
 
-    const deleteCharacter = () => {
-      restClient.deleteCharacter(character.characterid)
-        .then((user) => {
-          windowUtils.reload(user);
-        });
-    };
+    async function deleteCharacter() {
+      if (character.id === sessionStorageService.get('selectedCharacter')) {
+        sessionStorageService.remove('selectedCharacter');
+      }
+      const user = await restClient.deleteCharacter(character.id, onServerError);
+      if (user) {
+        windowUtils.reload(user);
+      }
+    }
 
     return (
       <>
@@ -97,13 +120,13 @@ export const Characters = ({groups}) => {
                 <Col md={6}>
                   <p>Nome personaggio: </p>
                 </Col>
-                <p><strong>{character.charactername}</strong></p>
+                <p><strong>{character.name}</strong></p>
               </Row>
               <Row>
                 <Col md={6}>
                   <p>Ruolo: </p>
                 </Col>
-                <p><strong>{character.rolename}</strong></p>
+                <p><strong>{getRoleValue(character.role.roleName).description}</strong></p>
               </Row>
               <Row>
                 <span><strong style={{color: 'red'}}>
@@ -125,27 +148,30 @@ export const Characters = ({groups}) => {
     );
   };
 
-  const characters = sessionStorageService.get('loggedUser').characters;
-  const EMPTY_ROLE = '---';
-  const [newCharacterName, setNewCharacterName] = useState('');
-  const [newCharacterRole, setNewCharacterRole] = useState(EMPTY_ROLE);
-  const [invalidCharacterAlertShow, setInvalidCharacterAlertShow] = useState(false);
-
-  const saveCharacter = () => {
-    if (newCharacterName && newCharacterRole !== EMPTY_ROLE) {
-      restClient.saveCharacter(newCharacterName, newCharacterRole)
-        .then((user) => {
-          windowUtils.reload(user);
-        });
+  async function saveCharacter() {
+    if (newCharacterName && newCharacterRole !== -1) {
+      const user = await restClient.saveCharacter({
+        name: newCharacterName,
+        role: {
+          id: newCharacterRole
+        },
+        userId: userData.id
+      }, onServerError);
+      if (user) {
+        windowUtils.reload(user);
+      }
     } else {
       setInvalidCharacterAlertShow(true);
     }
-  };
+  }
 
   return (
     <Container className={styles.container}>
+      <Alert variant="danger" show={serverErrorAlertShow}>
+        Si é verificato un errore durante la modifica...
+      </Alert>
       <Alert variant="danger" show={invalidCharacterAlertShow}>
-        Username o password errati
+        Dati mancanti
       </Alert>
       <Row className="justify-content-center">
         <Table responsive striped bordered hover size="sm">
@@ -160,10 +186,10 @@ export const Characters = ({groups}) => {
           {characters.map(character => {
             return (<tr key={character.id}>
               <td className={styles.characterCell}>
-                <p>{character.charactername}</p>
+                <p>{character.name}</p>
               </td>
               <td className={styles.characterCell}>
-                <p>{character.rolename}</p>
+                <p>{getRoleValue(character.role.roleName).description}</p>
               </td>
               <td className={styles.characterCell}>
                 <EditModalComponent character={character} />
@@ -179,12 +205,12 @@ export const Characters = ({groups}) => {
             <td className={styles.characterCell}>
               <FormControl
                 as="select"
-                defaultValue={EMPTY_ROLE}
-                onChange={(evt) => setNewCharacterRole(evt.target.value)} >
-                {groups.map(group => {
-                  return <option key={group.id} value={group.id}>{group.name}</option>;
-                })}
+                defaultValue={-1}
+                onChange={(evt) => setNewCharacterRole(Number(evt.target.value))} >
                 <option selected>{EMPTY_ROLE}</option>
+                {roles.map((role: CharacterRoleProps) => {
+                  return <option key={role.id} value={role.id}>{getRoleValue(role.roleName!).description}</option>;
+                })}
               </FormControl>
             </td>
             <td className={styles.characterCell}>

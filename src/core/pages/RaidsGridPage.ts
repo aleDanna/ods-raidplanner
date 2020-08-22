@@ -3,8 +3,11 @@ import { AsyncComponentLoader } from '@core/ui/atoms/AsyncComponentLoader/AsyncC
 import { ContentTitle } from '@core/ui/atoms/ContentTitle/ContentTitle';
 import pageBuilder from '@core/common/pageBuilder';
 import { RaidsGrid } from '@core/ui/components/RaidsGrid/RaidsGrid';
+import windowUtils from '@core/common/windowUtils';
 
 export const RaidsGridPage = (routeProps) => {
+
+  windowUtils.checkAuthenticated();
 
   async function loadRaids () {
 
@@ -15,7 +18,7 @@ export const RaidsGridPage = (routeProps) => {
     return await restClient.getRaidsByFilter({
       startDateFilter: today,
       endDateFilter: next2Weeks
-    });
+    }, (status) => console.error('Raids page failed to fetch events from backend: ', status));
   }
 
   const titleComponent = ContentTitle({nameTitle: 'Raid disponibili'});

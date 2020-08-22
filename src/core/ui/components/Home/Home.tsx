@@ -1,5 +1,5 @@
 import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
-import { EventProps } from '@core/datatypes/EventProps';
+import { RaidProps } from '@core/datatypes/RaidProps';
 import { RaidCard } from '../../atoms/RaidCard/RaidCard';
 import * as React from 'react';
 import sessionStorageService from '../../../services/sessionStorageService';
@@ -8,8 +8,10 @@ import styles from './Home.scss';
 
 export const Home = ({ history, events }) => {
   const userData = sessionStorageService.get('loggedUser');
-  const isAdmin = userData.role === 'ADMIN';
-  const subscribedEvents = events.filter(event => event.subscribed);
+  const isAdmin = userData.credential.role === 'ADMIN';
+  const subscribedEvents = events.filter(event => event.subscriptions.filter(
+    subscription => subscription.character.userId === userData.id
+  ));
 
   const eventDetails = eventId => {
     history.push(`/raid/${eventId}`);
@@ -17,11 +19,11 @@ export const Home = ({ history, events }) => {
 
   return (
     <>
-      <ContentTitle nameTitle="I tuoi eventi" />
+      <ContentTitle nameTitle="Eventi a cui sei iscritto" />
       <Container fluid="md" className={styles.container}>
         <Row className="justify-content-center">
           {subscribedEvents.length > 0 &&
-            subscribedEvents.map((item: EventProps) => {
+            subscribedEvents.map((item: RaidProps) => {
               return (
                 <Col md="auto" key={item.id} xs={6} className={styles.event}>
                   <RaidCard event={item} />
@@ -44,7 +46,7 @@ export const Home = ({ history, events }) => {
           <ContentTitle nameTitle="Prossimi eventi" />
           <Container fluid="md" className={styles.container}>
             <Row className="justify-content-center">
-              {events.map((item: EventProps) => {
+              {events.map((item: RaidProps) => {
                 return (
                   <Col key={item.id} md="auto" xs={6} className={styles.event}>
                     <RaidCard event={item} />

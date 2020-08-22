@@ -17,33 +17,32 @@ export const Login = ({ history }: LoginProps) => {
   const [validated, setValidated] = useState(false);
   const [badCredentialShow, setBadCredentialShow] = useState(false);
 
-  const login = (evt: any) => {
+  async function login(evt: any) {
     const form = evt.currentTarget;
 
     if (form.checkValidity() === false) {
       evt.preventDefault();
       evt.stopPropagation();
     } else {
-      restClient
-        .login({
-          username: username,
-          password: password
-        })
-        .then(res => {
-          if (res.status === 405) {
+      setValidated(true);
+      evt.preventDefault();
+
+      const user = await restClient.login(
+        {username: username, password: password},
+        (errorStatus) => {
+          if (errorStatus === 401) {
             setBadCredentialShow(true);
             setValidated(false);
-          } else {
-            sessionStorageService.saveOrUpdate('loggedUser', res);
-            history.push('/');
-            history.go();
           }
         });
-    }
 
-    setValidated(true);
-    evt.preventDefault();
-  };
+      if (user) {
+        sessionStorageService.saveOrUpdate('loggedUser', user);
+        history.push('/');
+        history.go();
+      }
+    }
+  }
 
   return (
     <Container className={styles.container}>

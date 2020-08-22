@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Jumbotron, Row } from 'react-bootstrap';
 import sessionStorageService from '@core/services/sessionStorageService';
 import { useState } from 'react';
 import restClient from '@core/services/restClient';
 
 import styles from './UserProfile.scss';
-import windowUtils from '@core/common/windowUtils';
 import { fieldChecker } from '@core/common/dataUtils';
+import windowUtils from '@core/common/windowUtils';
 
 export const UserProfile = ({history}) => {
 
@@ -17,6 +17,8 @@ export const UserProfile = ({history}) => {
 
   const [usernameError, setUsernameError] = useState('');
   const [esoUsernameError, setEsoUsernameError] = useState('');
+
+  const [showServerErrorAlert, setShowServerErrorAlert] = useState(false);
 
   const userData = sessionStorageService.get('loggedUser');
   const userDataForm: any = {};
@@ -31,10 +33,10 @@ export const UserProfile = ({history}) => {
         .then((res) => {
           if (invalidCheck) {
             setUsernameError('UNALLOWED_CHARS');
-          } else if (!res.isValid) {
+          } else if (res.status === 200) {
             setUsernameError('ALREADY_IN_USE');
           }
-          setValidUsername(res.isValid && !invalidCheck);
+          setValidUsername(res.status === 404 && !invalidCheck);
         });
     } else {
       if (invalidCheck) {
@@ -52,10 +54,10 @@ export const UserProfile = ({history}) => {
         .then((res) => {
           if (invalidCheck) {
             setEsoUsernameError('UNALLOWED_CHARS');
-          } else if (!res.isValid) {
+          } else if (res.status === 200) {
             setEsoUsernameError('ALREADY_IN_USE');
           }
-          setValidESOUsername(res.isValid && !invalidCheck);
+          setValidESOUsername(res.status === 404 && !invalidCheck);
         });
     } else {
       if (invalidCheck) {
@@ -67,7 +69,11 @@ export const UserProfile = ({history}) => {
     setForm('esousername', esoUsername);
   };
 
-  const save = (evt) => {
+  // tslint:disable-next-line:typedef
+  async function save(evt) {
+
+    console.log(userDataForm);
+
     const form = evt.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -75,27 +81,34 @@ export const UserProfile = ({history}) => {
       evt.stopPropagation();
     }
 
-    restClient.updateUserDetails(userDataForm)
-      .then((user) => {
-        windowUtils.reload(user);
-      });
-
     setValidated(true);
     evt.preventDefault();
-  };
+    const user = await restClient.updateUserDetails(userDataForm, () => setShowServerErrorAlert(true));
+
+    if (user) {
+      windowUtils.goToHome(user);
+    }
+  }
 
   const setForm = (field, value) => {
-    userDataForm[field] = value;
+    if (field === 'username') {
+      userDataForm.credential[field] = value;
+    } else {
+      userDataForm[field] = value;
+    }
   };
 
   return (
     <Container fluid>
+      <Alert variant="danger" show={showServerErrorAlert} >
+        Si é verificato un errore
+      </Alert>
       <Row className="justify-content-center">
         <Jumbotron className={styles.jumbotron}>
           <Form noValidate validated={validated} onSubmit={save}>
             <Form.Group controlId="username">
               <Form.Label>Username</Form.Label>
-              <Form.Control required type="text" defaultValue={userDataForm.username}
+              <Form.Control required type="text" defaultValue={userDataForm.credential.username}
                             readOnly={!editMode}
                             isInvalid={!validUsername}
                             onChange={e => onUsernameChange(e.currentTarget.value)}/>
@@ -127,7 +140,7 @@ export const UserProfile = ({history}) => {
             </Form.Group>
             <Form.Group controlId="esousername">
               <Form.Label>ESO Username</Form.Label>
-              <Form.Control required type="text" defaultValue={userDataForm.esousername}
+              <Form.Control required type="text" defaultValue={userDataForm.esoUsername}
                             readOnly={!editMode}
                             isInvalid={!validESOUsername}
                             onChange={e => onESOUsernameChange(e.target.value)}/>
