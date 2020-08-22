@@ -37,7 +37,7 @@ export const RaidsGrid = ({ events, history }) => {
   const eventDetails = eventId => {
     history.push(`/raid/${eventId}`);
   };
-
+  
   const events2group = events.reduce((result, event) => {
     (result[event.raidGroup.name] = result[event.raidGroup.name] || []).push(event);
     return result;
