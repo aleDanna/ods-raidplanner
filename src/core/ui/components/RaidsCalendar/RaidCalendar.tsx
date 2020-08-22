@@ -89,9 +89,13 @@ export const RaidCalendar = ({ history }) => {
 
   const eventInfo = (calendarEvent) => {
     const event = calendarEvent.event._def.extendedProps.internalEvent;
+    const userIsSubscribed = event.subscriptions
+      .filter(subscription => subscription.character.userId === userData.id).length > 0;
+
     return (
       <Row className={styles.iconContainer}
-           key={event.id}>
+           style={{backgroundColor: userIsSubscribed ? '#76db1a' : ''}}
+           key={event.id} >
         <Col md={2}>
           <Media>
             <img
@@ -109,16 +113,16 @@ export const RaidCalendar = ({ history }) => {
 
   async function onMonthChange(dateInfo: any) {
 
-      const today = dateInfo.start;
-      const next2Weeks = dateInfo.end;
-      next2Weeks.setDate(next2Weeks.getDate() + 14);
+    const today = dateInfo.start;
+    const next2Weeks = dateInfo.end;
+    next2Weeks.setDate(next2Weeks.getDate() + 14);
 
-      const result = await restClient.getRaidsByFilter({
-        startDateFilter: today,
-        endDateFilter: next2Weeks
-      });
+    const result = await restClient.getRaidsByFilter({
+      startDateFilter: today,
+      endDateFilter: next2Weeks
+    });
 
-      setEvents(result);
+    setEvents(result);
   }
 
   const FullCalendar = require('@fullcalendar/react').default;
