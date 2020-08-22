@@ -24,11 +24,11 @@ const executeRestCall = (url, method, body?, errorCallback?) => {
       } else {
         if (errorCallback) {
           errorCallback(res.status);
-          return null;
         } else {
           window.location.href = '/error';
-          return null;
         }
+        return null;
+
       }
     });
 };

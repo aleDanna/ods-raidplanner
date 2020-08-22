@@ -40,8 +40,8 @@ apiController.post('/subscribe', async (req, res) => {
 apiController.delete('/unsubscribe/:raidId', async (req, res) => {
   const raidId = req.params.raidId;
   const userId = res.locals.user.id;
-  const result = await RaidRestService.unsubscribe(raidId, userId);
-  res.send(result);
+  await RaidRestService.unsubscribe(raidId, userId);
+  res.sendStatus(200);
 });
 
 apiController.get('/allRoles', async (req, res) => {

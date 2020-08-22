@@ -10,7 +10,9 @@ export const Home = ({ history, events }) => {
   const userData = sessionStorageService.get('loggedUser');
   const isAdmin = userData.credential.role === 'ADMIN';
   const subscribedEvents = events.filter(event => event.subscriptions.filter(
-    subscription => subscription.character.userId === userData.id
+    subscription => {
+      return subscription.character.userId === userData.id;
+    }
   ));
 
   const eventDetails = eventId => {
