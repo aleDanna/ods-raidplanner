@@ -48,14 +48,14 @@ authController.get('/recoverSession', (req, res) => {
 authController.get('/checkUsername/:username', async (req, res) => {
   const result = await UserRestService.getUser(req.params.username);
   res.send({
-    isValid: result === null
+    isValid: result.status === 404
   });
 });
 
 authController.get('/checkEsoUsername/:username', async (req, res) => {
   const result = await UserRestService.findByEsoUsername(req.params.username);
   res.send({
-    isValid: result === null
+    isValid: result.status === 404
   });
 });
 
