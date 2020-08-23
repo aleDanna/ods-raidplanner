@@ -162,6 +162,7 @@ export const RaidGrouping = ({subscriptions, history}) => {
   };
 
   async function saveGrouping() {
+    console.log(groups);
     const result = await restClient.saveRaidGrouping(groups, () => {
       setServerErrorAlert(true);
       windowUtils.scrollTop();

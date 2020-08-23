@@ -21,7 +21,7 @@ async function executeRestCall(url, method, body?) {
 
   // @ts-ignore
   const result = await fetch(`${host}${url}`, params);
-  return result.ok ? await result.json().catch(e => result) : result;
+  return result.ok ? await result.json().catch(e => result.status) : result.status;
 }
 
 const userEndpoint = '/users';

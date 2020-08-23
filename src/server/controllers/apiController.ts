@@ -40,8 +40,8 @@ apiController.post('/subscribe', async (req, res) => {
 apiController.delete('/unsubscribe/:raidId', async (req, res) => {
   const raidId = req.params.raidId;
   const userId = res.locals.user.id;
-  await RaidRestService.unsubscribe(raidId, userId);
-  res.sendStatus(200);
+  const result = await RaidRestService.unsubscribe(raidId, userId);
+  res.sendStatus(result);
 });
 
 apiController.get('/allRoles', async (req, res) => {
@@ -54,18 +54,19 @@ apiController.put('/updateCharacter', async (req, res) => {
 
   const updatedCharacter = await CharacterRestService.updateCharacter(character);
   if (updatedCharacter) {
-    console.log(res.locals.user.username);
     req.session!.user = await UserRestService.getUser(res.locals.user.credential.username);
     res.send(req.session!.user);
   }
 });
 
-apiController.delete('/deleteCharacter/:characterId', (req, res) => {
-  CharacterRestService.deleteCharacter(req.params.characterId)
-    .then(async () => {
-      res.locals.user = await UserRestService.getUser(res.locals.user.credential.username);
-      res.send(res.locals.user);
-    });
+apiController.delete('/deleteCharacter/:characterId', async (req, res) => {
+  const result = await CharacterRestService.deleteCharacter(req.params.characterId);
+  if (result === 200) {
+    res.locals.user = await UserRestService.getUser(res.locals.user.credential.username);
+    res.send(res.locals.user);
+  } else {
+    res.send(result);
+  }
 });
 
 apiController.put('/updateUser', async (req, res) => {
@@ -82,7 +83,6 @@ apiController.post('/saveCharacter', async (req, res) => {
   const savedCharacter = await CharacterRestService.saveCharacter(character);
 
   if (savedCharacter) {
-    console.log(res.locals.user.username);
     req.session!.user = await UserRestService.getUser(res.locals.user.credential.username);
     res.send(req.session!.user);
   }

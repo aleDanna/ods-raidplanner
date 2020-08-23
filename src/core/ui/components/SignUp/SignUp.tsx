@@ -6,12 +6,12 @@ import restClient from '@core/services/restClient';
 import styles from './SignUp.scss';
 import { fieldChecker } from '@core/common/dataUtils';
 
-export const SignUp = ({history}) => {
+export const SignUp = () => {
 
   const [validated, setValidated] = useState(false);
-  const [validUsername, setValidUsername] = useState(true);
-  const [validESOUsername, setValidESOUsername] = useState(true);
-  const [validPassword, setValidPassword] = useState(true);
+  const [validUsername, setValidUsername] = useState(false);
+  const [validESOUsername, setValidESOUsername] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
 
   const [usernameError, setUsernameError] = useState('');
   const [esoUsernameError, setEsoUsernameError] = useState('');
@@ -91,13 +91,8 @@ export const SignUp = ({history}) => {
   };
 
   async function register(evt: any) {
-    const form = evt.currentTarget;
-
-    if (form.checkValidity() === false) {
-      evt.preventDefault();
-      evt.stopPropagation();
-    }
-
+    evt.preventDefault();
+    evt.stopPropagation();
     const user = await restClient.registerUser({
       username: username,
       password: password,
@@ -106,11 +101,9 @@ export const SignUp = ({history}) => {
       esoUsername: esoUsername
     });
     if (user) {
-      history.push('/login');
       setValidated(true);
+      window.location.href = '/login';
     }
-
-    evt.preventDefault();
   }
 
   return (
@@ -173,7 +166,7 @@ export const SignUp = ({history}) => {
             </Form.Control.Feedback>
           </Form.Group>
           <Button variant="success" type="submit"
-                  disabled={!validPassword || !validUsername || !validESOUsername}>
+                  disabled={!validPassword || !validUsername || !validESOUsername || !name || !surname}>
             Registrati
           </Button>
         </Form>

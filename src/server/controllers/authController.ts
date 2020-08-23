@@ -29,7 +29,7 @@ authController.post('/login', async (req, res) => {
       res.send(req.session!.user);
     });
   } else {
-    res.sendStatus(response.status);
+    res.sendStatus(response);
   }
 
 });
@@ -48,19 +48,18 @@ authController.get('/recoverSession', (req, res) => {
 authController.get('/checkUsername/:username', async (req, res) => {
   const result = await UserRestService.getUser(req.params.username);
   res.send({
-    isValid: result.status === 404
+    isValid: result === 404
   });
 });
 
 authController.get('/checkEsoUsername/:username', async (req, res) => {
   const result = await UserRestService.findByEsoUsername(req.params.username);
   res.send({
-    isValid: result.status === 404
+    isValid: result === 404
   });
 });
 
 authController.post('/register', async (req, res) => {
-  console.log(req.body);
   const {username, password, name, surname, esoUsername} = req.body.userData;
   const result = await CredentialRestService.register({
     name: name as string,
